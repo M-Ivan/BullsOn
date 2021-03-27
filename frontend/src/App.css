@@ -1,0 +1,57 @@
+.prueba {
+  background: linear-gradient(45deg, #ff01bf 30%, #ff1010 90%);
+  color: white;
+}
+
+body {
+  font-size: 1.2rem;
+  font-family: Arial, Helvetica, sans-serif;
+}
+a {
+  text-decoration: none;
+  color: #0059ff;
+}
+
+.navlink a {
+  color: #ffffff;
+  text-decoration: none;
+  padding: 0.5rem;
+  border-radius: 0.2rem;
+}
+.navlink a:hover {
+  background-color: #13131328;
+}
+
+.search-box {
+  position: relative;
+  border-radius: 0.1rem;
+  background: #ffffff56;
+  width: 100%;
+  align-items: center;
+  height: 40px;
+  margin-left: 1rem;
+}
+.search-box:hover {
+  background: #ffffff77;
+}
+.searchIcon {
+  padding: 0.5rem;
+  height: 100%;
+  position: absolute;
+  pointer-events: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.searchInput {
+  color: #ffffff;
+  width: 90%;
+}
+
+.brand {
+  font-size: 1.8rem;
+  font-weight: 600;
+  padding: 0.5rem;
+  color: white;
+  text-decoration: none;
+}
