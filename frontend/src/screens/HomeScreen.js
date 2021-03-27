@@ -10,8 +10,7 @@ export default function HomeScreen() {
           container
           direction="row"
           justify="center"
-          alignItems="flex-end"
-          xs={12}
+          alignItems="center"
           spacing={1}
         >
           <Grid container justify="flex-start">
@@ -28,15 +27,17 @@ export default function HomeScreen() {
               un texto esto es un texto esto es un texto
             </p>
           </div>
-          <Grid container direction="column" item xs={6}>
-            <Button
-              className="prueba"
-              variant="contained"
-              size="large"
-              startIcon={<SaveIcon />}
-            >
-              Esto es un boton
-            </Button>
+          <Grid item xs={8}>
+            <Grid container direction="column" justify="center">
+              <Button
+                className="prueba"
+                variant="contained"
+                size="large"
+                startIcon={<SaveIcon />}
+              >
+                Esto es un boton
+              </Button>
+            </Grid>
           </Grid>
         </Grid>
       </Container>

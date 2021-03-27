@@ -55,3 +55,12 @@ a {
   color: white;
   text-decoration: none;
 }
+
+.rounded {
+  background: #ea6d0b;
+  border-radius: 3rem;
+}
+
+.form-control {
+  margin-bottom: 2rem;
+}

@@ -84,66 +84,67 @@ export default function Header() {
   const classes = useStyles();
   return (
     <div>
-      <Grid container spacing={2} xs={12}>
-        <AppBar position="static">
-          <Toolbar>
-            <Grid container xs={12}>
-              <Grid
-                container
-                xs={5}
-                lg={3}
-                md={3}
-                alignItems="center"
-                justify="flex-start"
-              >
-                <Hidden only={["lg", "xl"]}>
-                  <IconButton edge="start" color="inherit" aria-label="menu">
-                    <MenuIcon />
-                  </IconButton>
-                </Hidden>
-                <Link className="brand" to="/">
-                  InvestIn
-                </Link>
-              </Grid>
-              <Grid lg={6} md={7} alignItems="center" justify="center">
-                <Hidden only={["xs", "sm"]}>
-                  <div className={classes.search}>
-                    <div className={classes.searchIcon}>
-                      <SearchIcon />
-                    </div>
-                    <InputBase
-                      placeholder="Buscar…"
-                      classes={{
-                        root: classes.inputRoot,
-                        input: classes.inputInput,
-                      }}
-                      inputProps={{ "aria-label": "search" }}
-                    />
-                  </div>
-                </Hidden>
-              </Grid>
-              <Hidden only={["xs", "sm", "md"]}>
-                <Grid container xs={3} alignItems="center" justify="flex-end">
-                  <div className="navlink">
-                    <a href="https://m-ivan.github.io/">Ir a mi portfolio</a>
-                  </div>
-                </Grid>
-              </Hidden>
-            </Grid>
-          </Toolbar>
-          <Hidden only={["xs", "sm", "md"]}>
+      <Grid container spacing={2}>
+        <Grid xs={12}>
+          <AppBar position="static">
             <Toolbar>
-              <Grid container justify="flex-end" alignItems="center">
-                <div className="navlink">
-                  <Link to="#inicio"></Link>
-                  <Link to="#contacto"></Link>
-                  <Link to="#about"></Link>
-                  <Link to="/signin">Iniciar Sesión</Link>
-                </div>
+              <Grid container alignItems="center" justify="flex-start">
+                <Grid item xs={5} lg={3} md={3}>
+                  <Hidden only={["lg", "xl"]}>
+                    <IconButton edge="start" color="inherit" aria-label="menu">
+                      <MenuIcon />
+                    </IconButton>
+                  </Hidden>
+                  <Link className="brand" to="/">
+                    InvestIn
+                  </Link>
+                </Grid>
+                <Grid item lg={6} md={7}>
+                  <Grid container alignItems="center" justify="center">
+                    <Hidden only={["xs", "sm"]}>
+                      <div className={classes.search}>
+                        <div className={classes.searchIcon}>
+                          <SearchIcon />
+                        </div>
+                        <InputBase
+                          placeholder="Buscar…"
+                          classes={{
+                            root: classes.inputRoot,
+                            input: classes.inputInput,
+                          }}
+                          inputProps={{ "aria-label": "search" }}
+                        />
+                      </div>
+                    </Hidden>
+                  </Grid>
+                </Grid>
+                <Hidden only={["xs", "sm", "md"]}>
+                  <Grid item xs={3}>
+                    <Grid container alignItems="center" justify="flex-end">
+                      <div className="navlink">
+                        <a href="https://m-ivan.github.io/">
+                          Ir a mi portfolio
+                        </a>
+                      </div>
+                    </Grid>
+                  </Grid>
+                </Hidden>
               </Grid>
             </Toolbar>
-          </Hidden>
-        </AppBar>
+            <Hidden only={["xs", "sm", "md"]}>
+              <Toolbar>
+                <Grid container justify="flex-end" alignItems="center">
+                  <div className="navlink">
+                    <Link to="#inicio"></Link>
+                    <Link to="#contacto"></Link>
+                    <Link to="#about"></Link>
+                    <Link to="/signin">Iniciar Sesión</Link>
+                  </div>
+                </Grid>
+              </Toolbar>
+            </Hidden>
+          </AppBar>
+        </Grid>
       </Grid>
     </div>
   );
