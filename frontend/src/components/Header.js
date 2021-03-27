@@ -102,7 +102,7 @@ export default function Header() {
                   </IconButton>
                 </Hidden>
                 <Link className="brand" to="/">
-                  RedSocial
+                  InvestIn
                 </Link>
               </Grid>
               <Grid lg={6} md={7} alignItems="center" justify="center">
@@ -138,7 +138,7 @@ export default function Header() {
                   <Link to="#inicio"></Link>
                   <Link to="#contacto"></Link>
                   <Link to="#about"></Link>
-                  <Link to="/register">Register</Link>
+                  <Link to="/signin">Iniciar Sesión</Link>
                 </div>
               </Grid>
             </Toolbar>
