@@ -25,19 +25,6 @@ const useStyles = makeStyles({
       background: "#e16828",
     },
   },
-  btnRoundedOrOut: {
-    background: "white",
-    borderRadius: "3rem",
-    border: "1px solid #ea6d0b",
-    color: "white",
-    height: 48,
-    padding: "0 30px",
-    boxShadow: "0 3px 5px 2px rgba(255, 105, 135, .3)",
-    "&:hover": {
-      background: "white",
-      border: "1px solid #e16828",
-    },
-  },
 
   label: {
     textTransform: "capitalize",
@@ -69,7 +56,7 @@ export default withRouter(function SigninScreen(props) {
   }, [props.history, redirect, userInfo]);
   return (
     <div>
-      <Container maxWidth="xs" fixed>
+      <Container maxWidth="sm" fixed>
         <form className="form" onSubmit={submitHandler}>
           <div>
             <h1>Iniciar Sesión</h1>
@@ -89,20 +76,10 @@ export default withRouter(function SigninScreen(props) {
               fullWidth
               onChange={(e) => setEmail(e.target.value)}
             ></TextField>
-            {console.log("Email", email)}
-            {
-              // <label htmlFor="email">E-mail</label>
-              //</div> <input
-              // type="email"
-              // id="email"
-              //  placeholder="Enter email"
-              //   required
-              //  onChange={(e) => setEmail(e.target.value)}
-              //</div> ></input>
-            }
           </div>
           <div className="form-control">
             <TextField
+              type="password"
               id="password"
               label="Password"
               variant="outlined"
@@ -127,13 +104,15 @@ export default withRouter(function SigninScreen(props) {
               </Grid>
             </Grid>
           </div>
-
-          <div>
-            Primera vez en el sitio?{" "}
-            <Button variant="outlined" color="primary">
-              <Link to={`/register?redirect=${redirect}`}>REGISTRATE</Link>
-            </Button>
-          </div>
+          <Grid container justify="center" alignItems="center">
+            <div>
+              Primera vez en el sitio?{" "}
+              <Link to={`/register?redirect=${redirect}`}>
+                {" "}
+                *Únete a InvestIn
+              </Link>
+            </div>
+          </Grid>
         </form>
       </Container>
     </div>
