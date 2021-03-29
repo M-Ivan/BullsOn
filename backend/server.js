@@ -2,6 +2,7 @@ import express from "express";
 import mongoose from "mongoose";
 import dotenv from "dotenv";
 import userRouter from "./routers/userRouter.js";
+import postRouter from "./routers/postRouter.js";
 
 const app = express();
 app.use(express.json());
@@ -14,6 +15,7 @@ mongoose.connect(process.env.MONGODB_URL || "mongodb://localhost/investIn", {
 });
 
 app.use("/api/users", userRouter);
+app.use("/api/posts", postRouter);
 
 app.use((err, req, res, next) => {
   res.status(500).send({ message: err.message });

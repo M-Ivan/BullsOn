@@ -98,9 +98,10 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function Header() {
+export default function Header(props) {
   const [userAnchorEl, setUserAnchorEl] = useState(false);
   const userSignin = useSelector((state) => state.userSignin);
+  const [name, setName] = useState("");
   const { userInfo } = userSignin;
   const dispatch = useDispatch();
   const signoutHandler = () => {
@@ -112,6 +113,11 @@ export default function Header() {
   };
   const handleUserMenuClose = () => {
     setUserAnchorEl(false);
+  };
+
+  const searchHandler = (e) => {
+    e.preventDefault();
+    props.history.push(`/search/name/${name}`);
   };
 
   const classes = useStyles();
@@ -139,14 +145,17 @@ export default function Header() {
                         <div className={classes.searchIcon}>
                           <SearchIcon />
                         </div>
-                        <InputBase
-                          placeholder="Buscar noticias, divisas, acciones…"
-                          classes={{
-                            root: classes.inputRoot,
-                            input: classes.inputInput,
-                          }}
-                          inputProps={{ "aria-label": "search" }}
-                        />
+                        <form onSubmit={searchHandler}>
+                          <InputBase
+                            placeholder="Buscar noticias, divisas, acciones…"
+                            onChange={(e) => setName(e.target.value)}
+                            classes={{
+                              root: classes.inputRoot,
+                              input: classes.inputInput,
+                            }}
+                            inputProps={{ type: "text", name: "q", id: "q" }}
+                          />
+                        </form>
                       </div>
                     </Hidden>
                   </Grid>

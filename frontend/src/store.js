@@ -1,5 +1,6 @@
 import { createStore, compose, applyMiddleware, combineReducers } from "redux";
 import thunk from "redux-thunk";
+import { postCreateReducer, postListReducer } from "./reducers/postReducers";
 import {
   userRegisterReducer,
   userSigninReducer,
@@ -15,6 +16,8 @@ const initialState = {
 const reducer = combineReducers({
   userSignin: userSigninReducer,
   userRegister: userRegisterReducer,
+  postCreate: postCreateReducer,
+  postList: postListReducer,
 });
 const composeEnhancer = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 

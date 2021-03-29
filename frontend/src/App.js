@@ -8,7 +8,7 @@ import SigninScreen from "./screens/SigninScreen";
 function App() {
   return (
     <BrowserRouter>
-      <Header />
+      <Route render={({ history }) => <Header history={history} />}></Route>
 
       <main>
         <Route path="/signin" component={SigninScreen}></Route>
