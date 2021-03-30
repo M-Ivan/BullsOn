@@ -1,14 +1,11 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Container, Button, Grid, makeStyles } from "@material-ui/core/index";
 import TextField from "@material-ui/core/TextField";
 import ReactLoading from "react-loading";
 import RenderPost from "../components/RenderPost";
 import { useDispatch, useSelector } from "react-redux";
-import { useEffect } from "react";
 import { POST_CREATE_RESET } from "../constants/postConstants";
-import { listPosts } from "../actions/postActions";
-import { useState } from "react";
-import { createPost } from "../actions/postActions";
+import { listPosts, createPost } from "../actions/postActions";
 import MessageBox from "../components/MessageBox";
 
 const useStyles = makeStyles({
@@ -64,23 +61,32 @@ export default function HomeScreen(props) {
     <div>
       <Container maxWidth="md" fixed>
         <Grid container justify="flex-start" direction="column">
-          <Grid item xs={2}>
+          <Grid item xs={12}>
             <h1>Inicio</h1>
-          </Grid>{" "}
+          </Grid>
         </Grid>
         <Grid item xs={12}>
           <hr />
         </Grid>
+
         <Grid item xs={12}>
           <form onSubmit={submitHandler}>
-            <TextField
-              id="post-text"
-              placeholder="En que estás pensando?"
-              multiline
-              rowsMax={4}
-              value={post}
-              onChange={(e) => setPost(e.target.value)}
-            />
+            <Grid
+              container
+              className="form-control"
+              direction="column"
+              justify="center"
+            >
+              <TextField
+                id="postText"
+                multiline
+                label="Comparte con el mundo"
+                placeholder="En que estas pensando?.."
+                rows={6}
+                value={post}
+                onChange={(e) => setPost(e.target.value)}
+              />
+            </Grid>
             <Grid
               container
               justify="center"
@@ -111,7 +117,9 @@ export default function HomeScreen(props) {
             </Grid>
           </form>
           <Grid item xs={12}>
-            <hr />{" "}
+            <div className="feed-separation">
+              <br />
+            </div>{" "}
           </Grid>
         </Grid>
         <Grid
@@ -121,9 +129,7 @@ export default function HomeScreen(props) {
           alignItems="center"
           spacing={1}
         >
-          <h2>Feed en vivo</h2>
           <Grid item xs={12}>
-            <hr />
             {loading ? (
               <ReactLoading color="#2d91f0" type="bars" />
             ) : error ? (

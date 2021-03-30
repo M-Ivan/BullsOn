@@ -38,11 +38,11 @@ const useStyles = makeStyles((theme) => ({
 
 export default function RenderPost(props) {
   const classes = useStyles();
+  const { post } = props;
 
   return (
-    <Card key={props.post._id} className={classes.root}>
+    <Card key={post._id} className={classes.root}>
       <CardHeader
-        key={props.post.author._id}
         avatar={
           <Avatar aria-label="recipe" className={classes.avatar}>
             R
@@ -53,29 +53,27 @@ export default function RenderPost(props) {
             <MoreVertIcon />
           </IconButton>
         }
-        title={props.post.author._id}
-        subheader={
-          "Publicado el: " +
-          props.post.createdAt.substring(0, 10) +
-          " a las: " +
-          props.post.createdAt.substring(10)
-        }
-      />{" "}
+        title={post.author.author.name}
+        subheader={"Publicado el: " + post.createdAt.substring(0, 10)}
+      />
       {
         // TODO: Revisar por que solo devuelve el ID Del autor
         // Pero no otras caracteristicas.
       }
-      {console.log("props", props)}
       {
-        // <CardMedia
-        // className={classes.media}
-        // image="/static/images/cards/paella.jpg"
-        // title="Paella dish"
-        ///>
+        //console.log("props", props)
       }
+      {console.log(post)}
+      {post.image ? (
+        <CardMedia
+          className={classes.media}
+          image={post.image}
+          title="Paella dish"
+        />
+      ) : null}
       <CardContent>
-        <Typography variant="body2" color="textSecondary" component="p">
-          {props.post.post}
+        <Typography variant="body" color="textPrimary" component="p">
+          {post.post}
         </Typography>
       </CardContent>
       <CardActions disableSpacing>

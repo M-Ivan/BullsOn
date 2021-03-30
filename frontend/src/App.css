@@ -77,6 +77,17 @@ a:hover {
   color: #424242;
 }
 
+.feed-separation {
+  background-color: #ececec;
+  margin: 0.5rem 0 0.5rem 0;
+  border-top: 1px solid #c9c9c9;
+  border-bottom: 1px solid #c9c9c9;
+}
+
+.pointer {
+  cursor: pointer;
+}
+
 /* Alert */
 .loading {
   display: block !important;
