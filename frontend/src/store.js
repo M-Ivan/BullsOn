@@ -2,6 +2,7 @@ import { createStore, compose, applyMiddleware, combineReducers } from "redux";
 import thunk from "redux-thunk";
 import { postCreateReducer, postListReducer } from "./reducers/postReducers";
 import {
+  userDetailsReducer,
   userRegisterReducer,
   userSigninReducer,
 } from "./reducers/userReducers";
@@ -18,6 +19,7 @@ const reducer = combineReducers({
   userRegister: userRegisterReducer,
   postCreate: postCreateReducer,
   postList: postListReducer,
+  userDetails: userDetailsReducer,
 });
 const composeEnhancer = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 

@@ -48,8 +48,8 @@ export default function HomeScreen(props) {
     // if (successDelete) {
     //  dispatch({ type: PRODUCT_DELETE_RESET });
     // }
-    dispatch(listPosts({ author: userInfo._id }));
-  }, [createdPost, dispatch, props.history, successCreate, userInfo._id]);
+    dispatch(listPosts({}));
+  }, [createdPost, dispatch, props.history, successCreate]);
 
   const submitHandler = (e) => {
     e.preventDefault();

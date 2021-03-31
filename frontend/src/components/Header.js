@@ -18,6 +18,19 @@ import Button from "@material-ui/core/Button";
 import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
 import { useState } from "react";
+import SwipeableDrawer from "@material-ui/core/SwipeableDrawer";
+import List from "@material-ui/core/List";
+import Divider from "@material-ui/core/Divider";
+import ListItem from "@material-ui/core/ListItem";
+import ListItemIcon from "@material-ui/core/ListItemIcon";
+import ListItemText from "@material-ui/core/ListItemText";
+
+import HomeOutlinedIcon from "@material-ui/icons/HomeOutlined";
+import ExitToAppOutlinedIcon from "@material-ui/icons/ExitToAppOutlined";
+import AccountCircleRoundedIcon from "@material-ui/icons/AccountCircleRounded";
+import { orange, green, red } from "@material-ui/core/colors";
+
+const drawerWidth = 240;
 
 const useStyles = makeStyles((theme) => ({
   grow: {
@@ -95,6 +108,43 @@ const useStyles = makeStyles((theme) => ({
     "&:hover": {
       backgroundColor: "#68686823",
     },
+    list: {
+      width: 250,
+    },
+    fullList: {
+      width: "auto",
+    },
+    drawer: {
+      width: drawerWidth,
+      flexShrink: 0,
+    },
+    drawerPaper: {
+      width: drawerWidth,
+    },
+    drawerHeader: {
+      display: "flex",
+      alignItems: "center",
+      padding: theme.spacing(0, 1),
+      // necessary for content to be below app bar
+      ...theme.mixins.toolbar,
+      justifyContent: "flex-end",
+    },
+    content: {
+      flexGrow: 1,
+      padding: theme.spacing(3),
+      transition: theme.transitions.create("margin", {
+        easing: theme.transitions.easing.sharp,
+        duration: theme.transitions.duration.leavingScreen,
+      }),
+      marginLeft: -drawerWidth,
+    },
+    contentShift: {
+      transition: theme.transitions.create("margin", {
+        easing: theme.transitions.easing.easeOut,
+        duration: theme.transitions.duration.enteringScreen,
+      }),
+      marginLeft: 0,
+    },
   },
 }));
 
@@ -102,6 +152,7 @@ export default function Header(props) {
   const [userAnchorEl, setUserAnchorEl] = useState(false);
   const userSignin = useSelector((state) => state.userSignin);
   const [name, setName] = useState("");
+  const [menuOpen, setMenuOpen] = useState(false);
   const { userInfo } = userSignin;
   const dispatch = useDispatch();
   const signoutHandler = () => {
@@ -120,6 +171,67 @@ export default function Header(props) {
     props.history.push(`/search/name/${name}`);
   };
 
+  //  const toogleBurger = (menuOpen) => (event) => {
+  //    if (
+  //      event &&
+  //      event.type === "keydown" &&
+  //      (event.key === "Tab" || event.key === "Shift")
+  //    ) {
+  //      return;
+  //    }
+
+  //    setMenuOpen({ menuOpen: !menuOpen });
+  //  };
+
+  const listMenu = () => (
+    <div>
+      <div className={classes.drawerHeader}>
+        <h1 className="brand">Navegación</h1>
+      </div>
+      <Divider />
+      <List>
+        <Link to="/">
+          <ListItem button>
+            <ListItemIcon>
+              <HomeOutlinedIcon style={{ color: orange[700] }} />
+            </ListItemIcon>
+            <ListItemText style={{ color: orange[800] }} primary="Inicio" />
+          </ListItem>
+        </Link>
+        {userInfo ? (
+          <>
+            <Link to="/:id">
+              <ListItem button>
+                <ListItemIcon>
+                  <AccountCircleRoundedIcon style={{ color: orange[700] }} />
+                </ListItemIcon>
+                <ListItemText style={{ color: orange[800] }} primary="Perfil" />
+              </ListItem>
+            </Link>
+            <ListItem button onClick={signoutHandler}>
+              <ExitToAppOutlinedIcon style={{ color: red[500] }} />
+              <ListItemText className="menu-margin" style={{ color: red[500] }}>
+                Cerrar sesión
+              </ListItemText>
+            </ListItem>
+          </>
+        ) : (
+          <Link to="/signin">
+            <ListItem button>
+              <ExitToAppOutlinedIcon style={{ color: green[700] }} />
+              <ListItemText
+                className="menu-margin"
+                style={{ color: green[700] }}
+              >
+                Iniciar Sesión
+              </ListItemText>
+            </ListItem>
+          </Link>
+        )}
+      </List>
+    </div>
+  );
+
   const classes = useStyles();
   return (
     <div>
@@ -130,8 +242,22 @@ export default function Header(props) {
               <Grid container alignItems="center" justify="flex-start">
                 <Grid item xs={5} lg={3} md={3}>
                   <Hidden only={["lg", "xl"]}>
-                    <IconButton edge="start" color="inherit" aria-label="menu">
+                    <IconButton
+                      onClick={() => setMenuOpen(!menuOpen)}
+                      edge="start"
+                      color="inherit"
+                      aria-label="menu"
+                    >
+                      {console.log(menuOpen)}
                       <MenuIcon />
+                      <SwipeableDrawer
+                        className={classes.drawer}
+                        open={menuOpen}
+                        onClose={() => setMenuOpen(false)}
+                        onOpen={() => setMenuOpen(true)}
+                      >
+                        {listMenu()}
+                      </SwipeableDrawer>
                     </IconButton>
                   </Hidden>
                   <Link className="brand" to="/">

@@ -119,3 +119,7 @@ a:hover {
   color: #20a020;
   background-color: #eeffe0;
 }
+
+.menu-margin {
+  margin-left: 10px;
+}
