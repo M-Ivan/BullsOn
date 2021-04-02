@@ -37,6 +37,21 @@ postRouter.post(
   })
 );
 
+postRouter.get(
+  "/:id",
+  expressAsyncHandler(async (req, res) => {
+    const post = await Post.findById(req.params.id).populate(
+      "author",
+      "author.name author.profilePic"
+    );
+    if (post) {
+      res.send(post);
+    } else {
+      res.status(404).send({ message: "Post no encontrado" });
+    }
+  })
+);
+
 postRouter.post(
   "/:id/comments",
   isAuth,

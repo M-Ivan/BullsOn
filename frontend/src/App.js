@@ -1,3 +1,4 @@
+import { useSelector } from "react-redux";
 import { BrowserRouter, Route } from "react-router-dom";
 import "./App.css";
 import Header from "./components/Header";
@@ -7,6 +8,10 @@ import RegisterScreen from "./screens/RegisterScreen";
 import SigninScreen from "./screens/SigninScreen";
 
 function App() {
+  const userSignin = useSelector((state) => state.userSignin);
+  const { userInfo } = userSignin;
+  const userDetails = useSelector((state) => state.userDetails);
+  const { loading, error, user } = userDetails;
   return (
     <BrowserRouter>
       <Route render={({ history }) => <Header history={history} />}></Route>
@@ -15,7 +20,7 @@ function App() {
         <Route path="/signin" component={SigninScreen}></Route>
         <Route path="/register" component={RegisterScreen}></Route>
         <Route path="/" exact component={HomeScreen}></Route>
-        <Route path="/:id" component={ProfileScreen} exact></Route>
+        <Route path="/:id" exact component={ProfileScreen}></Route>
       </main>
     </BrowserRouter>
   );

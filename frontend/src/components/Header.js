@@ -248,7 +248,6 @@ export default function Header(props) {
                       color="inherit"
                       aria-label="menu"
                     >
-                      {console.log(menuOpen)}
                       <MenuIcon />
                       <SwipeableDrawer
                         className={classes.drawer}
@@ -330,10 +329,10 @@ export default function Header(props) {
                         onClose={handleUserMenuClose}
                       >
                         <MenuItem onClick={handleUserMenuClose}>
-                          <Link to="/profile">Mi perfil</Link>
+                          <Link to="/:id">Mi perfil</Link>
                         </MenuItem>
                         <MenuItem onClick={handleUserMenuClose}>
-                          <Link to="/profile/settings">Configuración</Link>
+                          <Link to="/:id/settings">Configuración</Link>
                         </MenuItem>
                         <MenuItem onClick={signoutHandler}>
                           Cerrar sesión

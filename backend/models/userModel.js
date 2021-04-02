@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import { postSchema } from "./postModel.js";
 
 const userSchema = new mongoose.Schema(
   {
@@ -12,6 +13,7 @@ const userSchema = new mongoose.Schema(
       name: { type: String, default: "nombre" },
       profilePic: { type: String, default: "/images/p1.jpg" },
     },
+    posts: [postSchema],
   },
   {
     timestamps: true,

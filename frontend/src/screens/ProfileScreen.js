@@ -18,21 +18,25 @@ import Box from "@material-ui/core/Box";
 const useStyles = makeStyles({
   root: {
     maxWidth: "auto",
+    "&:hover": {
+      cursor: "normal",
+    },
   },
   media: {
-    height: 140,
-    position: "relative",
+    height: 170,
   },
   avatar: {
     backgroundColor: red[500],
-    width: "80px",
-    height: "80px",
+    width: "100px",
+    height: "100px",
     border: "5px solid #000000",
     zIndex: "10",
   },
 });
 
 export default function ProfileScreen(props) {
+  console.log(props.match.params);
+
   const classes = useStyles();
   const dispatch = useDispatch();
   const profileId = props.match.params.id;
@@ -42,17 +46,19 @@ export default function ProfileScreen(props) {
   const { loading, error, user } = userDetails;
 
   useEffect(() => {
-    if (!user) {
+    if (!user && userInfo) {
       dispatch(detailsUser(userInfo._id));
     }
-  }, [dispatch, userInfo._id, user]);
+  }, [dispatch, userInfo, user]);
 
   return (
     <div>
       {console.log("userDetails", userDetails.user)}
+      {console.log("userinfo", userInfo)}
+
       <Container fixed maxWidth="md">
         <h1>Perfil</h1>
-        <Card className={classes.root}>
+        <Card variant="outlined" className={classes.root}>
           {
             //  loading ? (
             //   <div className="row center">
@@ -62,38 +68,50 @@ export default function ProfileScreen(props) {
             //    <MessageBox variant="danger">{error}</MessageBox>
             //  ) : null
           }
-          <CardActionArea>
+          <Box m={1}>
             <CardMedia
               className={classes.media}
               image="/images/p1.jpg"
             ></CardMedia>
-            <Grid container>
-              <Grid item xs={2}>
+          </Box>
+          <Grid container>
+            <Grid item xs={3}>
+              <Grid container alignItems="center" direction="column">
                 <Avatar
                   src={user ? user.author.profilePic : null}
-                  aria-label="recipe"
                   className={classes.avatar}
                 ></Avatar>
               </Grid>
-              <Grid item xs={10}>
-                <Grid container direction="column" alignItems="flex-end">
-                  <Button size="large" variant="contained" color="primary">
-                    Seguir
-                  </Button>
-                </Grid>
+            </Grid>
+            <Grid item xs={9}>
+              <Grid container direction="column" alignItems="flex-end">
+                {userInfo && user && userInfo._id !== user._id ? (
+                  <Box m={3}>
+                    <Button size="large" variant="contained" color="primary">
+                      Seguir
+                    </Button>
+                  </Box>
+                ) : (
+                  <Box m={3}>
+                    <Button size="large" variant="outlined" color="primary">
+                      Editar perfil
+                    </Button>
+                  </Box>
+                )}
               </Grid>
             </Grid>
-            <CardContent>
-              <Typography gutterBottom variant="h5" component="h2">
-                {user ? user.name : null}
-              </Typography>
-              <Typography
-                variant="body2"
-                color="textSecondary"
-                component="p"
-              ></Typography>
-            </CardContent>
-          </CardActionArea>
+          </Grid>
+          <CardContent>
+            <Typography gutterBottom variant="h4" component="h2">
+              {user ? user.name : null}
+            </Typography>
+            <Typography
+              variant="body2"
+              color="textSecondary"
+              component="p"
+            ></Typography>
+            <Typography variant="body" component="p"></Typography>
+          </CardContent>
         </Card>
       </Container>
     </div>

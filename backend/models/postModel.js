@@ -9,7 +9,7 @@ const commentSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-const postSchema = new mongoose.Schema(
+export const postSchema = new mongoose.Schema(
   {
     post: { type: String, required: true },
     likes: { type: Number, default: 0 },
