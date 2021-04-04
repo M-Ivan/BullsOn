@@ -14,7 +14,7 @@ userRouter.post(
       if (bcrypt.compareSync(req.body.password, user.password)) {
         res.send({
           _id: user._id,
-          name: user.name,
+          username: user.username,
           email: user.email,
           isAdmin: user.isAdmin,
           token: generateToken(user),
@@ -38,12 +38,13 @@ userRouter.post(
         name: req.body.name,
         lastname: req.body.lastname,
         description: req.body.description,
+        username: req.body.username,
       },
     });
     const createdUser = await user.save();
     res.send({
       _id: createdUser._id,
-      name: createdUser.name,
+      username: createdUser.username,
       email: createdUser.email,
       isAdmin: createdUser.isAdmin,
       token: generateToken(createdUser),
@@ -53,9 +54,9 @@ userRouter.post(
 );
 
 userRouter.get(
-  "/:id",
+  "/:username",
   expressAsyncHandler(async (req, res) => {
-    const user = await User.findById(req.params.id);
+    const user = await User.findById(req.params.username);
     if (user) {
       res.send(user);
       console.log(user);

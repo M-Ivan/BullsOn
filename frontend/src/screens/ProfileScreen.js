@@ -15,6 +15,7 @@ import { red } from "@material-ui/core/colors";
 import Avatar from "@material-ui/core/Avatar";
 import Box from "@material-ui/core/Box";
 import RenderPost from "../components/RenderPost";
+import { listPosts } from "../actions/postActions";
 
 const useStyles = makeStyles({
   root: {
@@ -36,29 +37,33 @@ const useStyles = makeStyles({
 });
 
 export default function ProfileScreen(props) {
-  console.log(props.match.params);
-
   const classes = useStyles();
   const dispatch = useDispatch();
-  const profileId = props.match.params.id;
   const userSignin = useSelector((state) => state.userSignin);
   const { userInfo } = userSignin;
   const userDetails = useSelector((state) => state.userDetails);
   const { loading, error, user } = userDetails;
+  const postList = useSelector((state) => state.postList);
+  const { loading: loadingPosts, error: errorPosts, posts } = postList;
+  const profileId = props.match.params.username;
 
   useEffect(() => {
     if (!user && userInfo) {
       dispatch(detailsUser(userInfo._id));
     }
-  }, [dispatch, userInfo, user]);
-
+    if (user && !userInfo) {
+      dispatch(detailsUser(user._id));
+    }
+    dispatch(listPosts({ profile: profileId }));
+  }, [dispatch, userInfo, user, profileId]);
+  // TODO: Cambiar el fetch de _id a username
   return (
     <div>
-      {console.log("userDetails", userDetails.user)}
-      {console.log("userinfo", userInfo)}
-
+      {console.log("user", user)}
+      {console.log("userInfo", userInfo)}
+      {console.log("posts", posts)}
       <Container fixed maxWidth="md">
-        <h1>Perfil</h1>
+        <h1>Perfil {profileId}</h1>
         <Card variant="outlined" className={classes.root}>
           {
             //  loading ? (

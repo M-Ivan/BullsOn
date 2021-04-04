@@ -200,7 +200,7 @@ export default function Header(props) {
         </Link>
         {userInfo ? (
           <>
-            <Link to="/:id">
+            <Link to={`/${userInfo.username}`}>
               <ListItem button>
                 <ListItemIcon>
                   <AccountCircleRoundedIcon style={{ color: orange[700] }} />
@@ -329,7 +329,7 @@ export default function Header(props) {
                         onClose={handleUserMenuClose}
                       >
                         <MenuItem onClick={handleUserMenuClose}>
-                          <Link to="/:id">Mi perfil</Link>
+                          <Link to={`/${userInfo.username}`}>Mi perfil</Link>
                         </MenuItem>
                         <MenuItem onClick={handleUserMenuClose}>
                           <Link to="/:id/settings">Configuración</Link>

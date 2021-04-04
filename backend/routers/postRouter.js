@@ -18,7 +18,10 @@ postRouter.get(
     const posts = await Post.find({
       ...postFilter,
       ...profileFilter,
-    }).populate("profile", "profile.name profile.lastname profile.profile");
+    }).populate(
+      "profile",
+      "profile.name profile.lastname profile.profile profile.username"
+    );
     res.send(posts);
   })
 );
@@ -43,7 +46,7 @@ postRouter.get(
   expressAsyncHandler(async (req, res) => {
     const post = await Post.findById(req.params.id).populate(
       "profile",
-      "profile.name profile.lastname profile.profile"
+      "profile.name profile.lastname profile.profile profile.username"
     );
     if (post) {
       res.send(post);

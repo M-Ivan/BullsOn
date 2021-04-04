@@ -12,6 +12,7 @@ import { red } from "@material-ui/core/colors";
 import FavoriteIcon from "@material-ui/icons/Favorite";
 import ShareIcon from "@material-ui/icons/Share";
 import MoreVertIcon from "@material-ui/icons/MoreVert";
+import { Link } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -39,15 +40,16 @@ const useStyles = makeStyles((theme) => ({
 export default function RenderPost(props) {
   const classes = useStyles();
   const { post } = props;
+  const { profile } = post.profile;
 
-  console.log(post);
+  console.log(props);
   return (
-    <Card key={post._id} className={classes.root}>
+    <Card variant="outlined" key={post._id} className={classes.root}>
       <CardHeader
         avatar={
           <Avatar
             aria-label="recipe"
-            src={post ? post.profile.profile.profile : null}
+            src={post ? profile.profile : null}
             className={classes.avatar}
           ></Avatar>
         }
@@ -56,9 +58,10 @@ export default function RenderPost(props) {
             <MoreVertIcon />
           </IconButton>
         }
-        title={post.profile.profile.name + " " + post.profile.profile.lastname}
+        title={<Link to={`/${profile.username}`}>{profile.username}</Link>}
         subheader={"Publicado el: " + post.createdAt.substring(0, 10)}
       />
+
       {
         // TODO: Revisar por que solo devuelve el ID Del autor
         // Pero no otras caracteristicas.
@@ -66,7 +69,6 @@ export default function RenderPost(props) {
       {
         //console.log("props", props)
       }
-      {console.log(post)}
       {post.image ? (
         <CardMedia
           className={classes.media}
