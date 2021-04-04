@@ -8,13 +8,13 @@ import {
   POST_CREATE_FAIL,
 } from "../constants/postConstants";
 
-export const listPosts = ({ author = "", post = "" }) => async (dispatch) => {
+export const listPosts = ({ profile = "", post = "" }) => async (dispatch) => {
   dispatch({
     type: POST_LIST_REQUEST,
   });
   try {
     const { data } = await Axios.get(
-      `/api/posts?author=${author}&post=${post}`
+      `/api/posts?profile=${profile}&post=${post}`
     );
     dispatch({ type: POST_LIST_SUCCESS, payload: data });
   } catch (error) {

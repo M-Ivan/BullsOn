@@ -14,6 +14,7 @@ import { detailsUser } from "../actions/userActions";
 import { red } from "@material-ui/core/colors";
 import Avatar from "@material-ui/core/Avatar";
 import Box from "@material-ui/core/Box";
+import RenderPost from "../components/RenderPost";
 
 const useStyles = makeStyles({
   root: {
@@ -78,7 +79,7 @@ export default function ProfileScreen(props) {
             <Grid item xs={3}>
               <Grid container alignItems="center" direction="column">
                 <Avatar
-                  src={user ? user.author.profilePic : null}
+                  src={user ? user.profile.profile : null}
                   className={classes.avatar}
                 ></Avatar>
               </Grid>
@@ -103,16 +104,20 @@ export default function ProfileScreen(props) {
           </Grid>
           <CardContent>
             <Typography gutterBottom variant="h4" component="h2">
-              {user ? user.name : null}
+              {user ? user.profile.name + " " + user.profile.lastname : null}
             </Typography>
-            <Typography
-              variant="body2"
-              color="textSecondary"
-              component="p"
-            ></Typography>
+            <Typography variant="body" color="textPrimary" component="p">
+              {user ? user.profile.description : null}
+            </Typography>
             <Typography variant="body" component="p"></Typography>
           </CardContent>
         </Card>
+        <Grid item xs={12}>
+          {
+            // TODO: Hacer listado de posts analogo a productos por
+            // vendedor en AmLibre
+          }
+        </Grid>
       </Container>
     </div>
   );

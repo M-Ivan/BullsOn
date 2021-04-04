@@ -40,20 +40,23 @@ export default function RenderPost(props) {
   const classes = useStyles();
   const { post } = props;
 
+  console.log(post);
   return (
     <Card key={post._id} className={classes.root}>
       <CardHeader
         avatar={
-          <Avatar aria-label="recipe" className={classes.avatar}>
-            R
-          </Avatar>
+          <Avatar
+            aria-label="recipe"
+            src={post ? post.profile.profile.profile : null}
+            className={classes.avatar}
+          ></Avatar>
         }
         action={
           <IconButton aria-label="settings">
             <MoreVertIcon />
           </IconButton>
         }
-        title={post.author.author.name}
+        title={post.profile.profile.name + " " + post.profile.profile.lastname}
         subheader={"Publicado el: " + post.createdAt.substring(0, 10)}
       />
       {

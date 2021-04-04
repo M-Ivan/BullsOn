@@ -10,15 +10,15 @@ postRouter.get(
   "/",
   expressAsyncHandler(async (req, res) => {
     const post = req.query.post || "";
-    const author = req.query.author || "";
+    const profile = req.query.profile || "";
 
     const postFilter = post ? { post: { $regex: post, $options: "i" } } : {};
-    const authorFilter = author ? { author } : {};
+    const profileFilter = profile ? { profile } : {};
 
     const posts = await Post.find({
       ...postFilter,
-      ...authorFilter,
-    }).populate("author", "author.name");
+      ...profileFilter,
+    }).populate("profile", "profile.name profile.lastname profile.profile");
     res.send(posts);
   })
 );
@@ -29,9 +29,10 @@ postRouter.post(
   expressAsyncHandler(async (req, res) => {
     const post = new Post({
       post: req.body.post,
-      author: req.user._id,
+      profile: req.user._id,
       image: req.body.image ? req.body.image : null,
     });
+    console.log(post);
     const createdPost = await post.save();
     res.send({ message: "Post creado", post: createdPost });
   })
@@ -41,8 +42,8 @@ postRouter.get(
   "/:id",
   expressAsyncHandler(async (req, res) => {
     const post = await Post.findById(req.params.id).populate(
-      "author",
-      "author.name author.profilePic"
+      "profile",
+      "profile.name profile.lastname profile.profile"
     );
     if (post) {
       res.send(post);
@@ -60,7 +61,7 @@ postRouter.post(
     const post = await Post.findById(productId);
     if (post) {
       const comment = {
-        author: req.user._id,
+        profile: req.user._id,
         comment: req.body.comment,
       };
       post.comments.push(comment);

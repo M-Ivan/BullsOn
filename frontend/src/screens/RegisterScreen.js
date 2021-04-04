@@ -34,7 +34,10 @@ const useStyles = makeStyles({
 export default function RegisterScreen(props) {
   const classes = useStyles();
   //Hooks
+  const [username, setUserame] = useState("");
   const [name, setName] = useState("");
+  const [lastname, setLastname] = useState("");
+  const [description, setDescription] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -50,7 +53,9 @@ export default function RegisterScreen(props) {
   const submitHandler = (e) => {
     e.preventDefault();
     if (password === confirmPassword) {
-      dispatch(register(name, email, password));
+      dispatch(
+        register(username, email, password, name, lastname, description)
+      );
     }
   };
   useEffect(() => {
@@ -65,11 +70,21 @@ export default function RegisterScreen(props) {
           <div>
             <h1>Crear una cuenta</h1>
           </div>
-
+          <div className="form-control">
+            <TextField
+              id="username"
+              label="Nombre de usuario (con el que te veran otros usuarios)"
+              variant="outlined"
+              required
+              fullWidth
+              onChange={(e) => setUserame(e.target.value)}
+            ></TextField>
+          </div>
+          {console.log("username", username)}
           <div className="form-control">
             <TextField
               id="name"
-              label="Nombre Completo"
+              label="Tu nombre"
               variant="outlined"
               required
               fullWidth
@@ -77,7 +92,28 @@ export default function RegisterScreen(props) {
             ></TextField>
           </div>
           {console.log("name", name)}
-
+          <div className="form-control">
+            <TextField
+              id="lastname"
+              label="Tu apellido"
+              variant="outlined"
+              required
+              fullWidth
+              onChange={(e) => setLastname(e.target.value)}
+            ></TextField>
+          </div>
+          {console.log("lastname", lastname)}{" "}
+          <div className="form-control">
+            <TextField
+              id="description"
+              label="Escribe algo sobre vos"
+              variant="outlined"
+              required
+              fullWidth
+              onChange={(e) => setDescription(e.target.value)}
+            ></TextField>
+          </div>
+          {console.log("description", description)}
           <div className="form-control">
             <TextField
               id="email"
@@ -89,7 +125,6 @@ export default function RegisterScreen(props) {
             ></TextField>
           </div>
           {console.log("email", email)}
-
           <div className="form-control">
             <TextField
               type="password"
@@ -102,7 +137,6 @@ export default function RegisterScreen(props) {
             ></TextField>
           </div>
           {console.log("password", password)}
-
           <div className="form-control">
             <TextField
               type="password"
@@ -132,7 +166,6 @@ export default function RegisterScreen(props) {
             )}
             {error && <MessageBox variant="danger">{error}</MessageBox>}
           </div>
-
           <div className="form-control">
             <Grid item xs={12}>
               <Grid container justify="center" direction="column">
