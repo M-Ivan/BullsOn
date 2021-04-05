@@ -205,7 +205,10 @@ export default function Header(props) {
                 <ListItemIcon>
                   <AccountCircleRoundedIcon style={{ color: orange[700] }} />
                 </ListItemIcon>
-                <ListItemText style={{ color: orange[800] }} primary="Perfil" />
+                <ListItemText
+                  style={{ color: orange[800] }}
+                  primary={userInfo.username}
+                />
               </ListItem>
             </Link>
             <ListItem button onClick={signoutHandler}>

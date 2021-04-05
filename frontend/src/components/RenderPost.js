@@ -9,11 +9,13 @@ import Avatar from "@material-ui/core/Avatar";
 import IconButton from "@material-ui/core/IconButton";
 import Typography from "@material-ui/core/Typography";
 import { red } from "@material-ui/core/colors";
-import FavoriteIcon from "@material-ui/icons/Favorite";
-import ShareIcon from "@material-ui/icons/Share";
+import ScreenShareOutlinedIcon from "@material-ui/icons/ScreenShareOutlined";
 import MoreVertIcon from "@material-ui/icons/MoreVert";
 import { Link } from "react-router-dom";
-
+import ChatBubbleOutlineIcon from "@material-ui/icons/ChatBubbleOutline";
+import RepeatIcon from "@material-ui/icons/Repeat";
+import StarIcon from "@material-ui/icons/Star";
+import StarBorderOutlinedIcon from "@material-ui/icons/StarBorderOutlined";
 const useStyles = makeStyles((theme) => ({
   root: {
     maxWidth: "100%",
@@ -45,22 +47,38 @@ export default function RenderPost(props) {
   console.log(props);
   return (
     <Card variant="outlined" key={post._id} className={classes.root}>
-      <CardHeader
-        avatar={
-          <Avatar
-            aria-label="recipe"
-            src={post ? profile.profile : null}
-            className={classes.avatar}
-          ></Avatar>
-        }
-        action={
-          <IconButton aria-label="settings">
-            <MoreVertIcon />
-          </IconButton>
-        }
-        title={<Link to={`/${profile.username}`}>{profile.username}</Link>}
-        subheader={"Publicado el: " + post.createdAt.substring(0, 10)}
-      />
+      <Link to={`/${profile.username}`}>
+        <CardHeader
+          avatar={
+            <Avatar
+              aria-label="recipe"
+              src={post ? profile.profile : null}
+              className={classes.avatar}
+            ></Avatar>
+          }
+          action={
+            <IconButton aria-label="settings">
+              <MoreVertIcon />
+            </IconButton>
+          }
+          title={
+            <div>
+              <Typography color="textPrimary" variant="h6">
+                {profile.name + " " + profile.lastname}
+              </Typography>
+              <Typography color="textSecondary">
+                <strong>{profile.username}</strong>
+              </Typography>
+            </div>
+          }
+          subheader={
+            "Publicado el: " +
+            post.createdAt.substring(0, 10) +
+            "   A las:  " +
+            post.createdAt.substring(11, 16)
+          }
+        />
+      </Link>
 
       {
         // TODO: Revisar por que solo devuelve el ID Del autor
@@ -69,24 +87,35 @@ export default function RenderPost(props) {
       {
         //console.log("props", props)
       }
-      {post.image ? (
-        <CardMedia
-          className={classes.media}
-          image={post.image}
-          title="Paella dish"
-        />
-      ) : null}
-      <CardContent>
-        <Typography variant="body" color="textPrimary" component="p">
-          {post.post}
-        </Typography>
-      </CardContent>
+      <Link to={`/${profile.username}/post/${post._id}`}>
+        {post.image ? (
+          <CardMedia
+            className={classes.media}
+            image={post.image}
+            title="Paella dish"
+          />
+        ) : null}
+        <CardContent>
+          <Typography variant="body" color="textPrimary" component="p">
+            {post.post}
+          </Typography>
+        </CardContent>
+      </Link>
       <CardActions disableSpacing>
-        <IconButton aria-label="add to favorites">
-          <FavoriteIcon />
+        <IconButton>
+          <ChatBubbleOutlineIcon />
+          {post.comments.length}
         </IconButton>
+        <IconButton>
+          <RepeatIcon />
+          {post.repost}
+        </IconButton>
+        <IconButton aria-label="add to favorites">
+          <StarIcon />
+          {post.likes}
+        </IconButton>{" "}
         <IconButton aria-label="share">
-          <ShareIcon />
+          <ScreenShareOutlinedIcon />
         </IconButton>
       </CardActions>
     </Card>

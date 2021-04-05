@@ -7,6 +7,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { POST_CREATE_RESET } from "../constants/postConstants";
 import { listPosts, createPost } from "../actions/postActions";
 import MessageBox from "../components/MessageBox";
+import PostAddIcon from "@material-ui/icons/PostAdd";
 
 const useStyles = makeStyles({
   btnRoundedOr: {
@@ -44,10 +45,9 @@ export default function HomeScreen(props) {
     dispatch(listPosts({}));
     if (successCreate) {
       dispatch({ type: POST_CREATE_RESET });
+      setPost("");
     }
-    // if (successDelete) {
-    //  dispatch({ type: PRODUCT_DELETE_RESET });
-    // }
+
     dispatch(listPosts({}));
   }, [createdPost, dispatch, props.history, successCreate]);
 
@@ -101,6 +101,7 @@ export default function HomeScreen(props) {
                   variant="contained"
                   type="submit"
                 >
+                  <PostAddIcon />
                   Compartir una idea
                 </Button>
               ) : (
@@ -111,6 +112,7 @@ export default function HomeScreen(props) {
                   variant="contained"
                   disabled
                 >
+                  <PostAddIcon />
                   Compartir una idea
                 </Button>
               )}

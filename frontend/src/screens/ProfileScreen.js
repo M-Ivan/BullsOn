@@ -48,18 +48,20 @@ export default function ProfileScreen(props) {
   const profileId = props.match.params.username;
 
   useEffect(() => {
-    if (!user && userInfo) {
-      dispatch(detailsUser(userInfo._id));
+    if (!user) {
+      dispatch(detailsUser(profileId));
+      dispatch(listPosts({ profile: profileId }));
     }
-    if (user && !userInfo) {
-      dispatch(detailsUser(user._id));
+    if (user && profileId !== user.username) {
+      dispatch(detailsUser(profileId));
+      dispatch(listPosts({ profile: profileId }));
     }
-    dispatch(listPosts({ profile: profileId }));
   }, [dispatch, userInfo, user, profileId]);
   // TODO: Cambiar el fetch de _id a username
   return (
     <div>
       {console.log("user", user)}
+      {console.log("props", props)}
       {console.log("userInfo", userInfo)}
       {console.log("posts", posts)}
       <Container fixed maxWidth="md">
@@ -91,16 +93,16 @@ export default function ProfileScreen(props) {
             </Grid>
             <Grid item xs={9}>
               <Grid container direction="column" alignItems="flex-end">
-                {userInfo && user && userInfo._id !== user._id ? (
+                {userInfo && user && userInfo._id === user._id ? (
                   <Box m={3}>
-                    <Button size="large" variant="contained" color="primary">
-                      Seguir
+                    <Button size="large" variant="outlined" color="primary">
+                      Editar perfil
                     </Button>
                   </Box>
                 ) : (
                   <Box m={3}>
-                    <Button size="large" variant="outlined" color="primary">
-                      Editar perfil
+                    <Button size="large" variant="contained" color="primary">
+                      Seguir{" "}
                     </Button>
                   </Box>
                 )}
@@ -118,10 +120,15 @@ export default function ProfileScreen(props) {
           </CardContent>
         </Card>
         <Grid item xs={12}>
-          {
-            // TODO: Hacer listado de posts analogo a productos por
-            // vendedor en AmLibre
-          }
+          {loadingPosts ? (
+            <ReactLoading className="loading" color="#2d91f0" type="cylon" />
+          ) : errorPosts ? (
+            <MessageBox variant="danger">{errorPosts}</MessageBox>
+          ) : (
+            posts.map((post) => (
+              <RenderPost key={post._id} post={post}></RenderPost>
+            ))
+          )}
         </Grid>
       </Container>
     </div>

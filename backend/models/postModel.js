@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 
 const commentSchema = new mongoose.Schema(
   {
-    profile: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
+    profile: { type: mongoose.Schema.Types.String, ref: "User" },
     comment: { type: String, required: true },
     likes: { type: Number, default: 0 },
   },
@@ -13,8 +13,13 @@ export const postSchema = new mongoose.Schema(
   {
     post: { type: String, required: true },
     likes: { type: Number, default: 0 },
+    repost: { type: Number, default: 0 },
     image: { type: String, required: false, default: "" },
-    profile: { type: mongoose.Schema.Types.ObjectID, ref: "User" },
+    // Usamos String en lugar de ObjectId para encontrar el perfil
+    // Por el username, ya que el campo _id en userModel sera el mismo
+    // que el username, y no sera, un _id aleatorio creado por
+    // MongoDB
+    profile: { type: mongoose.Schema.Types.String, ref: "User" },
     comments: [commentSchema],
   },
   {

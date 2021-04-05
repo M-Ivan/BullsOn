@@ -6,6 +6,9 @@ import {
   POST_CREATE_REQUEST,
   POST_CREATE_SUCCESS,
   POST_CREATE_FAIL,
+  POST_DETAILS_SUCCESS,
+  POST_DETAILS_REQUEST,
+  POST_DETAILS_FAIL,
 } from "../constants/postConstants";
 
 export const listPosts = ({ profile = "", post = "" }) => async (dispatch) => {
@@ -19,6 +22,23 @@ export const listPosts = ({ profile = "", post = "" }) => async (dispatch) => {
     dispatch({ type: POST_LIST_SUCCESS, payload: data });
   } catch (error) {
     dispatch({ type: POST_LIST_FAIL, payload: error.message });
+  }
+};
+
+export const detailsPost = (postId) => async (dispatch) => {
+  dispatch({ type: POST_DETAILS_REQUEST, payload: postId });
+  try {
+    const { data } = await Axios.get(`/api/posts/${postId}`);
+    dispatch({ type: POST_DETAILS_SUCCESS, payload: data });
+    console.log(data);
+  } catch (error) {
+    dispatch({
+      type: POST_DETAILS_FAIL,
+      payload:
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message,
+    });
   }
 };
 
