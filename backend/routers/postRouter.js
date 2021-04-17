@@ -35,7 +35,6 @@ postRouter.post(
       profile: req.user._id,
       image: req.body.image ? req.body.image : null,
     });
-    console.log(post);
     const createdPost = await post.save();
     res.send({ message: "Post creado", post: createdPost });
   })
@@ -45,7 +44,7 @@ postRouter.get(
   "/:id",
   expressAsyncHandler(async (req, res) => {
     const post = await Post.findById(req.params.id).populate(
-      "profile",
+      "profile comments.profile",
       "profile.name profile.lastname profile.profile profile.username"
     );
     if (post) {
@@ -61,18 +60,20 @@ postRouter.post(
   isAuth,
   expressAsyncHandler(async (req, res) => {
     const postId = req.params.id;
-    const post = await Post.findById(productId);
+    const post = await Post.findById(postId);
     if (post) {
       const comment = {
         profile: req.user._id,
         comment: req.body.comment,
       };
       post.comments.push(comment);
+
       const updatedPost = await post.save();
       res.status(201).send({
         message: "Comentario publicado",
         comment: updatedPost.comments[updatedPost.comments.length - 1],
       });
+      console.log(updatedPost.comments);
     } else {
       res.status(404).send({
         message: "Post no encontrado",

@@ -1,20 +1,26 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { makeStyles } from "@material-ui/core/styles";
 
 import RenderPost from "../components/RenderPost";
-import { detailsPost } from "../actions/postActions";
+import { addComment, detailsPost } from "../actions/postActions";
 import MessageBox from "../components/MessageBox";
 import ReactLoading from "react-loading";
-import { Container, Button, Grid } from "@material-ui/core/index";
-import Card from "@material-ui/core/Card";
-import CardHeader from "@material-ui/core/CardHeader";
-import CardMedia from "@material-ui/core/CardMedia";
-import CardContent from "@material-ui/core/CardContent";
-import CardActions from "@material-ui/core/CardActions";
-import Avatar from "@material-ui/core/Avatar";
-import IconButton from "@material-ui/core/IconButton";
-import Typography from "@material-ui/core/Typography";
+import {
+  Container,
+  Button,
+  Grid,
+  TextField,
+  Card,
+  CardHeader,
+  CardMedia,
+  CardContent,
+  CardActions,
+  Avatar,
+  IconButton,
+  Typography,
+  Box,
+} from "@material-ui/core/index";
 import { red } from "@material-ui/core/colors";
 import ScreenShareOutlinedIcon from "@material-ui/icons/ScreenShareOutlined";
 import MoreVertIcon from "@material-ui/icons/MoreVert";
@@ -22,7 +28,6 @@ import { Link } from "react-router-dom";
 import ChatBubbleOutlineIcon from "@material-ui/icons/ChatBubbleOutline";
 import RepeatIcon from "@material-ui/icons/Repeat";
 import StarIcon from "@material-ui/icons/Star";
-import StarBorderOutlinedIcon from "@material-ui/icons/StarBorderOutlined";
 import RenderComments from "../components/RenderComments";
 
 const useStyles = makeStyles((theme) => ({
@@ -47,18 +52,33 @@ const useStyles = makeStyles((theme) => ({
   avatar: {
     backgroundColor: red[500],
   },
+  iconSmall: {
+    width: "1rem",
+    marginLeft: "2px",
+  },
+  commentBtn: {},
+
+  commentForm: {
+    padding: "1rem",
+  },
 }));
 
 export default function PostScreen(props) {
   const classes = useStyles();
   const postId = props.match.params.id;
   const dispatch = useDispatch();
+  const [commentForm, setCommentForm] = useState(false);
+  const [comment, setComment] = useState("");
   const postDetails = useSelector((state) => state.postDetails);
   const { loading, error, post } = postDetails;
 
   useEffect(() => {
     dispatch(detailsPost(postId));
   }, [postId, dispatch]);
+
+  const submitCommentHandler = () => {
+    dispatch(addComment(postId, comment));
+  };
 
   return (
     <>
@@ -133,10 +153,16 @@ export default function PostScreen(props) {
                     </CardContent>
 
                     <CardActions disableSpacing>
-                      <IconButton>
-                        <ChatBubbleOutlineIcon />
-                        {post.comments.length}{" "}
-                      </IconButton>{" "}
+                      <Box>
+                        {" "}
+                        <IconButton
+                          color="primary"
+                          onClick={(e) => setCommentForm(true)}
+                        >
+                          <ChatBubbleOutlineIcon />
+                          {post.comments.length}{" "}
+                        </IconButton>
+                      </Box>{" "}
                       Respuestas
                       <IconButton>
                         <RepeatIcon />
@@ -152,6 +178,35 @@ export default function PostScreen(props) {
                         <ScreenShareOutlinedIcon />
                       </IconButton>
                     </CardActions>
+                    {commentForm ? (
+                      <Box className={classes.commentForm}>
+                        <Grid container alignItems="center">
+                          <Grid item xs={10}>
+                            <TextField
+                              id="comment-form"
+                              value={comment}
+                              onChange={(e) => setComment(e.target.value)}
+                              fullWidth
+                              label="Agregar un comentario..."
+                            ></TextField>
+                          </Grid>
+                          <Grid item xs={2}>
+                            <Button
+                              className={classes.commentBtn}
+                              variant="outlined"
+                              color="primary"
+                              size="small"
+                              onClick={submitCommentHandler}
+                            >
+                              +1{" "}
+                              <ChatBubbleOutlineIcon
+                                className={classes.iconSmall}
+                              />
+                            </Button>
+                          </Grid>
+                        </Grid>{" "}
+                      </Box>
+                    ) : null}
                   </Card>
                   {post.comments
                     ? post.comments.map((comment) => (
@@ -169,7 +224,8 @@ export default function PostScreen(props) {
         </>
       )}
       {console.log("props", props)}
-      {console.log("post", post)}{" "}
+      {console.log("postId", postId)}
+      {console.log("comment", comment)}{" "}
     </>
   );
 }

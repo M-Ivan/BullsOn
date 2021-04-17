@@ -4,6 +4,7 @@ import {
   postCreateReducer,
   postListReducer,
   postDetailsReducer,
+  commentAddReducer,
 } from "./reducers/postReducers";
 import {
   userDetailsReducer,
@@ -25,6 +26,7 @@ const reducer = combineReducers({
   postList: postListReducer,
   postDetails: postDetailsReducer,
   userDetails: userDetailsReducer,
+  commentAdd: commentAddReducer,
 });
 const composeEnhancer = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 

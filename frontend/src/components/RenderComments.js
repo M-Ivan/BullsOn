@@ -1,12 +1,15 @@
 import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
-import List from "@material-ui/core/List";
-import ListItem from "@material-ui/core/ListItem";
-import Divider from "@material-ui/core/Divider";
-import ListItemText from "@material-ui/core/ListItemText";
-import ListItemAvatar from "@material-ui/core/ListItemAvatar";
-import Avatar from "@material-ui/core/Avatar";
-import Typography from "@material-ui/core/Typography";
+import {
+  List,
+  ListItem,
+  Box,
+  Divider,
+  ListItemText,
+  ListItemAvatar,
+  Avatar,
+  Typography,
+} from "@material-ui/core";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -21,78 +24,46 @@ const useStyles = makeStyles((theme) => ({
 
 export default function AlignItemsList(props) {
   const { comment } = props;
+  const { profile } = comment.profile;
   const classes = useStyles();
 
   return (
     <List className={classes.root}>
+      {console.log(props)}
       <ListItem alignItems="flex-start">
         <ListItemAvatar>
-          <Avatar
-            alt={comment.profile.username}
-            src={comment.profile.profile}
-          />
+          <Avatar alt={profile.username} src={profile.profile} />
         </ListItemAvatar>
         <ListItemText
-          primary="Brunch this weekend?"
+          primary={
+            <Typography color="textPrimary" variant="h7">
+              {`${profile.name} ${profile.lastname}`}
+            </Typography>
+          }
           secondary={
-            <React.Fragment>
+            <Box>
+              <Typography color="textSecondary">
+                <strong>{profile.username}</strong>{" "}
+              </Typography>
+              <Typography color="textSecondary" gutterBottom>
+                {"Publicado el: " +
+                  comment.createdAt.substring(0, 10) +
+                  " A las: " +
+                  comment.createdAt.substring(11, 16)}
+              </Typography>
               <Typography
                 component="span"
-                variant="body2"
+                variant="body1"
                 className={classes.inline}
                 color="textPrimary"
               >
-                Ali Connors
+                {comment.comment}
               </Typography>
-              {" — I'll be in your neighborhood doing errands this…"}
-            </React.Fragment>
+            </Box>
           }
         />
       </ListItem>
       <Divider variant="inset" component="li" />
-      <ListItem alignItems="flex-start">
-        <ListItemAvatar>
-          <Avatar alt="Travis Howard" src="/static/images/avatar/2.jpg" />
-        </ListItemAvatar>
-        <ListItemText
-          primary="Summer BBQ"
-          secondary={
-            <React.Fragment>
-              <Typography
-                component="span"
-                variant="body2"
-                className={classes.inline}
-                color="textPrimary"
-              >
-                to Scott, Alex, Jennifer
-              </Typography>
-              {" — Wish I could come, but I'm out of town this…"}
-            </React.Fragment>
-          }
-        />
-      </ListItem>
-      <Divider variant="inset" component="li" />
-      <ListItem alignItems="flex-start">
-        <ListItemAvatar>
-          <Avatar alt="Cindy Baker" src="/static/images/avatar/3.jpg" />
-        </ListItemAvatar>
-        <ListItemText
-          primary="Oui Oui"
-          secondary={
-            <React.Fragment>
-              <Typography
-                component="span"
-                variant="body2"
-                className={classes.inline}
-                color="textPrimary"
-              >
-                Sandra Adams
-              </Typography>
-              {" — Do you have Paris recommendations? Have you ever…"}
-            </React.Fragment>
-          }
-        />
-      </ListItem>
     </List>
   );
 }
