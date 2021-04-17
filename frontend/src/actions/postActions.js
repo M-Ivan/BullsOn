@@ -12,6 +12,9 @@ import {
   POST_COMMENT_ADD_REQUEST,
   POST_COMMENT_ADD_SUCCESS,
   POST_COMMENT_ADD_FAIL,
+  POST_LIKE_ADD_REQUEST,
+  POST_LIKE_ADD_SUCCESS,
+  POST_LIKE_ADD_FAIL,
 } from "../constants/postConstants";
 
 export const listPosts = ({ profile = "", post = "" }) => async (dispatch) => {
@@ -97,5 +100,31 @@ export const addComment = (postId, comment) => async (dispatch, getState) => {
         ? error.response.data.message
         : error.message;
     dispatch({ type: POST_COMMENT_ADD_FAIL, payload: message });
+  }
+};
+
+export const addLike = (postId) => async (dispatch, getState) => {
+  dispatch({ type: POST_LIKE_ADD_REQUEST });
+  const {
+    userSignin: { userInfo },
+  } = getState();
+  try {
+    const { data } = await Axios.post(
+      `/api/posts/${postId}`,
+      {},
+      {
+        headers: { Authorization: `Bearer ${userInfo.token}` },
+      }
+    );
+    dispatch({
+      type: POST_LIKE_ADD_SUCCESS,
+      payload: data.comment,
+    });
+  } catch (error) {
+    const message =
+      error.response && error.response.data.message
+        ? error.response.data.message
+        : error.message;
+    dispatch({ type: POST_LIKE_ADD_FAIL, payload: message });
   }
 };

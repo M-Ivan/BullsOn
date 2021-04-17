@@ -13,6 +13,10 @@ import {
   POST_COMMENT_ADD_REQUEST,
   POST_COMMENT_ADD_SUCCESS,
   POST_COMMENT_ADD_RESET,
+  POST_LIKE_ADD_REQUEST,
+  POST_LIKE_ADD_SUCCESS,
+  POST_LIKE_ADD_FAIL,
+  POST_LIKE_ADD_RESET,
 } from "../constants/postConstants";
 
 export const postListReducer = (
@@ -68,6 +72,21 @@ export const commentAddReducer = (state = {}, action) => {
     case POST_COMMENT_ADD_FAIL:
       return { loading: false, error: action.payload };
     case POST_COMMENT_ADD_RESET:
+      return {};
+    default:
+      return state;
+  }
+};
+
+export const likeAddReducer = (state = {}, action) => {
+  switch (action.type) {
+    case POST_LIKE_ADD_REQUEST:
+      return { loading: true };
+    case POST_LIKE_ADD_SUCCESS:
+      return { loading: false, success: true, like: action.payload };
+    case POST_LIKE_ADD_FAIL:
+      return { loading: false, error: action.payload };
+    case POST_LIKE_ADD_RESET:
       return {};
     default:
       return state;

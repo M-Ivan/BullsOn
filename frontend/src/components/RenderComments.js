@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import {
   List,
@@ -10,6 +10,8 @@ import {
   Avatar,
   Typography,
 } from "@material-ui/core";
+import { useDispatch } from "react-redux";
+import { detailsPost } from "../actions/postActions";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -22,7 +24,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function AlignItemsList(props) {
+export default function RenderComments(props) {
   const { comment } = props;
   const { profile } = comment.profile;
   const classes = useStyles();

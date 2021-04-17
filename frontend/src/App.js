@@ -1,4 +1,3 @@
-import { useSelector } from "react-redux";
 import { BrowserRouter, Route } from "react-router-dom";
 import "./App.css";
 import Header from "./components/Header";
@@ -15,10 +14,10 @@ function App() {
 
       <main>
         <Route path="/" exact component={HomeScreen}></Route>
-        <Route path="/signin" exact component={SigninScreen}></Route>
+        <Route path="/signin" component={SigninScreen}></Route>
         <Route path="/register" component={RegisterScreen}></Route>
         <Route path="/:username" exact component={ProfileScreen}></Route>
-        <Route path="/:username/post/:id" exact component={PostScreen}></Route>
+        <Route path="/:username/post/:id" component={PostScreen}></Route>
       </main>
     </BrowserRouter>
   );

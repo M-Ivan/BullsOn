@@ -40,6 +40,8 @@ export default function HomeScreen(props) {
   const { userInfo } = userSignin;
   const dispatch = useDispatch();
   const [post, setPost] = useState("");
+  const commentAdd = useSelector((state) => state.commentAdd);
+  const { success: successCommentAdd } = commentAdd;
 
   useEffect(() => {
     dispatch(listPosts({}));
@@ -47,9 +49,11 @@ export default function HomeScreen(props) {
       dispatch({ type: POST_CREATE_RESET });
       setPost("");
     }
-
+    if (successCommentAdd) {
+      dispatch(listPosts({}));
+    }
     dispatch(listPosts({}));
-  }, [createdPost, dispatch, props.history, successCreate]);
+  }, [createdPost, dispatch, props.history, successCreate, successCommentAdd]);
 
   const submitHandler = (e) => {
     e.preventDefault();
@@ -68,62 +72,64 @@ export default function HomeScreen(props) {
         <Grid item xs={12}>
           <hr />
         </Grid>
-
-        <Grid item xs={12}>
-          <form onSubmit={submitHandler}>
-            <Grid
-              container
-              className="form-control"
-              direction="column"
-              justify="center"
-            >
-              <TextField
-                id="postText"
-                multiline
-                label="Comparte con el mundo"
-                placeholder="En que estas pensando?.."
-                rows={6}
-                value={post}
-                onChange={(e) => setPost(e.target.value)}
-              />
-            </Grid>
-            <Grid
-              container
-              justify="center"
-              alignItems="flex-end"
-              direction="column"
-            >
-              {post.length > 0 ? (
-                <Button
-                  classes={{
-                    root: classes.btnRoundedOr,
-                  }}
-                  variant="contained"
-                  type="submit"
-                >
-                  <PostAddIcon />
-                  Compartir una idea
-                </Button>
-              ) : (
-                <Button
-                  classes={{
-                    root: classes.btnRoundedOr,
-                  }}
-                  variant="contained"
-                  disabled
-                >
-                  <PostAddIcon />
-                  Compartir una idea
-                </Button>
-              )}
-            </Grid>
-          </form>
+        {userInfo ? (
           <Grid item xs={12}>
-            <div className="feed-separation">
-              <br />
-            </div>{" "}
+            <form onSubmit={submitHandler}>
+              <Grid
+                container
+                className="form-control"
+                direction="column"
+                justify="center"
+              >
+                <TextField
+                  id="postText"
+                  variant="outlined"
+                  multiline
+                  label="Comparte con el mundo"
+                  placeholder="En que estas pensando?.."
+                  rows={6}
+                  value={post}
+                  onChange={(e) => setPost(e.target.value)}
+                />
+              </Grid>
+              <Grid
+                container
+                justify="center"
+                alignItems="flex-end"
+                direction="column"
+              >
+                {post.length > 0 ? (
+                  <Button
+                    classes={{
+                      root: classes.btnRoundedOr,
+                    }}
+                    variant="contained"
+                    type="submit"
+                  >
+                    <PostAddIcon />
+                    Compartir una idea
+                  </Button>
+                ) : (
+                  <Button
+                    classes={{
+                      root: classes.btnRoundedOr,
+                    }}
+                    variant="contained"
+                    disabled
+                  >
+                    <PostAddIcon />
+                    Compartir una idea
+                  </Button>
+                )}
+              </Grid>
+            </form>
+            <Grid item xs={12}>
+              <div className="feed-separation">
+                <br />
+              </div>{" "}
+            </Grid>
           </Grid>
-        </Grid>
+        ) : null}
         <Grid
           container
           direction="row"

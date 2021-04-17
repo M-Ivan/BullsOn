@@ -1,13 +1,19 @@
-import React from "react";
+import React, { useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
-import Card from "@material-ui/core/Card";
-import CardHeader from "@material-ui/core/CardHeader";
-import CardMedia from "@material-ui/core/CardMedia";
-import CardContent from "@material-ui/core/CardContent";
-import CardActions from "@material-ui/core/CardActions";
-import Avatar from "@material-ui/core/Avatar";
-import IconButton from "@material-ui/core/IconButton";
-import Typography from "@material-ui/core/Typography";
+import {
+  Box,
+  Grid,
+  TextField,
+  Button,
+  Card,
+  CardHeader,
+  CardMedia,
+  CardContent,
+  CardActions,
+  Avatar,
+  IconButton,
+  Typography,
+} from "@material-ui/core";
 import { red } from "@material-ui/core/colors";
 import ScreenShareOutlinedIcon from "@material-ui/icons/ScreenShareOutlined";
 import MoreVertIcon from "@material-ui/icons/MoreVert";
@@ -15,7 +21,9 @@ import { Link } from "react-router-dom";
 import ChatBubbleOutlineIcon from "@material-ui/icons/ChatBubbleOutline";
 import RepeatIcon from "@material-ui/icons/Repeat";
 import StarIcon from "@material-ui/icons/Star";
-import StarBorderOutlinedIcon from "@material-ui/icons/StarBorderOutlined";
+import { addComment } from "../actions/postActions";
+import { useDispatch } from "react-redux";
+
 const useStyles = makeStyles((theme) => ({
   root: {
     maxWidth: "100%",
@@ -37,31 +45,43 @@ const useStyles = makeStyles((theme) => ({
   avatar: {
     backgroundColor: red[500],
   },
+  commentForm: {
+    padding: "1rem",
+  },
 }));
 
 export default function RenderPost(props) {
   const classes = useStyles();
   const { post } = props;
   const { profile } = post.profile;
+  const [commentForm, setCommentForm] = useState(false);
+  const [comment, setComment] = useState("");
+  const postId = post._id;
+  const dispatch = useDispatch();
 
-  console.log(props);
+  const submitCommentHandler = () => {
+    dispatch(addComment(postId, comment));
+  };
+
   return (
     <Card variant="outlined" key={post._id} className={classes.root}>
-      <Link to={`/${profile.username}`}>
-        <CardHeader
-          avatar={
+      <CardHeader
+        avatar={
+          <Link to={`/${profile.username}`}>
             <Avatar
               aria-label="recipe"
               src={post ? profile.profile : null}
               className={classes.avatar}
             ></Avatar>
-          }
-          action={
-            <IconButton aria-label="settings">
-              <MoreVertIcon />
-            </IconButton>
-          }
-          title={
+          </Link>
+        }
+        action={
+          <IconButton aria-label="settings">
+            <MoreVertIcon />
+          </IconButton>
+        }
+        title={
+          <Link to={`/${profile.username}`}>
             <div>
               <Typography color="textPrimary" variant="h6">
                 {profile.name + " " + profile.lastname}
@@ -70,15 +90,15 @@ export default function RenderPost(props) {
                 <strong>{profile.username}</strong>
               </Typography>
             </div>
-          }
-          subheader={
-            "Publicado el: " +
-            post.createdAt.substring(0, 10) +
-            "   A las:  " +
-            post.createdAt.substring(11, 16)
-          }
-        />
-      </Link>
+          </Link>
+        }
+        subheader={
+          "Publicado el: " +
+          post.createdAt.substring(0, 10) +
+          "   A las:  " +
+          post.createdAt.substring(11, 16)
+        }
+      />
 
       {
         // TODO: Revisar por que solo devuelve el ID Del autor
@@ -102,7 +122,7 @@ export default function RenderPost(props) {
         </CardContent>
       </Link>
       <CardActions disableSpacing>
-        <IconButton>
+        <IconButton color="primary" onClick={(e) => setCommentForm(true)}>
           <ChatBubbleOutlineIcon />
           {post.comments.length}
         </IconButton>
@@ -111,13 +131,42 @@ export default function RenderPost(props) {
           {post.repost}
         </IconButton>
         <IconButton aria-label="add to favorites">
-          <StarIcon />
+          <StarIcon
+          // TODO LIKE HANDLER
+          />
           {post.likes}
         </IconButton>{" "}
         <IconButton aria-label="share">
           <ScreenShareOutlinedIcon />
         </IconButton>
       </CardActions>
+      {commentForm ? (
+        <Box className={classes.commentForm}>
+          <Grid container alignItems="center">
+            <Grid item xs={10}>
+              <TextField
+                id="comment-form"
+                value={comment}
+                onChange={(e) => setComment(e.target.value)}
+                fullWidth
+                label="Agregar un comentario..."
+              ></TextField>
+            </Grid>
+            <Grid item xs={2}>
+              <Button
+                className={classes.commentBtn}
+                variant="outlined"
+                color="primary"
+                size="small"
+                onClick={submitCommentHandler}
+              >
+                +1 <ChatBubbleOutlineIcon className={classes.iconSmall} />
+              </Button>
+            </Grid>
+          </Grid>{" "}
+        </Box>
+      ) : null}
+      {console.log("post", post)}
     </Card>
   );
 }

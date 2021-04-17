@@ -71,10 +71,15 @@ export default function PostScreen(props) {
   const [comment, setComment] = useState("");
   const postDetails = useSelector((state) => state.postDetails);
   const { loading, error, post } = postDetails;
+  const commentAdd = useSelector((state) => state.commentAdd);
+  const { success: successCommentAdd } = commentAdd;
 
   useEffect(() => {
+    if (successCommentAdd) {
+      dispatch(detailsPost(postId));
+    }
     dispatch(detailsPost(postId));
-  }, [postId, dispatch]);
+  }, [postId, dispatch, successCommentAdd]);
 
   const submitCommentHandler = () => {
     dispatch(addComment(postId, comment));
@@ -210,7 +215,6 @@ export default function PostScreen(props) {
                   </Card>
                   {post.comments
                     ? post.comments.map((comment) => (
-                        //TODO: Hacer backend y frontend del POST COMMENT
                         <RenderComments key={comment._id} comment={comment} />
                       ))
                     : null}
@@ -225,7 +229,7 @@ export default function PostScreen(props) {
       )}
       {console.log("props", props)}
       {console.log("postId", postId)}
-      {console.log("comment", comment)}{" "}
+      {console.log("commentAdd", commentAdd)} {console.log("comment", comment)}{" "}
     </>
   );
 }

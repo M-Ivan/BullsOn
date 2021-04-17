@@ -40,6 +40,20 @@ postRouter.post(
   })
 );
 
+postRouter.post(
+  "/:id",
+  expressAsyncHandler(async (req, res) => {
+    const post = await Post.findById(req.params.id);
+    if (post) {
+      post.likes + 1;
+
+      res.send(post);
+    } else {
+      res.status(404).send({ message: "Post no encontrado" });
+    }
+  })
+);
+
 postRouter.get(
   "/:id",
   expressAsyncHandler(async (req, res) => {

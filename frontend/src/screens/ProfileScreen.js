@@ -64,73 +64,75 @@ export default function ProfileScreen(props) {
       {console.log("props", props)}
       {console.log("userInfo", userInfo)}
       {console.log("posts", posts)}
-      <Container fixed maxWidth="md">
-        <h1>Perfil {profileId}</h1>
-        <Card variant="outlined" className={classes.root}>
-          {
-            //  loading ? (
-            //   <div className="row center">
-            //      <ReactLoading className="loading" color="#2d91f0" type="cylon" />{" "}
-            //    </div>
-            //  ) : error ? (
-            //    <MessageBox variant="danger">{error}</MessageBox>
-            //  ) : null
-          }
-          <Box m={1}>
-            <CardMedia
-              className={classes.media}
-              image="/images/p1.jpg"
-            ></CardMedia>
-          </Box>
-          <Grid container>
-            <Grid item xs={3}>
-              <Grid container alignItems="center" direction="column">
-                <Avatar
-                  src={user ? user.profile.profile : null}
-                  className={classes.avatar}
-                ></Avatar>
+      {user ? (
+        <Container fixed maxWidth="md">
+          <h1>Perfil {profileId}</h1>
+          <Card variant="outlined" className={classes.root}>
+            {
+              //  loading ? (
+              //   <div className="row center">
+              //      <ReactLoading className="loading" color="#2d91f0" type="cylon" />{" "}
+              //    </div>
+              //  ) : error ? (
+              //    <MessageBox variant="danger">{error}</MessageBox>
+              //  ) : null
+            }
+            <Box m={1}>
+              <CardMedia
+                className={classes.media}
+                image="/images/p1.jpg"
+              ></CardMedia>
+            </Box>
+            <Grid container>
+              <Grid item xs={3}>
+                <Grid container alignItems="center" direction="column">
+                  <Avatar
+                    src={user ? user.profile.profile : null}
+                    className={classes.avatar}
+                  ></Avatar>
+                </Grid>
+              </Grid>
+              <Grid item xs={9}>
+                <Grid container direction="column" alignItems="flex-end">
+                  {userInfo && user && userInfo._id === user._id ? (
+                    <Box m={3}>
+                      <Button size="large" variant="outlined" color="primary">
+                        Editar perfil
+                      </Button>
+                    </Box>
+                  ) : (
+                    <Box m={3}>
+                      <Button size="large" variant="contained" color="primary">
+                        Seguir{" "}
+                      </Button>
+                    </Box>
+                  )}
+                </Grid>
               </Grid>
             </Grid>
-            <Grid item xs={9}>
-              <Grid container direction="column" alignItems="flex-end">
-                {userInfo && user && userInfo._id === user._id ? (
-                  <Box m={3}>
-                    <Button size="large" variant="outlined" color="primary">
-                      Editar perfil
-                    </Button>
-                  </Box>
-                ) : (
-                  <Box m={3}>
-                    <Button size="large" variant="contained" color="primary">
-                      Seguir{" "}
-                    </Button>
-                  </Box>
-                )}
-              </Grid>
-            </Grid>
+            <CardContent>
+              <Typography gutterBottom variant="h4" component="h2">
+                {user ? user.profile.name + " " + user.profile.lastname : null}
+              </Typography>
+              <Typography variant="body" color="textPrimary" component="p">
+                {user ? user.profile.description : null}
+              </Typography>
+              <Typography variant="body" component="p"></Typography>
+            </CardContent>
+          </Card>
+          <Grid item xs={12}>
+            {loadingPosts ? (
+              <ReactLoading className="loading" color="#2d91f0" type="cylon" />
+            ) : errorPosts ? (
+              <MessageBox variant="danger">{errorPosts}</MessageBox>
+            ) : (
+              posts.map((post) => (
+                <RenderPost key={post._id} post={post}></RenderPost>
+              ))
+            )}
           </Grid>
-          <CardContent>
-            <Typography gutterBottom variant="h4" component="h2">
-              {user ? user.profile.name + " " + user.profile.lastname : null}
-            </Typography>
-            <Typography variant="body" color="textPrimary" component="p">
-              {user ? user.profile.description : null}
-            </Typography>
-            <Typography variant="body" component="p"></Typography>
-          </CardContent>
-        </Card>
-        <Grid item xs={12}>
-          {loadingPosts ? (
-            <ReactLoading className="loading" color="#2d91f0" type="cylon" />
-          ) : errorPosts ? (
-            <MessageBox variant="danger">{errorPosts}</MessageBox>
-          ) : (
-            posts.map((post) => (
-              <RenderPost key={post._id} post={post}></RenderPost>
-            ))
-          )}
-        </Grid>
-      </Container>
+        </Container>
+      ) : null}
     </div>
   );
 }
