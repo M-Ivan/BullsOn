@@ -6,7 +6,9 @@ import {
   addComment,
   detailsPost,
   likePost,
+  repostPost,
   unlikePost,
+  unrepostPost,
 } from "../actions/postActions";
 import MessageBox from "../components/MessageBox";
 import ReactLoading from "react-loading";
@@ -70,9 +72,17 @@ const useStyles = makeStyles((theme) => ({
   activeComment: {
     color: "#006eff",
   },
+  activeRepost: {
+    color: "#00bb1b",
+  },
   likeIcon: {
     "&:hover": {
       color: "#ffc900",
+    },
+  },
+  repostIcon: {
+    "&:hover": {
+      color: "#00bb1b",
     },
   },
   likedIcon: {
@@ -98,15 +108,33 @@ export default function PostScreen(props) {
   const { success: successLikeAdd } = postLike;
   const postUnlike = useSelector((state) => state.postUnlike);
   const { success: successLikeRemove } = postUnlike;
+  const postRepost = useSelector((state) => state.postRepost);
+  const { success: successRepost } = postRepost;
+  const postUnrepost = useSelector((state) => state.postUnrepost);
+  const { success: successUnrepost } = postUnrepost;
   const userSignin = useSelector((state) => state.userSignin);
   const { userInfo } = userSignin;
 
   useEffect(() => {
-    if (successLikeAdd || successLikeRemove || successCommentAdd) {
+    if (
+      successUnrepost ||
+      successRepost ||
+      successLikeAdd ||
+      successLikeRemove ||
+      successCommentAdd
+    ) {
       dispatch(detailsPost(postId));
     }
     dispatch(detailsPost(postId));
-  }, [postId, dispatch, successCommentAdd, successLikeAdd, successLikeRemove]);
+  }, [
+    postId,
+    dispatch,
+    successCommentAdd,
+    successLikeAdd,
+    successUnrepost,
+    successRepost,
+    successLikeRemove,
+  ]);
 
   const submitCommentHandler = () => {
     dispatch(addComment(postId, comment));
@@ -118,6 +146,12 @@ export default function PostScreen(props) {
   };
   const unlikeHandler = () => {
     dispatch(unlikePost(postId));
+  };
+  const repostHandler = () => {
+    dispatch(repostPost(postId));
+  };
+  const unrepostHandler = () => {
+    dispatch(unrepostPost(postId));
   };
 
   return (
@@ -208,10 +242,19 @@ export default function PostScreen(props) {
                         </Grid>
                       </IconButton>
                       Respuestas
-                      <IconButton>
-                        <RepeatIcon />
-                        {post.repost}{" "}
-                      </IconButton>{" "}
+                      {post &&
+                      userInfo &&
+                      !post.repost.includes(userInfo.username) ? (
+                        <IconButton onClick={repostHandler}>
+                          <RepeatIcon />
+                          {post.repost.length}
+                        </IconButton>
+                      ) : (
+                        <IconButton onClick={unrepostHandler}>
+                          <RepeatIcon className={classes.activeRepost} />
+                          {post.repost.length}
+                        </IconButton>
+                      )}
                       Repost
                       {post &&
                       userInfo &&

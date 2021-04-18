@@ -18,6 +18,12 @@ import {
   POST_UNLIKE_ADD_SUCCESS,
   POST_UNLIKE_ADD_REQUEST,
   POST_UNLIKE_ADD_FAIL,
+  POST_UNREPOST_ADD_SUCCESS,
+  POST_UNREPOST_ADD_REQUEST,
+  POST_REPOST_ADD_FAIL,
+  POST_REPOST_ADD_SUCCESS,
+  POST_REPOST_ADD_REQUEST,
+  POST_UNREPOST_ADD_FAIL,
 } from "../constants/postConstants";
 
 export const listPosts = ({ profile = "", post = "" }) => async (dispatch) => {
@@ -157,5 +163,59 @@ export const unlikePost = (postId) => async (dispatch, getState) => {
         ? error.response.data.message
         : error.message;
     dispatch({ type: POST_UNLIKE_ADD_FAIL, payload: message });
+  }
+};
+
+export const repostPost = (postId) => async (dispatch, getState) => {
+  dispatch({ type: POST_REPOST_ADD_REQUEST });
+  const {
+    userSignin: { userInfo },
+  } = getState();
+  try {
+    const { data } = await Axios.put(
+      `/api/posts/${postId}/repost`,
+      { username: userInfo.username },
+      {
+        headers: { Authorization: `Bearer ${userInfo.token}` },
+      }
+    );
+    dispatch({
+      type: POST_REPOST_ADD_SUCCESS,
+      payload: data,
+    });
+    console.log("data", data);
+  } catch (error) {
+    const message =
+      error.response && error.response.data.message
+        ? error.response.data.message
+        : error.message;
+    dispatch({ type: POST_REPOST_ADD_FAIL, payload: message });
+  }
+};
+
+export const unrepostPost = (postId) => async (dispatch, getState) => {
+  dispatch({ type: POST_UNREPOST_ADD_REQUEST });
+  const {
+    userSignin: { userInfo },
+  } = getState();
+  try {
+    const { data } = await Axios.put(
+      `/api/posts/${postId}/unrepost`,
+      { username: userInfo.username },
+      {
+        headers: { Authorization: `Bearer ${userInfo.token}` },
+      }
+    );
+    dispatch({
+      type: POST_UNREPOST_ADD_SUCCESS,
+      payload: data,
+    });
+    console.log("data", data);
+  } catch (error) {
+    const message =
+      error.response && error.response.data.message
+        ? error.response.data.message
+        : error.message;
+    dispatch({ type: POST_UNREPOST_ADD_FAIL, payload: message });
   }
 };

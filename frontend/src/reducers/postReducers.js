@@ -21,6 +21,14 @@ import {
   POST_UNLIKE_ADD_FAIL,
   POST_UNLIKE_ADD_SUCCESS,
   POST_UNLIKE_ADD_REQUEST,
+  POST_REPOST_ADD_REQUEST,
+  POST_REPOST_ADD_SUCCESS,
+  POST_REPOST_ADD_FAIL,
+  POST_REPOST_ADD_RESET,
+  POST_UNREPOST_ADD_REQUEST,
+  POST_UNREPOST_ADD_SUCCESS,
+  POST_UNREPOST_ADD_FAIL,
+  POST_UNREPOST_ADD_RESET,
 } from "../constants/postConstants";
 
 export const postListReducer = (
@@ -106,6 +114,36 @@ export const postUnlikeReducer = (state = {}, action) => {
     case POST_UNLIKE_ADD_FAIL:
       return { loading: false, error: action.payload };
     case POST_UNLIKE_ADD_RESET:
+      return {};
+    default:
+      return state;
+  }
+};
+
+export const postRepostReducer = (state = {}, action) => {
+  switch (action.type) {
+    case POST_REPOST_ADD_REQUEST:
+      return { loading: true };
+    case POST_REPOST_ADD_SUCCESS:
+      return { loading: false, success: true, like: action.payload };
+    case POST_REPOST_ADD_FAIL:
+      return { loading: false, error: action.payload };
+    case POST_REPOST_ADD_RESET:
+      return {};
+    default:
+      return state;
+  }
+};
+
+export const postUnrepostReducer = (state = {}, action) => {
+  switch (action.type) {
+    case POST_UNREPOST_ADD_REQUEST:
+      return { loading: true };
+    case POST_UNREPOST_ADD_SUCCESS:
+      return { loading: false, success: true, like: action.payload };
+    case POST_UNREPOST_ADD_FAIL:
+      return { loading: false, error: action.payload };
+    case POST_UNREPOST_ADD_RESET:
       return {};
     default:
       return state;

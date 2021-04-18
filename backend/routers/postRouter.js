@@ -138,4 +138,46 @@ postRouter.put(
   })
 );
 
+postRouter.put(
+  "/:id/repost",
+  isAuth,
+  expressAsyncHandler(async (req, res) => {
+    const postId = req.params.id;
+    const post = await Post.findByIdAndUpdate(postId);
+    if (post) {
+      post.repost.push(req.body.username);
+      const updatedPost = await post.save();
+      res.status(201).send({
+        message: "Reposteado",
+      });
+      console.log("repost", updatedPost);
+    } else {
+      res.status(404).send({
+        message: "Post no encontrado",
+      });
+    }
+  })
+);
+
+postRouter.put(
+  "/:id/unrepost",
+  isAuth,
+  expressAsyncHandler(async (req, res) => {
+    const postId = req.params.id;
+    const post = await Post.findByIdAndUpdate(postId);
+    if (post) {
+      post.repost.pull(req.body.username);
+      const updatedPost = await post.save();
+      res.status(201).send({
+        message: "Repost deshecho",
+      });
+      console.log("desrepost", updatedPost);
+    } else {
+      res.status(404).send({
+        message: "Post no encontrado",
+      });
+    }
+  })
+);
+
 export default postRouter;
