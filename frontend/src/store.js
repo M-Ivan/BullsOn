@@ -5,6 +5,8 @@ import {
   postListReducer,
   postDetailsReducer,
   commentAddReducer,
+  postLikeReducer,
+  postUnlikeReducer,
 } from "./reducers/postReducers";
 import {
   userDetailsReducer,
@@ -27,6 +29,8 @@ const reducer = combineReducers({
   postDetails: postDetailsReducer,
   userDetails: userDetailsReducer,
   commentAdd: commentAddReducer,
+  postLike: postLikeReducer,
+  postUnlike: postUnlikeReducer,
 });
 const composeEnhancer = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 

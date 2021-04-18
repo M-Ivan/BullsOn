@@ -96,4 +96,46 @@ postRouter.post(
   })
 );
 
+postRouter.put(
+  "/:id/likes",
+  isAuth,
+  expressAsyncHandler(async (req, res) => {
+    const postId = req.params.id;
+    const post = await Post.findByIdAndUpdate(postId);
+    if (post) {
+      post.likes.push(req.body.username);
+      const updatedPost = await post.save();
+      res.status(201).send({
+        message: "Like publicado",
+      });
+      console.log("likeado", updatedPost);
+    } else {
+      res.status(404).send({
+        message: "Post no encontrado",
+      });
+    }
+  })
+);
+
+postRouter.put(
+  "/:id/unlike",
+  isAuth,
+  expressAsyncHandler(async (req, res) => {
+    const postId = req.params.id;
+    const post = await Post.findByIdAndUpdate(postId);
+    if (post) {
+      post.likes.pull(req.body.username);
+      const updatedPost = await post.save();
+      res.status(201).send({
+        message: "Like removido",
+      });
+      console.log("deslikeado", updatedPost);
+    } else {
+      res.status(404).send({
+        message: "Post no encontrado",
+      });
+    }
+  })
+);
+
 export default postRouter;

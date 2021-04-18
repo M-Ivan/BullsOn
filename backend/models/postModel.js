@@ -12,7 +12,7 @@ const commentSchema = new mongoose.Schema(
 export const postSchema = new mongoose.Schema(
   {
     post: { type: String, required: true },
-    likes: { type: Number, default: 0 },
+    likes: [{ type: String, ref: "User" }],
     repost: { type: Number, default: 0 },
     image: { type: String, required: false, default: "" },
     // Usamos String en lugar de ObjectId para encontrar el perfil

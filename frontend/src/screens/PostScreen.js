@@ -2,8 +2,12 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { makeStyles } from "@material-ui/core/styles";
 
-import RenderPost from "../components/RenderPost";
-import { addComment, detailsPost } from "../actions/postActions";
+import {
+  addComment,
+  detailsPost,
+  likePost,
+  unlikePost,
+} from "../actions/postActions";
 import MessageBox from "../components/MessageBox";
 import ReactLoading from "react-loading";
 import {
@@ -29,6 +33,7 @@ import ChatBubbleOutlineIcon from "@material-ui/icons/ChatBubbleOutline";
 import RepeatIcon from "@material-ui/icons/Repeat";
 import StarIcon from "@material-ui/icons/Star";
 import RenderComments from "../components/RenderComments";
+import StarOutlineIcon from "@material-ui/icons/StarOutline";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -73,16 +78,30 @@ export default function PostScreen(props) {
   const { loading, error, post } = postDetails;
   const commentAdd = useSelector((state) => state.commentAdd);
   const { success: successCommentAdd } = commentAdd;
+  const postLike = useSelector((state) => state.postLike);
+  const { success: successLikeAdd } = postLike;
+  const postUnlike = useSelector((state) => state.postUnlike);
+  const { success: successLikeRemove } = postUnlike;
+  const userSignin = useSelector((state) => state.userSignin);
+  const { userInfo } = userSignin;
 
   useEffect(() => {
-    if (successCommentAdd) {
+    if (successLikeAdd || successLikeRemove || successCommentAdd) {
       dispatch(detailsPost(postId));
     }
     dispatch(detailsPost(postId));
-  }, [postId, dispatch, successCommentAdd]);
+  }, [postId, dispatch, successCommentAdd, successLikeAdd, successLikeRemove]);
 
   const submitCommentHandler = () => {
     dispatch(addComment(postId, comment));
+    setCommentForm(false);
+  };
+
+  const likeHandler = () => {
+    dispatch(likePost(postId));
+  };
+  const unlikeHandler = () => {
+    dispatch(unlikePost(postId));
   };
 
   return (
@@ -174,11 +193,26 @@ export default function PostScreen(props) {
                         {post.repost}{" "}
                       </IconButton>{" "}
                       Repost
-                      <IconButton aria-label="add to favorites">
-                        <StarIcon />
-                        {post.likes}{" "}
-                      </IconButton>
-                      Me gusta{" "}
+                      {post &&
+                      userInfo &&
+                      !post.likes.includes(userInfo.username) ? (
+                        <IconButton
+                          onClick={likeHandler}
+                          aria-label="indicar me gusta"
+                        >
+                          <StarOutlineIcon />
+                          {post.likes.length}{" "}
+                        </IconButton>
+                      ) : (
+                        <IconButton
+                          onClick={unlikeHandler}
+                          aria-label="ya no me gusta"
+                        >
+                          <StarIcon />
+                          {post.likes.length}{" "}
+                        </IconButton>
+                      )}
+                      Me gusta
                       <IconButton aria-label="share">
                         <ScreenShareOutlinedIcon />
                       </IconButton>
@@ -227,9 +261,11 @@ export default function PostScreen(props) {
           </Container>
         </>
       )}
-      {console.log("props", props)}
-      {console.log("postId", postId)}
-      {console.log("commentAdd", commentAdd)} {console.log("comment", comment)}{" "}
+      {
+        // console.log("props", props)}
+        // {console.log("postId", postId)}
+        // {console.log("commentAdd", commentAdd)} {console.log("comment", comment)}
+      }
     </>
   );
 }

@@ -21,7 +21,7 @@ import { Link } from "react-router-dom";
 import ChatBubbleOutlineIcon from "@material-ui/icons/ChatBubbleOutline";
 import RepeatIcon from "@material-ui/icons/Repeat";
 import StarIcon from "@material-ui/icons/Star";
-import { addComment } from "../actions/postActions";
+import { addComment, likePost } from "../actions/postActions";
 import { useDispatch } from "react-redux";
 
 const useStyles = makeStyles((theme) => ({
@@ -61,6 +61,10 @@ export default function RenderPost(props) {
 
   const submitCommentHandler = () => {
     dispatch(addComment(postId, comment));
+  };
+
+  const likeHandler = () => {
+    dispatch(likePost(postId));
   };
 
   return (
@@ -122,7 +126,7 @@ export default function RenderPost(props) {
         </CardContent>
       </Link>
       <CardActions disableSpacing>
-        <IconButton color="primary" onClick={(e) => setCommentForm(true)}>
+        <IconButton color="primary" onClick={() => setCommentForm(true)}>
           <ChatBubbleOutlineIcon />
           {post.comments.length}
         </IconButton>
@@ -130,11 +134,11 @@ export default function RenderPost(props) {
           <RepeatIcon />
           {post.repost}
         </IconButton>
-        <IconButton aria-label="add to favorites">
+        <IconButton onClick={likeHandler} aria-label="add to favorites">
           <StarIcon
           // TODO LIKE HANDLER
           />
-          {post.likes}
+          {post.likes.length}
         </IconButton>{" "}
         <IconButton aria-label="share">
           <ScreenShareOutlinedIcon />

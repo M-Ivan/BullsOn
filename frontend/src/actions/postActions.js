@@ -15,6 +15,9 @@ import {
   POST_LIKE_ADD_REQUEST,
   POST_LIKE_ADD_SUCCESS,
   POST_LIKE_ADD_FAIL,
+  POST_UNLIKE_ADD_SUCCESS,
+  POST_UNLIKE_ADD_REQUEST,
+  POST_UNLIKE_ADD_FAIL,
 } from "../constants/postConstants";
 
 export const listPosts = ({ profile = "", post = "" }) => async (dispatch) => {
@@ -103,28 +106,56 @@ export const addComment = (postId, comment) => async (dispatch, getState) => {
   }
 };
 
-export const addLike = (postId) => async (dispatch, getState) => {
+export const likePost = (postId) => async (dispatch, getState) => {
   dispatch({ type: POST_LIKE_ADD_REQUEST });
   const {
     userSignin: { userInfo },
   } = getState();
   try {
-    const { data } = await Axios.post(
-      `/api/posts/${postId}`,
-      {},
+    const { data } = await Axios.put(
+      `/api/posts/${postId}/likes`,
+      { username: userInfo.username },
       {
         headers: { Authorization: `Bearer ${userInfo.token}` },
       }
     );
     dispatch({
       type: POST_LIKE_ADD_SUCCESS,
-      payload: data.comment,
+      payload: data,
     });
+    console.log("data", data);
   } catch (error) {
     const message =
       error.response && error.response.data.message
         ? error.response.data.message
         : error.message;
     dispatch({ type: POST_LIKE_ADD_FAIL, payload: message });
+  }
+};
+
+export const unlikePost = (postId) => async (dispatch, getState) => {
+  dispatch({ type: POST_UNLIKE_ADD_REQUEST });
+  const {
+    userSignin: { userInfo },
+  } = getState();
+  try {
+    const { data } = await Axios.put(
+      `/api/posts/${postId}/unlike`,
+      { username: userInfo.username },
+      {
+        headers: { Authorization: `Bearer ${userInfo.token}` },
+      }
+    );
+    dispatch({
+      type: POST_UNLIKE_ADD_SUCCESS,
+      payload: data,
+    });
+    console.log("data", data);
+  } catch (error) {
+    const message =
+      error.response && error.response.data.message
+        ? error.response.data.message
+        : error.message;
+    dispatch({ type: POST_UNLIKE_ADD_FAIL, payload: message });
   }
 };

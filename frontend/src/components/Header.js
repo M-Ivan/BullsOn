@@ -321,7 +321,7 @@ export default function Header(props) {
                         >
                           {" "}
                           <i className="fa fa-user-circle"></i>
-                          Mi cuenta
+                          {userInfo.username}
                         </Button>
                       </div>
                       <Menu
@@ -335,7 +335,9 @@ export default function Header(props) {
                           <Link to={`/${userInfo.username}`}>Mi perfil</Link>
                         </MenuItem>
                         <MenuItem onClick={handleUserMenuClose}>
-                          <Link to="/:id/settings">Configuración</Link>
+                          <Link to={`/${userInfo.username}/settings`}>
+                            Configuración
+                          </Link>
                         </MenuItem>
                         <MenuItem onClick={signoutHandler}>
                           Cerrar sesión
