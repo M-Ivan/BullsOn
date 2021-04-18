@@ -21,8 +21,10 @@ import { Link } from "react-router-dom";
 import ChatBubbleOutlineIcon from "@material-ui/icons/ChatBubbleOutline";
 import RepeatIcon from "@material-ui/icons/Repeat";
 import StarIcon from "@material-ui/icons/Star";
-import { addComment, likePost } from "../actions/postActions";
-import { useDispatch } from "react-redux";
+import { addComment, likePost, unlikePost } from "../actions/postActions";
+import { useDispatch, useSelector } from "react-redux";
+import StarOutlineIcon from "@material-ui/icons/StarOutline";
+import ChatIcon from "@material-ui/icons/Chat";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -48,6 +50,22 @@ const useStyles = makeStyles((theme) => ({
   commentForm: {
     padding: "1rem",
   },
+  activeComment: {
+    color: "#006eff",
+  },
+  likeIcon: {
+    "&:hover": {
+      color: "#ffc900",
+    },
+  },
+  likedIcon: {
+    color: "#ffc900",
+  },
+  commentBtn: {
+    "&:hover": {
+      color: "#006eff",
+    },
+  },
 }));
 
 export default function RenderPost(props) {
@@ -56,15 +74,21 @@ export default function RenderPost(props) {
   const { profile } = post.profile;
   const [commentForm, setCommentForm] = useState(false);
   const [comment, setComment] = useState("");
+  const userSignin = useSelector((state) => state.userSignin);
+  const { userInfo } = userSignin;
   const postId = post._id;
   const dispatch = useDispatch();
 
   const submitCommentHandler = () => {
     dispatch(addComment(postId, comment));
+    setCommentForm(false);
   };
 
   const likeHandler = () => {
     dispatch(likePost(postId));
+  };
+  const unlikeHandler = () => {
+    dispatch(unlikePost(postId));
   };
 
   return (
@@ -126,20 +150,40 @@ export default function RenderPost(props) {
         </CardContent>
       </Link>
       <CardActions disableSpacing>
-        <IconButton color="primary" onClick={() => setCommentForm(true)}>
-          <ChatBubbleOutlineIcon />
+        <IconButton
+          className={classes.commentBtn}
+          onClick={() => setCommentForm(true)}
+        >
+          {!commentForm ? (
+            <ChatBubbleOutlineIcon />
+          ) : (
+            <ChatIcon className={classes.activeComment} />
+          )}{" "}
           {post.comments.length}
         </IconButton>
         <IconButton>
           <RepeatIcon />
           {post.repost}
         </IconButton>
-        <IconButton onClick={likeHandler} aria-label="add to favorites">
-          <StarIcon
-          // TODO LIKE HANDLER
-          />
-          {post.likes.length}
-        </IconButton>{" "}
+        {post && userInfo && !post.likes.includes(userInfo.username) ? (
+          <IconButton
+            className={classes.likeIcon}
+            onClick={likeHandler}
+            aria-label="indicar me gusta"
+          >
+            <Grid container alignItems="center">
+              <StarOutlineIcon />
+              {post.likes.length}{" "}
+            </Grid>
+          </IconButton>
+        ) : (
+          <IconButton onClick={unlikeHandler} aria-label="ya no me gusta">
+            <Grid container alignItems="center" className={classes.likeIcon}>
+              <StarIcon className={classes.likedIcon} />
+              {post.likes.length}{" "}
+            </Grid>
+          </IconButton>
+        )}
         <IconButton aria-label="share">
           <ScreenShareOutlinedIcon />
         </IconButton>
@@ -158,13 +202,12 @@ export default function RenderPost(props) {
             </Grid>
             <Grid item xs={2}>
               <Button
-                className={classes.commentBtn}
+                className={classes.activeComment}
                 variant="outlined"
-                color="primary"
                 size="small"
                 onClick={submitCommentHandler}
               >
-                +1 <ChatBubbleOutlineIcon className={classes.iconSmall} />
+                +1 <ChatIcon className={classes.iconSmall} />
               </Button>
             </Grid>
           </Grid>{" "}

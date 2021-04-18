@@ -13,7 +13,7 @@ export const postSchema = new mongoose.Schema(
   {
     post: { type: String, required: true },
     likes: [{ type: String, ref: "User" }],
-    repost: { type: Number, default: 0 },
+    repost: [{ type: String, ref: "User" }],
     image: { type: String, required: false, default: "" },
     // Usamos String en lugar de ObjectId para encontrar el perfil
     // Por el username, ya que el campo _id en userModel sera el mismo

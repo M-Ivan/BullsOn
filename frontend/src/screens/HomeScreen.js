@@ -8,6 +8,7 @@ import { POST_CREATE_RESET } from "../constants/postConstants";
 import { listPosts, createPost } from "../actions/postActions";
 import MessageBox from "../components/MessageBox";
 import PostAddIcon from "@material-ui/icons/PostAdd";
+import RenderComments from "../components/RenderComments";
 
 const useStyles = makeStyles({
   btnRoundedOr: {
@@ -42,6 +43,10 @@ export default function HomeScreen(props) {
   const [post, setPost] = useState("");
   const commentAdd = useSelector((state) => state.commentAdd);
   const { success: successCommentAdd } = commentAdd;
+  const postLike = useSelector((state) => state.postLike);
+  const { success: successLikeAdd } = postLike;
+  const postUnlike = useSelector((state) => state.postUnlike);
+  const { success: successLikeRemove } = postUnlike;
 
   useEffect(() => {
     dispatch(listPosts({}));
@@ -49,11 +54,19 @@ export default function HomeScreen(props) {
       dispatch({ type: POST_CREATE_RESET });
       setPost("");
     }
-    if (successCommentAdd) {
+    if (successCommentAdd || successLikeAdd || successLikeRemove) {
       dispatch(listPosts({}));
     }
     dispatch(listPosts({}));
-  }, [createdPost, dispatch, props.history, successCreate, successCommentAdd]);
+  }, [
+    createdPost,
+    dispatch,
+    props.history,
+    successCreate,
+    successLikeAdd,
+    successLikeRemove,
+    successCommentAdd,
+  ]);
 
   const submitHandler = (e) => {
     e.preventDefault();

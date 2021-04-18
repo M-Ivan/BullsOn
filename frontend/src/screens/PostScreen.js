@@ -34,6 +34,7 @@ import RepeatIcon from "@material-ui/icons/Repeat";
 import StarIcon from "@material-ui/icons/Star";
 import RenderComments from "../components/RenderComments";
 import StarOutlineIcon from "@material-ui/icons/StarOutline";
+import ChatIcon from "@material-ui/icons/Chat";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -61,7 +62,22 @@ const useStyles = makeStyles((theme) => ({
     width: "1rem",
     marginLeft: "2px",
   },
-  commentBtn: {},
+  commentBtn: {
+    "&:hover": {
+      color: "#006eff",
+    },
+  },
+  activeComment: {
+    color: "#006eff",
+  },
+  likeIcon: {
+    "&:hover": {
+      color: "#ffc900",
+    },
+  },
+  likedIcon: {
+    color: "#ffc900",
+  },
 
   commentForm: {
     padding: "1rem",
@@ -177,16 +193,20 @@ export default function PostScreen(props) {
                     </CardContent>
 
                     <CardActions disableSpacing>
-                      <Box>
-                        {" "}
-                        <IconButton
-                          color="primary"
-                          onClick={(e) => setCommentForm(true)}
-                        >
-                          <ChatBubbleOutlineIcon />
+                      {" "}
+                      <IconButton
+                        className={classes.commentBtn}
+                        onClick={() => setCommentForm(true)}
+                      >
+                        <Grid container alignItems="center">
+                          {!commentForm ? (
+                            <ChatBubbleOutlineIcon />
+                          ) : (
+                            <ChatIcon className={classes.activeComment} />
+                          )}
                           {post.comments.length}{" "}
-                        </IconButton>
-                      </Box>{" "}
+                        </Grid>
+                      </IconButton>
                       Respuestas
                       <IconButton>
                         <RepeatIcon />
@@ -199,17 +219,26 @@ export default function PostScreen(props) {
                         <IconButton
                           onClick={likeHandler}
                           aria-label="indicar me gusta"
+                          className={classes.likeIcon}
                         >
-                          <StarOutlineIcon />
-                          {post.likes.length}{" "}
+                          <Grid container alignItems="center">
+                            <StarOutlineIcon />
+                            {post.likes.length}{" "}
+                          </Grid>
                         </IconButton>
                       ) : (
                         <IconButton
                           onClick={unlikeHandler}
                           aria-label="ya no me gusta"
                         >
-                          <StarIcon />
-                          {post.likes.length}{" "}
+                          <Grid
+                            container
+                            alignItems="center"
+                            className={classes.likeIcon}
+                          >
+                            <StarIcon className={classes.likedIcon} />
+                            {post.likes.length}{" "}
+                          </Grid>
                         </IconButton>
                       )}
                       Me gusta
@@ -231,16 +260,12 @@ export default function PostScreen(props) {
                           </Grid>
                           <Grid item xs={2}>
                             <Button
-                              className={classes.commentBtn}
+                              className={classes.activeComment}
                               variant="outlined"
-                              color="primary"
                               size="small"
                               onClick={submitCommentHandler}
                             >
-                              +1{" "}
-                              <ChatBubbleOutlineIcon
-                                className={classes.iconSmall}
-                              />
+                              +1 <ChatIcon className={classes.iconSmall} />
                             </Button>
                           </Grid>
                         </Grid>{" "}
