@@ -24,19 +24,36 @@ import {
   POST_REPOST_ADD_SUCCESS,
   POST_REPOST_ADD_REQUEST,
   POST_UNREPOST_ADD_FAIL,
+  USER_REPOST_LIST_FAIL,
+  USER_REPOST_LIST_REQUEST,
+  USER_REPOST_LIST_SUCCESS,
 } from "../constants/postConstants";
 
-export const listPosts = ({ profile = "", post = "" }) => async (dispatch) => {
+export const listPosts = ({ profile = "", post = "", repost = "" }) => async (
+  dispatch
+) => {
   dispatch({
     type: POST_LIST_REQUEST,
   });
   try {
     const { data } = await Axios.get(
-      `/api/posts?profile=${profile}&post=${post}`
+      `/api/posts?profile=${profile}&repost=${repost}&post=${post}`
     );
     dispatch({ type: POST_LIST_SUCCESS, payload: data });
   } catch (error) {
     dispatch({ type: POST_LIST_FAIL, payload: error.message });
+  }
+};
+
+export const listReposts = ({ profile = "" }) => async (dispatch) => {
+  dispatch({
+    type: USER_REPOST_LIST_REQUEST,
+  });
+  try {
+    const { data } = await Axios.get(`/api/posts/reposts?profile=${profile}`);
+    dispatch({ type: USER_REPOST_LIST_SUCCESS, payload: data });
+  } catch (error) {
+    dispatch({ type: USER_REPOST_LIST_FAIL, payload: error.message });
   }
 };
 

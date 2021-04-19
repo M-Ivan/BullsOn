@@ -21,7 +21,13 @@ import { Link } from "react-router-dom";
 import ChatBubbleOutlineIcon from "@material-ui/icons/ChatBubbleOutline";
 import RepeatIcon from "@material-ui/icons/Repeat";
 import StarIcon from "@material-ui/icons/Star";
-import { addComment, likePost, unlikePost } from "../actions/postActions";
+import {
+  addComment,
+  likePost,
+  repostPost,
+  unlikePost,
+  unrepostPost,
+} from "../actions/postActions";
 import { useDispatch, useSelector } from "react-redux";
 import StarOutlineIcon from "@material-ui/icons/StarOutline";
 import ChatIcon from "@material-ui/icons/Chat";
@@ -47,24 +53,33 @@ const useStyles = makeStyles((theme) => ({
   avatar: {
     backgroundColor: red[500],
   },
-  commentForm: {
-    padding: "1rem",
+  commentBtn: {
+    "&:hover": {
+      color: "#006eff",
+    },
   },
   activeComment: {
     color: "#006eff",
+  },
+  activeRepost: {
+    color: "#00bb1b",
   },
   likeIcon: {
     "&:hover": {
       color: "#ffc900",
     },
   },
+  repostIcon: {
+    "&:hover": {
+      color: "#00bb1b",
+    },
+  },
   likedIcon: {
     color: "#ffc900",
   },
-  commentBtn: {
-    "&:hover": {
-      color: "#006eff",
-    },
+
+  commentForm: {
+    padding: "1rem",
   },
 }));
 
@@ -76,6 +91,7 @@ export default function RenderPost(props) {
   const [comment, setComment] = useState("");
   const userSignin = useSelector((state) => state.userSignin);
   const { userInfo } = userSignin;
+
   const postId = post._id;
   const dispatch = useDispatch();
 
@@ -89,6 +105,12 @@ export default function RenderPost(props) {
   };
   const unlikeHandler = () => {
     dispatch(unlikePost(postId));
+  };
+  const repostHandler = () => {
+    dispatch(repostPost(postId));
+  };
+  const unrepostHandler = () => {
+    dispatch(unrepostPost(postId));
   };
 
   return (
@@ -161,10 +183,17 @@ export default function RenderPost(props) {
           )}{" "}
           {post.comments.length}
         </IconButton>
-        <IconButton>
-          <RepeatIcon />
-          {post.repost}
-        </IconButton>
+        {post && userInfo && !post.repost.includes(userInfo.username) ? (
+          <IconButton onClick={repostHandler}>
+            <RepeatIcon />
+            {post.repost.length}
+          </IconButton>
+        ) : (
+          <IconButton onClick={unrepostHandler}>
+            <RepeatIcon className={classes.activeRepost} />
+            {post.repost.length}
+          </IconButton>
+        )}
         {post && userInfo && !post.likes.includes(userInfo.username) ? (
           <IconButton
             className={classes.likeIcon}

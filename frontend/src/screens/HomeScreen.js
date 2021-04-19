@@ -47,6 +47,10 @@ export default function HomeScreen(props) {
   const { success: successLikeAdd } = postLike;
   const postUnlike = useSelector((state) => state.postUnlike);
   const { success: successLikeRemove } = postUnlike;
+  const postRepost = useSelector((state) => state.postRepost);
+  const { success: successRepost } = postRepost;
+  const postUnrepost = useSelector((state) => state.postUnrepost);
+  const { success: successUnrepost } = postUnrepost;
 
   useEffect(() => {
     dispatch(listPosts({}));
@@ -54,18 +58,25 @@ export default function HomeScreen(props) {
       dispatch({ type: POST_CREATE_RESET });
       setPost("");
     }
-    if (successCommentAdd || successLikeAdd || successLikeRemove) {
+    if (
+      successUnrepost ||
+      successRepost ||
+      successLikeAdd ||
+      successLikeRemove ||
+      successCommentAdd
+    ) {
       dispatch(listPosts({}));
     }
     dispatch(listPosts({}));
   }, [
     createdPost,
     dispatch,
-    props.history,
-    successCreate,
-    successLikeAdd,
-    successLikeRemove,
     successCommentAdd,
+    successLikeAdd,
+    successUnrepost,
+    successRepost,
+    successLikeRemove,
+    successCreate,
   ]);
 
   const submitHandler = (e) => {

@@ -9,6 +9,7 @@ import {
   postUnlikeReducer,
   postRepostReducer,
   postUnrepostReducer,
+  repostListReducer,
 } from "./reducers/postReducers";
 import {
   userDetailsReducer,
@@ -28,6 +29,7 @@ const reducer = combineReducers({
   userRegister: userRegisterReducer,
   postCreate: postCreateReducer,
   postList: postListReducer,
+  repostList: repostListReducer,
   postDetails: postDetailsReducer,
   userDetails: userDetailsReducer,
   commentAdd: commentAddReducer,

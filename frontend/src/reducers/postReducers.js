@@ -29,6 +29,9 @@ import {
   POST_UNREPOST_ADD_SUCCESS,
   POST_UNREPOST_ADD_FAIL,
   POST_UNREPOST_ADD_RESET,
+  USER_REPOST_LIST_REQUEST,
+  USER_REPOST_LIST_SUCCESS,
+  USER_REPOST_LIST_FAIL,
 } from "../constants/postConstants";
 
 export const postListReducer = (
@@ -41,6 +44,22 @@ export const postListReducer = (
     case POST_LIST_SUCCESS:
       return { loading: false, posts: action.payload };
     case POST_LIST_FAIL:
+      return { loading: false, error: action.payload };
+    default:
+      return state;
+  }
+};
+
+export const repostListReducer = (
+  state = { loading: true, reposts: [] },
+  action
+) => {
+  switch (action.type) {
+    case USER_REPOST_LIST_REQUEST:
+      return { loading: true };
+    case USER_REPOST_LIST_SUCCESS:
+      return { loading: false, reposts: action.payload };
+    case USER_REPOST_LIST_FAIL:
       return { loading: false, error: action.payload };
     default:
       return state;

@@ -26,6 +26,18 @@ postRouter.get(
   })
 );
 
+postRouter.get(
+  "/reposts",
+  expressAsyncHandler(async (req, res) => {
+    const repost = req.query.profile || "";
+    const repostFilter = repost ? { repost } : {};
+    const posts = await Post.find({ ...repostFilter }).populate(
+      "profile",
+      "profile.name profile.lastname profile.profile profile.username"
+    );
+    res.send(posts);
+  })
+);
 postRouter.post(
   "/",
   isAuth,

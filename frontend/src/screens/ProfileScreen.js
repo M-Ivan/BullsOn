@@ -15,7 +15,7 @@ import { red } from "@material-ui/core/colors";
 import Avatar from "@material-ui/core/Avatar";
 import Box from "@material-ui/core/Box";
 import RenderPost from "../components/RenderPost";
-import { listPosts } from "../actions/postActions";
+import { listPosts, listReposts } from "../actions/postActions";
 
 const useStyles = makeStyles({
   root: {
@@ -42,27 +42,64 @@ export default function ProfileScreen(props) {
   const userSignin = useSelector((state) => state.userSignin);
   const { userInfo } = userSignin;
   const userDetails = useSelector((state) => state.userDetails);
-  const { loading, error, user } = userDetails;
+  const { user } = userDetails;
   const postList = useSelector((state) => state.postList);
   const { loading: loadingPosts, error: errorPosts, posts } = postList;
-  const profileId = props.match.params.username;
+  const repostList = useSelector((state) => state.repostList);
+  const { reposts } = repostList;
+  const commentAdd = useSelector((state) => state.commentAdd);
+  const { success: successCommentAdd } = commentAdd;
+  const postLike = useSelector((state) => state.postLike);
+  const { success: successLikeAdd } = postLike;
+  const postUnlike = useSelector((state) => state.postUnlike);
+  const { success: successLikeRemove } = postUnlike;
+  const postRepost = useSelector((state) => state.postRepost);
+  const { success: successRepost } = postRepost;
+  const postUnrepost = useSelector((state) => state.postUnrepost);
+  const { success: successUnrepost } = postUnrepost;
 
+  const profileId = props.match.params.username;
+  const postTotal = posts && reposts ? posts.concat(reposts) : null;
+  // console.log("postTotal", postTotal);
   useEffect(() => {
+    if (
+      successCommentAdd ||
+      successLikeAdd ||
+      successLikeRemove ||
+      successRepost ||
+      successUnrepost
+    ) {
+      dispatch(listPosts({ profile: profileId }));
+      dispatch(listReposts({ profile: profileId }));
+    }
     if (!user) {
       dispatch(detailsUser(profileId));
       dispatch(listPosts({ profile: profileId }));
+      dispatch(listReposts({ profile: profileId }));
     }
     if (user && profileId !== user.username) {
       dispatch(detailsUser(profileId));
+      //TODO: Arreglar este problema, busca por ambos parametros
+      //Por lo que la respuesta es 0 posts
       dispatch(listPosts({ profile: profileId }));
+      dispatch(listReposts({ profile: profileId }));
     }
-  }, [dispatch, userInfo, user, profileId]);
-  // TODO: Cambiar el fetch de _id a username
+  }, [
+    dispatch,
+    userInfo,
+    user,
+    profileId,
+    successCommentAdd,
+    successLikeAdd,
+    successLikeRemove,
+    successRepost,
+    successUnrepost,
+  ]);
   return (
     <div>
       {console.log("user", user)}
       {console.log("props", props)}
-      {console.log("userInfo", userInfo)}
+      {console.log("reposts", reposts)}
       {console.log("posts", posts)}
       {user ? (
         <Container fixed maxWidth="md">
@@ -125,11 +162,12 @@ export default function ProfileScreen(props) {
               <ReactLoading className="loading" color="#2d91f0" type="cylon" />
             ) : errorPosts ? (
               <MessageBox variant="danger">{errorPosts}</MessageBox>
-            ) : (
-              posts.map((post) => (
+            ) : posts && reposts ? (
+              postTotal.map((post) => (
                 <RenderPost key={post._id} post={post}></RenderPost>
               ))
-            )}
+            ) : //TODO: Pantalla length === 0
+            null}
           </Grid>
         </Container>
       ) : null}
