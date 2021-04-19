@@ -67,4 +67,46 @@ userRouter.get(
   })
 );
 
+userRouter.put(
+  "/:username/follow",
+  isAuth,
+  expressAsyncHandler(async (req, res) => {
+    const userId = req.params.username;
+    const user = await User.findByIdAndUpdate(userId);
+    if (user) {
+      user.followers.push(req.body.username);
+      const updatedUser = await user.save();
+      res.status(201).send({
+        message: `Siguiendo a ${updatedUser.username}`,
+      });
+      console.log("follow", updatedUser);
+    } else {
+      res.status(404).send({
+        message: "User no encontrado",
+      });
+    }
+  })
+);
+
+userRouter.put(
+  "/:username/unfollow",
+  isAuth,
+  expressAsyncHandler(async (req, res) => {
+    const userId = req.params.username;
+    const user = await User.findByIdAndUpdate(userId);
+    if (user) {
+      user.followers.pull(req.body.username);
+      const updatedUser = await user.save();
+      res.status(201).send({
+        message: `Ya no estas siguiendo a ${updatedUser.username}`,
+      });
+      console.log("unfollow", updatedUser);
+    } else {
+      res.status(404).send({
+        message: "User no encontrado",
+      });
+    }
+  })
+);
+
 export default userRouter;

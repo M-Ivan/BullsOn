@@ -7,8 +7,9 @@ const userSchema = new mongoose.Schema(
     email: { type: String, required: true, unique: true },
     password: { type: String, required: true },
     isAdmin: { type: Boolean, default: false, required: true },
-    followers: { type: Number, default: 0 },
-    following: { type: Number, default: 0 },
+    followers: [{ type: String, ref: "User" }],
+    following: [{ type: String, ref: "User" }],
+    disabled: { type: Boolean, default: false },
     profile: {
       name: String,
       lastname: String,

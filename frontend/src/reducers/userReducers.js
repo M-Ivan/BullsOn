@@ -10,6 +10,14 @@ import {
   USER_DETAILS_SUCCESS,
   USER_DETAILS_FAIL,
   USER_DETAILS_RESET,
+  USER_FOLLOW_REQUEST,
+  USER_FOLLOW_SUCCESS,
+  USER_FOLLOW_FAIL,
+  USER_FOLLOW_RESET,
+  USER_UNFOLLOW_REQUEST,
+  USER_UNFOLLOW_SUCCESS,
+  USER_UNFOLLOW_FAIL,
+  USER_UNFOLLOW_RESET,
 } from "../constants/userConstants";
 
 export const userRegisterReducer = (state = {}, action) => {
@@ -50,6 +58,36 @@ export const userDetailsReducer = (state = { loading: true }, action) => {
       return { loading: false, error: action.payload };
     case USER_DETAILS_RESET:
       return { loading: true };
+    default:
+      return state;
+  }
+};
+
+export const userFollowReducer = (state = {}, action) => {
+  switch (action.type) {
+    case USER_FOLLOW_REQUEST:
+      return { loading: true };
+    case USER_FOLLOW_SUCCESS:
+      return { loading: false, success: true, follow: action.payload };
+    case USER_FOLLOW_FAIL:
+      return { loading: false, error: action.payload };
+    case USER_FOLLOW_RESET:
+      return {};
+    default:
+      return state;
+  }
+};
+
+export const userUnfollowReducer = (state = {}, action) => {
+  switch (action.type) {
+    case USER_UNFOLLOW_REQUEST:
+      return { loading: true };
+    case USER_UNFOLLOW_SUCCESS:
+      return { loading: false, success: true, unfollow: action.payload };
+    case USER_UNFOLLOW_FAIL:
+      return { loading: false, error: action.payload };
+    case USER_UNFOLLOW_RESET:
+      return {};
     default:
       return state;
   }

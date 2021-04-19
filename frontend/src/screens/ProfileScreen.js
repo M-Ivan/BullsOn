@@ -10,12 +10,16 @@ import CardActions from "@material-ui/core/CardActions";
 import CardContent from "@material-ui/core/CardContent";
 import CardMedia from "@material-ui/core/CardMedia";
 import Typography from "@material-ui/core/Typography";
-import { detailsUser } from "../actions/userActions";
+import { detailsUser, followUser, unfollowUser } from "../actions/userActions";
 import { red } from "@material-ui/core/colors";
 import Avatar from "@material-ui/core/Avatar";
 import Box from "@material-ui/core/Box";
 import RenderPost from "../components/RenderPost";
 import { listPosts, listReposts } from "../actions/postActions";
+import {
+  USER_FOLLOW_RESET,
+  USER_UNFOLLOW_RESET,
+} from "../constants/userConstants";
 
 const useStyles = makeStyles({
   root: {
@@ -57,6 +61,10 @@ export default function ProfileScreen(props) {
   const { success: successRepost } = postRepost;
   const postUnrepost = useSelector((state) => state.postUnrepost);
   const { success: successUnrepost } = postUnrepost;
+  const userFollow = useSelector((state) => state.userFollow);
+  const { success: successFollow } = userFollow;
+  const userUnfollow = useSelector((state) => state.userUnfollow);
+  const { success: successUnfollow } = userUnfollow;
 
   const profileId = props.match.params.username;
   const postTotal = posts && reposts ? posts.concat(reposts) : null;
@@ -71,6 +79,14 @@ export default function ProfileScreen(props) {
     ) {
       dispatch(listPosts({ profile: profileId }));
       dispatch(listReposts({ profile: profileId }));
+    }
+    if (successFollow) {
+      dispatch(detailsUser(profileId));
+      dispatch({ type: USER_FOLLOW_RESET });
+    }
+    if (successUnfollow) {
+      dispatch(detailsUser(profileId));
+      dispatch({ type: USER_UNFOLLOW_RESET });
     }
     if (!user) {
       dispatch(detailsUser(profileId));
@@ -94,16 +110,33 @@ export default function ProfileScreen(props) {
     successLikeRemove,
     successRepost,
     successUnrepost,
+    successFollow,
+    successUnfollow,
   ]);
+
+  const followHandler = () => {
+    dispatch(followUser(profileId));
+  };
+  const unfollowHandler = () => {
+    dispatch(unfollowUser(profileId));
+  };
   return (
     <div>
-      {console.log("user", user)}
-      {console.log("props", props)}
-      {console.log("reposts", reposts)}
-      {console.log("posts", posts)}
+      {
+        // console.log("user", user)}
+        // {console.log("props", props)}
+        //   {console.log("reposts", reposts)}
+        //   {console.log("posts", posts)
+      }
+      {
+        //console.log("userInfo", userInfo)
+      }
+
       {user ? (
         <Container fixed maxWidth="md">
-          <h1>Perfil {profileId}</h1>
+          <h1>
+            {user.profile.name} {user.profile.lastname}
+          </h1>
           <Card variant="outlined" className={classes.root}>
             {
               //  loading ? (
@@ -137,10 +170,26 @@ export default function ProfileScreen(props) {
                         Editar perfil
                       </Button>
                     </Box>
+                  ) : !user.followers.includes(userInfo.username) ? (
+                    <Box m={3}>
+                      <Button
+                        onClick={followHandler}
+                        size="large"
+                        variant="contained"
+                        color="primary"
+                      >
+                        Seguir{" "}
+                      </Button>
+                    </Box>
                   ) : (
                     <Box m={3}>
-                      <Button size="large" variant="contained" color="primary">
-                        Seguir{" "}
+                      <Button
+                        onClick={unfollowHandler}
+                        size="large"
+                        variant="contained"
+                        color="primary"
+                      >
+                        Dejar de seguir
                       </Button>
                     </Box>
                   )}

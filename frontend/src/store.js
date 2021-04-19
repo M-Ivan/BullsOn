@@ -13,8 +13,10 @@ import {
 } from "./reducers/postReducers";
 import {
   userDetailsReducer,
+  userFollowReducer,
   userRegisterReducer,
   userSigninReducer,
+  userUnfollowReducer,
 } from "./reducers/userReducers";
 
 const initialState = {
@@ -37,6 +39,8 @@ const reducer = combineReducers({
   postUnlike: postUnlikeReducer,
   postRepost: postRepostReducer,
   postUnrepost: postUnrepostReducer,
+  userFollow: userFollowReducer,
+  userUnfollow: userUnfollowReducer,
 });
 const composeEnhancer = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 

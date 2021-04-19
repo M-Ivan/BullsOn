@@ -11,6 +11,12 @@ import {
   USER_DETAILS_SUCCESS,
   USER_DETAILS_REQUEST,
   USER_DETAILS_FAIL,
+  USER_FOLLOW_REQUEST,
+  USER_FOLLOW_SUCCESS,
+  USER_FOLLOW_FAIL,
+  USER_UNFOLLOW_REQUEST,
+  USER_UNFOLLOW_SUCCESS,
+  USER_UNFOLLOW_FAIL,
 } from "../constants/userConstants";
 
 export const register = (
@@ -85,4 +91,58 @@ export const signout = () => (dispatch) => {
   localStorage.removeItem("userInfo");
   dispatch({ type: USER_SIGNOUT });
   document.location.href = "/";
+};
+
+export const followUser = (userId) => async (dispatch, getState) => {
+  dispatch({ type: USER_FOLLOW_REQUEST });
+  const {
+    userSignin: { userInfo },
+  } = getState();
+  try {
+    const { data } = await Axios.put(
+      `/api/users/${userId}/follow`,
+      { username: userInfo.username },
+      {
+        headers: { Authorization: `Bearer ${userInfo.token}` },
+      }
+    );
+    dispatch({
+      type: USER_FOLLOW_SUCCESS,
+      payload: data,
+    });
+    console.log("data", data);
+  } catch (error) {
+    const message =
+      error.response && error.response.data.message
+        ? error.response.data.message
+        : error.message;
+    dispatch({ type: USER_FOLLOW_FAIL, payload: message });
+  }
+};
+
+export const unfollowUser = (userId) => async (dispatch, getState) => {
+  dispatch({ type: USER_UNFOLLOW_REQUEST });
+  const {
+    userSignin: { userInfo },
+  } = getState();
+  try {
+    const { data } = await Axios.put(
+      `/api/users/${userId}/unfollow`,
+      { username: userInfo.username },
+      {
+        headers: { Authorization: `Bearer ${userInfo.token}` },
+      }
+    );
+    dispatch({
+      type: USER_UNFOLLOW_SUCCESS,
+      payload: data,
+    });
+    console.log("data", data);
+  } catch (error) {
+    const message =
+      error.response && error.response.data.message
+        ? error.response.data.message
+        : error.message;
+    dispatch({ type: USER_UNFOLLOW_FAIL, payload: message });
+  }
 };
