@@ -87,7 +87,7 @@ export default function HomeScreen(props) {
 
   return (
     <div>
-      <Container maxWidth="md" fixed>
+      <Container maxWidth="lg" fixed>
         <Grid container justify="flex-start" direction="column">
           <Grid item xs={12}>
             <h1>Inicio</h1>
@@ -96,87 +96,93 @@ export default function HomeScreen(props) {
         <Grid item xs={12}>
           <hr />
         </Grid>
-        {userInfo ? (
-          <Grid item xs={12}>
-            <form onSubmit={submitHandler}>
-              <Grid
-                container
-                className="form-control"
-                direction="column"
-                justify="center"
-              >
-                <TextField
-                  id="postText"
-                  variant="outlined"
-                  multiline
-                  label="Comparte con el mundo"
-                  placeholder="En que estas pensando?.."
-                  rows={6}
-                  value={post}
-                  onChange={(e) => setPost(e.target.value)}
-                />
+        <Grid container justify="center">
+          <Grid item xs={3}></Grid>
+          <Grid item xs={12} md={6}>
+            {userInfo ? (
+              <Grid item xs={12}>
+                <form onSubmit={submitHandler}>
+                  <Grid
+                    container
+                    className="form-control"
+                    direction="column"
+                    justify="center"
+                  >
+                    <TextField
+                      id="postText"
+                      variant="outlined"
+                      multiline
+                      label="Comparte con el mundo"
+                      placeholder="En que estas pensando?.."
+                      rows={6}
+                      value={post}
+                      onChange={(e) => setPost(e.target.value)}
+                    />
+                  </Grid>
+                  <Grid
+                    container
+                    justify="center"
+                    alignItems="flex-end"
+                    direction="column"
+                  >
+                    {post.length > 0 ? (
+                      <Button
+                        classes={{
+                          root: classes.btnRoundedOr,
+                        }}
+                        variant="contained"
+                        type="submit"
+                      >
+                        <PostAddIcon />
+                        Compartir una idea
+                      </Button>
+                    ) : (
+                      <Button
+                        classes={{
+                          root: classes.btnRoundedOr,
+                        }}
+                        variant="contained"
+                        disabled
+                      >
+                        <PostAddIcon />
+                        Compartir una idea
+                      </Button>
+                    )}
+                  </Grid>
+                </form>
+                <Grid item xs={12}>
+                  <div className="feed-separation">
+                    <br />
+                  </div>{" "}
+                </Grid>
               </Grid>
-              <Grid
-                container
-                justify="center"
-                alignItems="flex-end"
-                direction="column"
-              >
-                {post.length > 0 ? (
-                  <Button
-                    classes={{
-                      root: classes.btnRoundedOr,
-                    }}
-                    variant="contained"
-                    type="submit"
-                  >
-                    <PostAddIcon />
-                    Compartir una idea
-                  </Button>
+            ) : null}
+            <Grid
+              container
+              direction="row"
+              justify="center"
+              alignItems="center"
+              spacing={1}
+            >
+              <Grid item xs={12}>
+                {loading ? (
+                  <ReactLoading color="#2d91f0" type="bars" />
+                ) : error ? (
+                  <MessageBox variant="danger">{error}</MessageBox>
                 ) : (
-                  <Button
-                    classes={{
-                      root: classes.btnRoundedOr,
-                    }}
-                    variant="contained"
-                    disabled
-                  >
-                    <PostAddIcon />
-                    Compartir una idea
-                  </Button>
+                  <>
+                    {posts.length === 0 && (
+                      <MessageBox>Nada que mostrar</MessageBox>
+                    )}
+                    {posts.map((post) => (
+                      <RenderPost key={post._id} post={post} />
+                    ))}
+                  </>
                 )}
               </Grid>
-            </form>
-            <Grid item xs={12}>
-              <div className="feed-separation">
-                <br />
-              </div>{" "}
             </Grid>
           </Grid>
-        ) : null}
-        <Grid
-          container
-          direction="row"
-          justify="center"
-          alignItems="center"
-          spacing={1}
-        >
-          <Grid item xs={12}>
-            {loading ? (
-              <ReactLoading color="#2d91f0" type="bars" />
-            ) : error ? (
-              <MessageBox variant="danger">{error}</MessageBox>
-            ) : (
-              <>
-                {posts.length === 0 && (
-                  <MessageBox>Nada que mostrar</MessageBox>
-                )}
-                {posts.map((post) => (
-                  <RenderPost key={post._id} post={post} />
-                ))}
-              </>
-            )}
-          </Grid>
+          <Grid item xs={3}></Grid>
         </Grid>
       </Container>
     </div>

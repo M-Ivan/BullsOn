@@ -18,7 +18,29 @@ import {
   USER_UNFOLLOW_SUCCESS,
   USER_UNFOLLOW_FAIL,
   USER_UNFOLLOW_RESET,
+  USER_LIST_REQUEST,
+  USER_LIST_SUCCESS,
+  USER_LIST_FAIL,
+  USER_LIST_RESET,
 } from "../constants/userConstants";
+
+export const userListReducer = (
+  state = { loading: true, success: null, users: [] },
+  action
+) => {
+  switch (action.type) {
+    case USER_LIST_REQUEST:
+      return { loading: true };
+    case USER_LIST_SUCCESS:
+      return { loading: false, success: true, users: action.payload };
+    case USER_LIST_FAIL:
+      return { loading: false, success: false, error: action.payload };
+    case USER_LIST_RESET:
+      return {};
+    default:
+      return state;
+  }
+};
 
 export const userRegisterReducer = (state = {}, action) => {
   switch (action.type) {

@@ -29,6 +29,8 @@ import HomeOutlinedIcon from "@material-ui/icons/HomeOutlined";
 import ExitToAppOutlinedIcon from "@material-ui/icons/ExitToAppOutlined";
 import AccountCircleRoundedIcon from "@material-ui/icons/AccountCircleRounded";
 import { orange, green, red } from "@material-ui/core/colors";
+import { POST_LIST_RESET } from "../constants/postConstants";
+import SearchBox from "./SearchBox";
 
 const drawerWidth = 240;
 
@@ -45,47 +47,7 @@ const useStyles = makeStyles((theme) => ({
       display: "block",
     },
   },
-  search: {
-    boxShadow: "0px 0px 5px #3636363f",
-    position: "relative",
-    borderRadius: theme.shape.borderRadius,
-    backgroundColor: fade(theme.palette.common.white, 0.15),
-    "&:hover": {
-      backgroundColor: fade(theme.palette.common.white, 0.25),
-    },
-    marginRight: theme.spacing(2),
-    marginLeft: 0,
-    width: "100%",
-    [theme.breakpoints.up("sm")]: {
-      marginLeft: theme.spacing(3),
-      width: "auto",
-    },
-  },
-  searchIcon: {
-    padding: theme.spacing(0, 2),
-    height: "100%",
-    position: "absolute",
-    pointerEvents: "none",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  inputRoot: {
-    color: "inherit",
-  },
-  inputInput: {
-    padding: theme.spacing(1, 1, 1, 0),
-    // vertical padding + font size from searchIcon
-    paddingLeft: `calc(1em + ${theme.spacing(4)}px)`,
-    transition: theme.transitions.create("width"),
-    width: "100%",
-    [theme.breakpoints.down("md")]: {
-      width: "55ch",
-    },
-    [theme.breakpoints.up("lg")]: {
-      width: "100ch",
-    },
-  },
+
   sectionDesktop: {
     display: "none",
     [theme.breakpoints.up("md")]: {
@@ -151,9 +113,10 @@ const useStyles = makeStyles((theme) => ({
 export default function Header(props) {
   const [userAnchorEl, setUserAnchorEl] = useState(false);
   const userSignin = useSelector((state) => state.userSignin);
-  const [name, setName] = useState("");
-  const [menuOpen, setMenuOpen] = useState(false);
   const { userInfo } = userSignin;
+
+  const [menuOpen, setMenuOpen] = useState(false);
+
   const dispatch = useDispatch();
   const signoutHandler = () => {
     dispatch(signout());
@@ -164,11 +127,6 @@ export default function Header(props) {
   };
   const handleUserMenuClose = () => {
     setUserAnchorEl(false);
-  };
-
-  const searchHandler = (e) => {
-    e.preventDefault();
-    props.history.push(`/search/name/${name}`);
   };
 
   //  const toogleBurger = (menuOpen) => (event) => {
@@ -267,26 +225,7 @@ export default function Header(props) {
                   </Link>
                 </Grid>
                 <Grid item lg={6} md={7}>
-                  <Grid container alignItems="center" justify="center">
-                    <Hidden only={["xs", "sm"]}>
-                      <div className={classes.search}>
-                        <div className={classes.searchIcon}>
-                          <SearchIcon />
-                        </div>
-                        <form onSubmit={searchHandler}>
-                          <InputBase
-                            placeholder="Buscar noticias, divisas, acciones…"
-                            onChange={(e) => setName(e.target.value)}
-                            classes={{
-                              root: classes.inputRoot,
-                              input: classes.inputInput,
-                            }}
-                            inputProps={{ type: "text", name: "q", id: "q" }}
-                          />
-                        </form>
-                      </div>
-                    </Hidden>
-                  </Grid>
+                  <SearchBox />
                 </Grid>
                 <Hidden only={["xs", "sm", "md"]}>
                   <Grid item xs={3}>

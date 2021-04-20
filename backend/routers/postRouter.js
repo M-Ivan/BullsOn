@@ -13,7 +13,14 @@ postRouter.get(
     const profile = req.query.profile || "";
 
     const postFilter = post ? { post: { $regex: post, $options: "i" } } : {};
-    const profileFilter = profile ? { profile } : {};
+    const profileFilter = profile
+      ? {
+          profile: {
+            $regex: profile,
+            $options: "i",
+          },
+        }
+      : {};
 
     const posts = await Post.find({
       ...postFilter,
@@ -22,6 +29,7 @@ postRouter.get(
       "profile",
       "profile.name profile.lastname profile.profile profile.username"
     );
+
     res.send(posts);
   })
 );

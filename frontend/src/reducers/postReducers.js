@@ -32,19 +32,22 @@ import {
   USER_REPOST_LIST_REQUEST,
   USER_REPOST_LIST_SUCCESS,
   USER_REPOST_LIST_FAIL,
+  POST_LIST_RESET,
 } from "../constants/postConstants";
 
 export const postListReducer = (
-  state = { loading: true, posts: [] },
+  state = { loading: true, success: null, posts: [] },
   action
 ) => {
   switch (action.type) {
     case POST_LIST_REQUEST:
       return { loading: true };
     case POST_LIST_SUCCESS:
-      return { loading: false, posts: action.payload };
+      return { loading: false, success: true, posts: action.payload };
     case POST_LIST_FAIL:
-      return { loading: false, error: action.payload };
+      return { loading: false, success: false, error: action.payload };
+    case POST_LIST_RESET:
+      return {};
     default:
       return state;
   }

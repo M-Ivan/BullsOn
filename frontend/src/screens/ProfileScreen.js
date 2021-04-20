@@ -4,12 +4,13 @@ import { Link } from "react-router-dom";
 import MessageBox from "../components/MessageBox";
 import ReactLoading from "react-loading";
 import { Container, Button, Grid, makeStyles } from "@material-ui/core/index";
-import Card from "@material-ui/core/Card";
-import CardActionArea from "@material-ui/core/CardActionArea";
-import CardActions from "@material-ui/core/CardActions";
-import CardContent from "@material-ui/core/CardContent";
-import CardMedia from "@material-ui/core/CardMedia";
-import Typography from "@material-ui/core/Typography";
+import {
+  Card,
+  CardContent,
+  CardMedia,
+  Typography,
+  Divider,
+} from "@material-ui/core/";
 import { detailsUser, followUser, unfollowUser } from "../actions/userActions";
 import { red } from "@material-ui/core/colors";
 import Avatar from "@material-ui/core/Avatar";
@@ -21,7 +22,7 @@ import {
   USER_UNFOLLOW_RESET,
 } from "../constants/userConstants";
 
-const useStyles = makeStyles({
+const useStyles = makeStyles((theme) => ({
   root: {
     maxWidth: "auto",
     "&:hover": {
@@ -38,7 +39,18 @@ const useStyles = makeStyles({
     border: "5px solid #000000",
     zIndex: "10",
   },
-});
+  nameSection: {
+    margin: theme.spacing(2),
+  },
+  descriptionSection: {
+    margin: theme.spacing(2),
+    marginBottom: theme.spacing(3),
+  },
+  followSection: {
+    margin: theme.spacing(2),
+    marginTop: theme.spacing(3),
+  },
+}));
 
 export default function ProfileScreen(props) {
   const classes = useStyles();
@@ -124,14 +136,13 @@ export default function ProfileScreen(props) {
     <div>
       {
         // console.log("user", user)}
-        // {console.log("props", props)}
         //   {console.log("reposts", reposts)}
         //   {console.log("posts", posts)
-      }
+      }{" "}
+      {console.log("props", props)}
       {
         //console.log("userInfo", userInfo)
       }
-
       {user ? (
         <Container fixed maxWidth="md">
           <h1>
@@ -197,13 +208,31 @@ export default function ProfileScreen(props) {
               </Grid>
             </Grid>
             <CardContent>
-              <Typography gutterBottom variant="h4" component="h2">
-                {user ? user.profile.name + " " + user.profile.lastname : null}
-              </Typography>
-              <Typography variant="body" color="textPrimary" component="p">
-                {user ? user.profile.description : null}
-              </Typography>
-              <Typography variant="body" component="p"></Typography>
+              <Grid container className={classes.nameSection}>
+                <Grid item xs={12}>
+                  <Typography gutterBottom variant="h4" component="h2">
+                    {user.profile.name + " " + user.profile.lastname}
+                  </Typography>
+                </Grid>
+                <Grid item xs={12}>
+                  <Typography variant="body1" color="textSecondary">
+                    {"@" + user.profile.username}
+                  </Typography>
+                </Grid>
+              </Grid>
+              <Grid container className={classes.descriptionSection}>
+                <Typography variant="body" color="textPrimary" component="p">
+                  {user ? user.profile.description : null}
+                </Typography>
+              </Grid>
+              <Divider />
+              <Grid container className={classes.followSection}>
+                {" "}
+                <Typography variant="body" component="p">
+                  {`${user.following.length} siguiendo
+                ${user.followers.length} seguidores`}
+                </Typography>
+              </Grid>
             </CardContent>
           </Card>
           <Grid item xs={12}>

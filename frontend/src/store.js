@@ -14,6 +14,7 @@ import {
 import {
   userDetailsReducer,
   userFollowReducer,
+  userListReducer,
   userRegisterReducer,
   userSigninReducer,
   userUnfollowReducer,
@@ -41,6 +42,7 @@ const reducer = combineReducers({
   postUnrepost: postUnrepostReducer,
   userFollow: userFollowReducer,
   userUnfollow: userUnfollowReducer,
+  userList: userListReducer,
 });
 const composeEnhancer = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 

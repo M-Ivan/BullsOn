@@ -242,7 +242,9 @@ export default function RenderPost(props) {
           </Grid>{" "}
         </Box>
       ) : null}
-      {console.log("post", post)}
+      {
+        // console.log("post", post)
+      }
     </Card>
   );
 }

@@ -17,7 +17,22 @@ import {
   USER_UNFOLLOW_REQUEST,
   USER_UNFOLLOW_SUCCESS,
   USER_UNFOLLOW_FAIL,
+  USER_LIST_REQUEST,
+  USER_LIST_SUCCESS,
+  USER_LIST_FAIL,
 } from "../constants/userConstants";
+
+export const listUsers = ({ user = "" }) => async (dispatch) => {
+  dispatch({
+    type: USER_LIST_REQUEST,
+  });
+  try {
+    const { data } = await Axios.get(`/api/users?user=${user}`);
+    dispatch({ type: USER_LIST_SUCCESS, payload: data });
+  } catch (error) {
+    dispatch({ type: USER_LIST_FAIL, payload: error.message });
+  }
+};
 
 export const register = (
   username,

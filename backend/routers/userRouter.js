@@ -6,6 +6,73 @@ import { generateToken, isAdmin, isAuth } from "../utils.js";
 
 const userRouter = express.Router();
 
+userRouter.get(
+  "/",
+  expressAsyncHandler(async (req, res) => {
+    const user = req.query.user || "";
+
+    const userFilter = user
+      ? {
+          username: {
+            $regex: user,
+            $options: "i",
+          },
+        }
+      : {};
+    const nameFilter = user
+      ? {
+          "profile.name": {
+            $regex: user,
+            $options: "i",
+          },
+        }
+      : {};
+    const lastnameFilter = user
+      ? {
+          "profile.lastname": {
+            $regex: user,
+            $options: "i",
+          },
+        }
+      : {};
+
+    const users = await User.find({
+      ...userFilter,
+    });
+    if (users.length > 0) {
+      res.send(users);
+    } else if (users.length === 0) {
+      const lastnameFilter = user
+        ? {
+            "profile.lastname": {
+              $regex: user,
+              $options: "i",
+            },
+          }
+        : {};
+      console.log("userDentro", user);
+      const users = await User.find({
+        ...lastnameFilter,
+      });
+      res.send(users);
+    } else if (users.length === 0) {
+      const nameFilter = user
+        ? {
+            "profile.name": {
+              $regex: user,
+              $options: "i",
+            },
+          }
+        : {};
+      console.log("userDentro", user);
+      const users = await User.find({
+        ...nameFilter,
+      });
+      res.send(users);
+    }
+  })
+);
+
 userRouter.post(
   "/signin",
   expressAsyncHandler(async (req, res) => {
