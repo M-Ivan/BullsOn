@@ -17,7 +17,7 @@ import {
 import { red } from "@material-ui/core/colors";
 import ScreenShareOutlinedIcon from "@material-ui/icons/ScreenShareOutlined";
 import MoreVertIcon from "@material-ui/icons/MoreVert";
-import { Link } from "react-router-dom";
+import { Link, withRouter } from "react-router-dom";
 import ChatBubbleOutlineIcon from "@material-ui/icons/ChatBubbleOutline";
 import RepeatIcon from "@material-ui/icons/Repeat";
 import StarIcon from "@material-ui/icons/Star";
@@ -83,7 +83,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function RenderPost(props) {
+export default withRouter(function RenderPost(props) {
   const classes = useStyles();
   const { post } = props;
   const { profile } = post.profile;
@@ -100,6 +100,7 @@ export default function RenderPost(props) {
     setCommentForm(false);
   };
 
+  //TODO: Handler para redirect a signIn si no hay userInfo
   const likeHandler = () => {
     dispatch(likePost(postId));
   };
@@ -172,25 +173,38 @@ export default function RenderPost(props) {
         </CardContent>
       </Link>
       <CardActions disableSpacing>
-        <IconButton
-          className={classes.commentBtn}
-          onClick={() => setCommentForm(true)}
-        >
-          {!commentForm ? (
+        {post && userInfo ? (
+          <IconButton
+            className={classes.commentBtn}
+            onClick={() => setCommentForm(true)}
+          >
+            {!commentForm ? (
+              <ChatBubbleOutlineIcon />
+            ) : (
+              <ChatIcon className={classes.activeComment} />
+            )}
+            {post.comments.length}
+          </IconButton>
+        ) : (
+          <IconButton className={classes.commentBtn}>
             <ChatBubbleOutlineIcon />
-          ) : (
-            <ChatIcon className={classes.activeComment} />
-          )}{" "}
-          {post.comments.length}
-        </IconButton>
+            {post.comments.length}
+          </IconButton>
+        )}
+
         {post && userInfo && !post.repost.includes(userInfo.username) ? (
           <IconButton onClick={repostHandler}>
             <RepeatIcon />
             {post.repost.length}
           </IconButton>
-        ) : (
+        ) : post && userInfo && post.repost.includes(userInfo.username) ? (
           <IconButton onClick={unrepostHandler}>
             <RepeatIcon className={classes.activeRepost} />
+            {post.repost.length}
+          </IconButton>
+        ) : (
+          <IconButton>
+            <RepeatIcon />
             {post.repost.length}
           </IconButton>
         )}
@@ -205,10 +219,17 @@ export default function RenderPost(props) {
               {post.likes.length}{" "}
             </Grid>
           </IconButton>
-        ) : (
+        ) : post && userInfo && post.likes.includes(userInfo.username) ? (
           <IconButton onClick={unlikeHandler} aria-label="ya no me gusta">
             <Grid container alignItems="center" className={classes.likeIcon}>
               <StarIcon className={classes.likedIcon} />
+              {post.likes.length}{" "}
+            </Grid>
+          </IconButton>
+        ) : (
+          <IconButton>
+            <Grid container alignItems="center" className={classes.likeIcon}>
+              <StarIcon />
               {post.likes.length}{" "}
             </Grid>
           </IconButton>
@@ -247,4 +268,4 @@ export default function RenderPost(props) {
       }
     </Card>
   );
-}
+});

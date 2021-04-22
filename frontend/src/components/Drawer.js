@@ -1,16 +1,12 @@
 import React from "react";
-import clsx from "clsx";
 import { makeStyles } from "@material-ui/core/styles";
-import SwipeableDrawer from "@material-ui/core/SwipeableDrawer";
-import Button from "@material-ui/core/Button";
-import List from "@material-ui/core/List";
-import Divider from "@material-ui/core/Divider";
-import ListItem from "@material-ui/core/ListItem";
-import ListItemIcon from "@material-ui/core/ListItemIcon";
-import ListItemText from "@material-ui/core/ListItemText";
-import InboxIcon from "@material-ui/icons/MoveToInbox";
-import MailIcon from "@material-ui/icons/Mail";
-import { useState } from "react";
+import {
+  List,
+  Divider,
+  ListItem,
+  ListItemIcon,
+  ListItemText,
+} from "@material-ui/core/";
 
 const useStyles = makeStyles({
   list: {
@@ -21,72 +17,57 @@ const useStyles = makeStyles({
   },
 });
 
-export default function Drawer() {
-  const classes = useStyles();
-  const [state, setState] = useState({
-    left: false,
-  });
-
-  const toggleDrawer = (anchor, open) => (event) => {
-    if (
-      event &&
-      event.type === "keydown" &&
-      (event.key === "Tab" || event.key === "Shift")
-    ) {
-      return;
-    }
-
-    setState({ ...state, [anchor]: open });
-  };
-
-  const list = (anchor) => (
-    <div
-      className={clsx(classes.list, {
-        [classes.fullList]: anchor === "top" || anchor === "bottom",
-      })}
-      role="presentation"
-      onClick={toggleDrawer(anchor, false)}
-      onKeyDown={toggleDrawer(anchor, false)}
-    >
-      <List>
-        {["Inbox", "Starred", "Send email", "Drafts"].map((text, index) => (
-          <ListItem button key={text}>
-            <ListItemIcon>
-              {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-            </ListItemIcon>
-            <ListItemText primary={text} />
-          </ListItem>
-        ))}
-      </List>
-      <Divider />
-      <List>
-        {["All mail", "Trash", "Spam"].map((text, index) => (
-          <ListItem button key={text}>
-            <ListItemIcon>
-              {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-            </ListItemIcon>
-            <ListItemText primary={text} />
-          </ListItem>
-        ))}
-      </List>
+export default function SmallMenu() {
+  <div>
+    <div className={classes.drawerHeader}>
+      <h1 className="brand">Navegación</h1>
     </div>
-  );
-
-  return (
-    <div>
-      {["left", "right", "top", "bottom"].map((anchor) => (
-        <React.Fragment key={anchor}>
-          <Button onClick={toggleDrawer(anchor, true)}>{anchor}</Button>
-          <SwipeableDrawer
-            anchor={anchor}
-            open={state[anchor]}
-            onClose={toggleDrawer(anchor, false)}
-            onOpen={toggleDrawer(anchor, true)}
-          >
-            {list(anchor)}
-          </SwipeableDrawer>
-        </React.Fragment>
-      ))}
-    </div>
-  );
+    <Divider />
+    <List>
+      <Link to="/">
+        <ListItem button>
+          <ListItemIcon>
+            <HomeOutlinedIcon style={{ color: orange[700] }} />
+          </ListItemIcon>
+          <ListItemText style={{ color: orange[800] }} primary="Inicio" />
+        </ListItem>
+      </Link>
+      <ListItem button onClick={() => setShowSearchBox(!showSearchBox)}>
+        <ListItemIcon>
+          <SearchIcon style={{ color: orange[700] }} />
+        </ListItemIcon>
+        <ListItemText style={{ color: orange[800] }} primary="Buscar..." />
+      </ListItem>
+      {userInfo ? (
+        <>
+          <Link to={`/${userInfo.username}`}>
+            <ListItem button>
+              <ListItemIcon>
+                <AccountCircleRoundedIcon style={{ color: orange[700] }} />
+              </ListItemIcon>
+              <ListItemText
+                style={{ color: orange[800] }}
+                primary={userInfo.username}
+              />
+            </ListItem>
+          </Link>
+          <ListItem button onClick={signoutHandler}>
+            <ExitToAppOutlinedIcon style={{ color: red[500] }} />
+            <ListItemText className="menu-margin" style={{ color: red[500] }}>
+              Cerrar sesión
+            </ListItemText>
+          </ListItem>
+        </>
+      ) : (
+        <Link to="/signin">
+          <ListItem button>
+            <ExitToAppOutlinedIcon style={{ color: green[700] }} />
+            <ListItemText className="menu-margin" style={{ color: green[700] }}>
+              Iniciar Sesión
+            </ListItemText>
+          </ListItem>
+        </Link>
+      )}
+    </List>
+  </div>;
 }

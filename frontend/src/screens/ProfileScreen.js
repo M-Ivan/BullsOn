@@ -1,6 +1,5 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Link } from "react-router-dom";
 import MessageBox from "../components/MessageBox";
 import ReactLoading from "react-loading";
 import { Container, Button, Grid, makeStyles } from "@material-ui/core/index";

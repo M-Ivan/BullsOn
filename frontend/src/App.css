@@ -75,6 +75,7 @@ a:hover {
 .toolBar {
   background-color: #ffd700;
   color: #424242;
+  padding: 0.2rem;
 }
 
 .feed-separation {

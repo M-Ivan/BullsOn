@@ -1,6 +1,5 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Link, useParams } from "react-router-dom";
 import { listPosts } from "../actions/postActions";
 import ReactLoading from "react-loading";
 import MessageBox from "../components/MessageBox";
@@ -10,22 +9,26 @@ import {
   Typography,
   Box,
   Grid,
-  Container,
-  Button,
   AppBar,
+  makeStyles,
   Divider,
 } from "@material-ui/core";
 import RenderPost from "../components/RenderPost";
 import { useState } from "react";
-import { detailsUser, listUsers } from "../actions/userActions";
-import { POST_LIST_RESET } from "../constants/postConstants";
+import { listUsers } from "../actions/userActions";
 import PropTypes from "prop-types";
 import RenderUsers from "../components/RenderUsers";
-import {
-  USER_FOLLOW_RESET,
-  USER_UNFOLLOW_RESET,
-} from "../constants/userConstants";
 
+const useStyles = makeStyles((theme) => ({
+  tabs: {
+    backgroundColor: "#ffffff",
+    marginTop: "0.5rem",
+  },
+  divider: {
+    backgroundColor: "#ffffff",
+    padding: "0.5rem",
+  },
+}));
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
 
@@ -60,13 +63,14 @@ function a11yProps(index) {
 }
 
 export default function SearchScreen(props) {
+  const classes = useStyles();
   const query = props.match.params.query;
   const profile = props.match.params.profile;
   const order = useState("nuevos");
 
   const dispatch = useDispatch();
   const postList = useSelector((state) => state.postList);
-  const { loading, error, success: successPosts, posts } = postList;
+  const { loading, error, posts } = postList;
   const userList = useSelector((state) => state.userList);
   const userFollow = useSelector((state) => state.userFollow);
   const { success: successFollow } = userFollow;
@@ -105,13 +109,13 @@ export default function SearchScreen(props) {
     <Grid container justify="center">
       <Grid item xs={3}></Grid>
       <Grid item xs={12} md={6}>
-        <AppBar position="static" color="default">
+        <AppBar position="static" className={classes.tabs}>
           <Tabs
             //TODO: Render condicional de users y posts
             value={showing}
             onChange={handleChange}
-            indicatorColor="primary"
-            textColor="primary"
+            indicatorColor="secondary"
+            textColor="secondary"
             variant="fullWidth"
           >
             <Tab label="Destacados" {...a11yProps(0)} />
@@ -119,6 +123,10 @@ export default function SearchScreen(props) {
             <Tab label="Usuarios" {...a11yProps(2)} />
           </Tabs>
         </AppBar>
+        <Divider light />
+
+        <Grid className={classes.divider}></Grid>
+        <Divider />
         {loading ? (
           <ReactLoading color="#2d91f0" type="bars" />
         ) : error ? (
@@ -126,10 +134,19 @@ export default function SearchScreen(props) {
         ) : (
           <>
             {posts && posts.length === 0 && showing === 0 && (
-              <MessageBox>Nada que mostrar</MessageBox>
+              <MessageBox>
+                Lo sentimos, no encontramos publicaciones que incluyan las
+                palabras solicitadas.
+              </MessageBox>
             )}
             {posts && posts.length === 0 && showing === 1 && (
-              <MessageBox>Nada que mostrar</MessageBox>
+              <MessageBox>
+                Lo sentimos, no encontramos publicaciones que incluyan las
+                palabras solicitadas.
+              </MessageBox>
+            )}
+            {users && users.length === 0 && showing === 2 && (
+              <MessageBox>No se encontraron usuarios.</MessageBox>
             )}
             {posts && showing === 1
               ? posts.map((post) => <RenderPost key={post._id} post={post} />)

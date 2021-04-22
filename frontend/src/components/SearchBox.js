@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { fade, Grid, Hidden, InputBase, makeStyles } from "@material-ui/core";
+import { fade, Grid, InputBase, makeStyles } from "@material-ui/core";
 import SearchIcon from "@material-ui/icons/Search";
 import { withRouter } from "react-router";
 
@@ -44,6 +44,12 @@ const useStyles = makeStyles((theme) => ({
     [theme.breakpoints.up("lg")]: {
       width: "100ch",
     },
+    [theme.breakpoints.down("sm")]: {
+      width: "40ch",
+    },
+    [theme.breakpoints.down("xs")]: {
+      width: "30ch",
+    },
   },
 }));
 
@@ -52,31 +58,33 @@ export default withRouter(function SearchBox(props) {
   const [query, setQuery] = useState("");
 
   const searchHandler = (e) => {
-    e.preventDefault();
-    props.history.push(`/search/query/${query}`);
+    if (query) {
+      e.preventDefault();
+      props.history.push(`/search/query/${query}`);
+    } else {
+      return null;
+    }
   };
 
   return (
     <div>
       <Grid container alignItems="center" justify="center">
-        <Hidden only={["xs", "sm"]}>
-          <div className={classes.search}>
-            <div className={classes.searchIcon}>
-              <SearchIcon />
-            </div>
-            <form onSubmit={searchHandler}>
-              <InputBase
-                placeholder="Buscar noticias, divisas, acciones…"
-                onChange={(e) => setQuery(e.target.value)}
-                classes={{
-                  root: classes.inputRoot,
-                  input: classes.inputInput,
-                }}
-                inputProps={{ type: "text", name: "q", id: "q" }}
-              />
-            </form>
+        <div className={classes.search}>
+          <div className={classes.searchIcon}>
+            <SearchIcon />
           </div>
-        </Hidden>
+          <form onSubmit={searchHandler}>
+            <InputBase
+              placeholder="Buscar..."
+              onChange={(e) => setQuery(e.target.value)}
+              classes={{
+                root: classes.inputRoot,
+                input: classes.inputInput,
+              }}
+              inputProps={{ type: "text", name: "q", id: "q" }}
+            />
+          </form>
+        </div>
       </Grid>
     </div>
   );

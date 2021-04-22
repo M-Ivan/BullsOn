@@ -1,13 +1,12 @@
 import React from "react";
 import {
   AppBar,
-  fade,
   Grid,
   Hidden,
   IconButton,
-  InputBase,
   makeStyles,
   Toolbar,
+  Typography,
 } from "@material-ui/core";
 import SearchIcon from "@material-ui/icons/Search";
 import { Link } from "react-router-dom";
@@ -24,12 +23,10 @@ import Divider from "@material-ui/core/Divider";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
-
 import HomeOutlinedIcon from "@material-ui/icons/HomeOutlined";
 import ExitToAppOutlinedIcon from "@material-ui/icons/ExitToAppOutlined";
 import AccountCircleRoundedIcon from "@material-ui/icons/AccountCircleRounded";
 import { orange, green, red } from "@material-ui/core/colors";
-import { POST_LIST_RESET } from "../constants/postConstants";
 import SearchBox from "./SearchBox";
 
 const drawerWidth = 240;
@@ -114,6 +111,9 @@ export default function Header(props) {
   const [userAnchorEl, setUserAnchorEl] = useState(false);
   const userSignin = useSelector((state) => state.userSignin);
   const { userInfo } = userSignin;
+  const [showSearchBox, setShowSearchBox] = useState(false);
+
+  console.log("showSearchBox", showSearchBox);
 
   const [menuOpen, setMenuOpen] = useState(false);
 
@@ -156,6 +156,12 @@ export default function Header(props) {
             <ListItemText style={{ color: orange[800] }} primary="Inicio" />
           </ListItem>
         </Link>
+        <ListItem button onClick={() => setShowSearchBox(!showSearchBox)}>
+          <ListItemIcon>
+            <SearchIcon style={{ color: orange[700] }} />
+          </ListItemIcon>
+          <ListItemText style={{ color: orange[800] }} primary="Buscar..." />
+        </ListItem>
         {userInfo ? (
           <>
             <Link to={`/${userInfo.username}`}>
@@ -224,9 +230,13 @@ export default function Header(props) {
                     InvestIn
                   </Link>
                 </Grid>
-                <Grid item lg={6} md={7}>
-                  <SearchBox />
+
+                <Grid item lg={6} xs={7}>
+                  <Hidden only={["xs", "sm", "md"]}>
+                    <SearchBox />{" "}
+                  </Hidden>
                 </Grid>
+
                 <Hidden only={["xs", "sm", "md"]}>
                   <Grid item xs={3}>
                     <Grid container alignItems="center" justify="flex-end">
@@ -241,14 +251,29 @@ export default function Header(props) {
                 </Hidden>
               </Grid>
             </Toolbar>
+            {showSearchBox ? (
+              <Hidden only={["lg", "xl"]}>
+                <Toolbar className="toolBar">
+                  <Grid container justify="center">
+                    <SearchBox />
+                  </Grid>
+                </Toolbar>
+              </Hidden>
+            ) : null}
             <Hidden only={["xs", "sm", "md"]}>
               <Toolbar className="toolBar">
+                <Grid container justify="flex-start" alignItems="center">
+                  {" "}
+                  <Button classes={{ root: classes.navlink }}>
+                    <Link to="/">
+                      <Grid container alignItems="center">
+                        <HomeOutlinedIcon style={{ color: orange[700] }} />
+                        <Typography color="textPrimary">Inicio</Typography>
+                      </Grid>{" "}
+                    </Link>
+                  </Button>
+                </Grid>
                 <Grid container justify="flex-end" alignItems="center">
-                  <div className="navlink">
-                    <Link to="#inicio"></Link>
-                    <Link to="#contacto"></Link>
-                    <Link to="#about"></Link>
-                  </div>
                   {userInfo ? (
                     <div>
                       <div>

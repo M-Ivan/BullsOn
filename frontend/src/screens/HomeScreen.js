@@ -8,7 +8,6 @@ import { POST_CREATE_RESET } from "../constants/postConstants";
 import { listPosts, createPost } from "../actions/postActions";
 import MessageBox from "../components/MessageBox";
 import PostAddIcon from "@material-ui/icons/PostAdd";
-import RenderComments from "../components/RenderComments";
 
 const useStyles = makeStyles({
   btnRoundedOr: {
