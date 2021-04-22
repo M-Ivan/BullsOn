@@ -13,12 +13,18 @@ import {
   Container,
   Button,
   AppBar,
+  Divider,
 } from "@material-ui/core";
 import RenderPost from "../components/RenderPost";
 import { useState } from "react";
-import { listUsers } from "../actions/userActions";
+import { detailsUser, listUsers } from "../actions/userActions";
 import { POST_LIST_RESET } from "../constants/postConstants";
 import PropTypes from "prop-types";
+import RenderUsers from "../components/RenderUsers";
+import {
+  USER_FOLLOW_RESET,
+  USER_UNFOLLOW_RESET,
+} from "../constants/userConstants";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -62,8 +68,10 @@ export default function SearchScreen(props) {
   const postList = useSelector((state) => state.postList);
   const { loading, error, success: successPosts, posts } = postList;
   const userList = useSelector((state) => state.userList);
-
-  const [showing, setShowing] = useState(0);
+  const userFollow = useSelector((state) => state.userFollow);
+  const { success: successFollow } = userFollow;
+  const userUnfollow = useSelector((state) => state.userUnfollow);
+  const { success: successUnfollow } = userUnfollow;
   const {
     loading: loadingUsers,
     success: successUsers,
@@ -71,10 +79,12 @@ export default function SearchScreen(props) {
     users,
   } = userList;
 
+  const [showing, setShowing] = useState(0);
+
   useEffect(() => {
     dispatch(listPosts({ post: query, order }));
     dispatch(listUsers({ user: query }));
-  }, [query]);
+  }, [query, successFollow, successUnfollow]);
 
   const getFilterUrl = (filter) => {
     const filterQuery = filter.query || query;
@@ -85,6 +95,7 @@ export default function SearchScreen(props) {
   // console.log("props", props);
   console.log("posts", posts);
   console.log("users", users);
+  console.log("showing", showing);
 
   const handleChange = (event, newValue) => {
     setShowing(newValue);
@@ -102,11 +113,10 @@ export default function SearchScreen(props) {
             indicatorColor="primary"
             textColor="primary"
             variant="fullWidth"
-            aria-label="full width tabs example"
           >
-            <Tab label="Item One" {...a11yProps(0)} />
-            <Tab label="Item Two" {...a11yProps(1)} />
-            <Tab label="Item Three" {...a11yProps(2)} />
+            <Tab label="Destacados" {...a11yProps(0)} />
+            <Tab label="Mas recientes" {...a11yProps(1)} />
+            <Tab label="Usuarios" {...a11yProps(2)} />
           </Tabs>
         </AppBar>
         {loading ? (
@@ -115,11 +125,17 @@ export default function SearchScreen(props) {
           <MessageBox variant="danger">{error}</MessageBox>
         ) : (
           <>
-            {posts && posts.length === 0 && (
+            {posts && posts.length === 0 && showing === 0 && (
               <MessageBox>Nada que mostrar</MessageBox>
             )}
-            {posts
+            {posts && posts.length === 0 && showing === 1 && (
+              <MessageBox>Nada que mostrar</MessageBox>
+            )}
+            {posts && showing === 1
               ? posts.map((post) => <RenderPost key={post._id} post={post} />)
+              : null}
+            {users && showing === 2
+              ? users.map((user) => <RenderUsers key={user._id} user={user} />)
               : null}
           </>
         )}
