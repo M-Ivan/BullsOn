@@ -138,15 +138,24 @@ userRouter.put(
   "/:username/follow",
   isAuth,
   expressAsyncHandler(async (req, res) => {
+    // Usuario a seguir
     const userId = req.params.username;
+    // el usuario objetivo de la request
     const user = await User.findByIdAndUpdate(userId);
-    if (user) {
-      user.followers.push(req.body.username);
+    // followerUser = nuevo seguidor (el que hace request)
+    const followerUser = await User.findByIdAndUpdate(req.user._id);
+    if (user && followerUser) {
+      //req.user._id esta poblado con
+      //el usuario que hace el request.
+      user.followers.push(req.user._id);
+      followerUser.following.push(userId);
       const updatedUser = await user.save();
+      const updatedFollower = await followerUser.save();
+      console.log("followbase", updatedUser);
+      console.log("follower", updatedFollower);
       res.status(201).send({
         message: `Siguiendo a ${updatedUser.username}`,
       });
-      console.log("follow", updatedUser);
     } else {
       res.status(404).send({
         message: "User no encontrado",
@@ -161,13 +170,17 @@ userRouter.put(
   expressAsyncHandler(async (req, res) => {
     const userId = req.params.username;
     const user = await User.findByIdAndUpdate(userId);
-    if (user) {
-      user.followers.pull(req.body.username);
+    const unfollowerUser = await User.findByIdAndUpdate(req.user._id);
+    if (user && unfollowerUser) {
+      user.followers.pull(req.user._id);
+      unfollowerUser.following.pull(userId);
       const updatedUser = await user.save();
+      const updatedUnfollower = await unfollowerUser.save();
       res.status(201).send({
         message: `Ya no estas siguiendo a ${updatedUser.username}`,
       });
-      console.log("unfollow", updatedUser);
+      console.log("unfollowBase", updatedUser);
+      console.log("unfollower", updatedUnfollower);
     } else {
       res.status(404).send({
         message: "User no encontrado",

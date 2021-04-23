@@ -25,6 +25,10 @@ const useStyles = makeStyles({
       background: "#e16828",
     },
   },
+  title: {
+    marginLeft: "1rem",
+    padding: "1rem",
+  },
 
   label: {
     textTransform: "capitalize",
@@ -41,6 +45,7 @@ export default withRouter(function SigninScreen(props) {
     ? props.location.search.split("=")[1]
     : "/";
 
+  console.log("redir", redirect);
   const userSignin = useSelector((state) => state.userSignin);
   const { userInfo, loading, error } = userSignin;
 

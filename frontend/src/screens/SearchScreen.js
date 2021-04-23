@@ -12,20 +12,33 @@ import {
   AppBar,
   makeStyles,
   Divider,
+  Container,
 } from "@material-ui/core";
 import RenderPost from "../components/RenderPost";
 import { useState } from "react";
 import { listUsers } from "../actions/userActions";
 import PropTypes from "prop-types";
 import RenderUsers from "../components/RenderUsers";
+import { withRouter } from "react-router";
+import NavLarge from "../components/NavLarge";
 
 const useStyles = makeStyles((theme) => ({
+  root: {
+    borderLeft: "1px solid #e0e0e0",
+    borderRight: "1px solid #e0e0e0",
+    borderBottom: "1px solid #e0e0e0",
+    borderRadius: "0px",
+  },
+  title: {
+    marginLeft: "1rem",
+    padding: "1rem",
+  },
   tabs: {
     backgroundColor: "#ffffff",
-    marginTop: "0.5rem",
+    borderbottom: "1px solid #e0e0e0",
   },
   divider: {
-    backgroundColor: "#ffffff",
+    backgroundColor: "#e0e0e0",
     padding: "0.5rem",
   },
 }));
@@ -62,7 +75,7 @@ function a11yProps(index) {
   };
 }
 
-export default function SearchScreen(props) {
+export default withRouter(function SearchScreen(props) {
   const classes = useStyles();
   const query = props.match.params.query;
   const profile = props.match.params.profile;
@@ -106,58 +119,68 @@ export default function SearchScreen(props) {
   };
 
   return (
-    <Grid container justify="center">
-      <Grid item xs={3}></Grid>
-      <Grid item xs={12} md={6}>
-        <AppBar position="static" className={classes.tabs}>
-          <Tabs
-            //TODO: Render condicional de users y posts
-            value={showing}
-            onChange={handleChange}
-            indicatorColor="secondary"
-            textColor="secondary"
-            variant="fullWidth"
-          >
-            <Tab label="Destacados" {...a11yProps(0)} />
-            <Tab label="Mas recientes" {...a11yProps(1)} />
-            <Tab label="Usuarios" {...a11yProps(2)} />
-          </Tabs>
-        </AppBar>
-        <Divider light />
-
-        <Grid className={classes.divider}></Grid>
+    <Container fixed maxWidth="lg">
+      <Grid container justify="center" className={classes.root}>
+        <Grid item xs={12} className={classes.title}>
+          <Typography variant="h4" color="textPrimary">
+            Busqueda
+          </Typography>
+        </Grid>
         <Divider />
-        {loading ? (
-          <ReactLoading color="#2d91f0" type="bars" />
-        ) : error ? (
-          <MessageBox variant="danger">{error}</MessageBox>
-        ) : (
-          <>
-            {posts && posts.length === 0 && showing === 0 && (
-              <MessageBox>
-                Lo sentimos, no encontramos publicaciones que incluyan las
-                palabras solicitadas.
-              </MessageBox>
-            )}
-            {posts && posts.length === 0 && showing === 1 && (
-              <MessageBox>
-                Lo sentimos, no encontramos publicaciones que incluyan las
-                palabras solicitadas.
-              </MessageBox>
-            )}
-            {users && users.length === 0 && showing === 2 && (
-              <MessageBox>No se encontraron usuarios.</MessageBox>
-            )}
-            {posts && showing === 1
-              ? posts.map((post) => <RenderPost key={post._id} post={post} />)
-              : null}
-            {users && showing === 2
-              ? users.map((user) => <RenderUsers key={user._id} user={user} />)
-              : null}
-          </>
-        )}
+        <NavLarge />
+        <Grid item xs={12} md={6}>
+          <AppBar position="static" className={classes.tabs}>
+            <Tabs
+              //TODO: Render condicional de users y posts
+              value={showing}
+              onChange={handleChange}
+              indicatorColor="secondary"
+              textColor="secondary"
+              variant="fullWidth"
+            >
+              <Tab label="Destacados" {...a11yProps(0)} />
+              <Tab label="Mas recientes" {...a11yProps(1)} />
+              <Tab label="Usuarios" {...a11yProps(2)} />
+            </Tabs>
+          </AppBar>
+
+          <Grid className={classes.divider}></Grid>
+          <Divider />
+
+          {loading ? (
+            <ReactLoading color="#2d91f0" type="bars" />
+          ) : error ? (
+            <MessageBox variant="danger">{error}</MessageBox>
+          ) : (
+            <>
+              {posts && posts.length === 0 && showing === 0 && (
+                <MessageBox>
+                  Lo sentimos, no encontramos publicaciones que incluyan las
+                  palabras solicitadas.
+                </MessageBox>
+              )}
+              {posts && posts.length === 0 && showing === 1 && (
+                <MessageBox>
+                  Lo sentimos, no encontramos publicaciones que incluyan las
+                  palabras solicitadas.
+                </MessageBox>
+              )}
+              {users && users.length === 0 && showing === 2 && (
+                <MessageBox>No se encontraron usuarios.</MessageBox>
+              )}
+              {posts && showing === 1
+                ? posts.map((post) => <RenderPost key={post._id} post={post} />)
+                : null}
+              {users && showing === 2
+                ? users.map((user) => (
+                    <RenderUsers key={user._id} user={user} />
+                  ))
+                : null}
+            </>
+          )}
+        </Grid>
+        <Grid item xs={3}></Grid>
       </Grid>
-      <Grid item xs={3}></Grid>
-    </Grid>
+    </Container>
   );
-}
+});

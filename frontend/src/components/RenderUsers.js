@@ -1,6 +1,5 @@
 import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
-
 import {
   Button,
   ListItemAvatar,
@@ -20,7 +19,7 @@ import {
   USER_FOLLOW_RESET,
   USER_UNFOLLOW_RESET,
 } from "../constants/userConstants";
-import { Link } from "react-router-dom";
+import { Link, withRouter } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -68,11 +67,16 @@ export default function RenderUsers(props) {
   const { success: successUnfollow } = userUnfollow;
 
   const followHandler = () => {
-    dispatch(followUser(user.username));
+    if (userInfo) {
+      dispatch(followUser(user.username));
+    }
   };
   const unfollowHandler = () => {
-    dispatch(unfollowUser(user.username));
+    if (userInfo) {
+      dispatch(unfollowUser(user.username));
+    }
   };
+  console.log("userInfo", userInfo);
 
   useEffect(() => {
     if (successFollow) {
@@ -110,7 +114,7 @@ export default function RenderUsers(props) {
             }
           />
           <ListItemSecondaryAction>
-            {user && !user.followers.includes(userInfo.username) ? (
+            {user && userInfo && !user.followers.includes(userInfo.username) ? (
               <Button
                 disableElevation
                 variant="contained"
@@ -119,7 +123,9 @@ export default function RenderUsers(props) {
               >
                 Seguir
               </Button>
-            ) : user && user.followers.includes(userInfo.username) ? (
+            ) : user &&
+              userInfo &&
+              user.followers.includes(userInfo.username) ? (
               <Button
                 disableElevation
                 classes={{ root: classes.unfollowButton }}
@@ -127,7 +133,20 @@ export default function RenderUsers(props) {
               >
                 Dejar de seguir
               </Button>
-            ) : null}
+            ) : (
+              !userInfo && (
+                <Link to="/signin">
+                  <Button
+                    disableElevation
+                    variant="contained"
+                    classes={{ root: classes.followButton }}
+                    onClick={followHandler}
+                  >
+                    Seguir
+                  </Button>
+                </Link>
+              )
+            )}
           </ListItemSecondaryAction>
         </ListItem>
       </Link>

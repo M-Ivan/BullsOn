@@ -129,18 +129,6 @@ export default function Header(props) {
     setUserAnchorEl(false);
   };
 
-  //  const toogleBurger = (menuOpen) => (event) => {
-  //    if (
-  //      event &&
-  //      event.type === "keydown" &&
-  //      (event.key === "Tab" || event.key === "Shift")
-  //    ) {
-  //      return;
-  //    }
-
-  //    setMenuOpen({ menuOpen: !menuOpen });
-  //  };
-
   const listMenu = () => (
     <div>
       <div className={classes.drawerHeader}>
@@ -204,10 +192,10 @@ export default function Header(props) {
     <div>
       <Grid container spacing={2}>
         <Grid xs={12}>
-          <AppBar position="static">
+          <AppBar position="static" elevation={1}>
             <Toolbar className="toolBar">
               <Grid container alignItems="center" justify="flex-start">
-                <Grid item xs={5} lg={3} md={3}>
+                <Grid item xs={6} lg={3} md={3}>
                   <Hidden only={["lg", "xl"]}>
                     <IconButton
                       onClick={() => setMenuOpen(!menuOpen)}
@@ -231,6 +219,17 @@ export default function Header(props) {
                   </Link>
                 </Grid>
 
+                {showSearchBox ? (
+                  <Hidden only={["lg", "xl"]}>
+                    <Grid item xs={6}>
+                      <Toolbar className="toolBar">
+                        <Grid container justify="center">
+                          <SearchBox />
+                        </Grid>
+                      </Toolbar>
+                    </Grid>
+                  </Hidden>
+                ) : null}
                 <Grid item lg={6} xs={7}>
                   <Hidden only={["xs", "sm", "md"]}>
                     <SearchBox />{" "}
@@ -251,28 +250,9 @@ export default function Header(props) {
                 </Hidden>
               </Grid>
             </Toolbar>
-            {showSearchBox ? (
-              <Hidden only={["lg", "xl"]}>
-                <Toolbar className="toolBar">
-                  <Grid container justify="center">
-                    <SearchBox />
-                  </Grid>
-                </Toolbar>
-              </Hidden>
-            ) : null}
+
             <Hidden only={["xs", "sm", "md"]}>
               <Toolbar className="toolBar">
-                <Grid container justify="flex-start" alignItems="center">
-                  {" "}
-                  <Button classes={{ root: classes.navlink }}>
-                    <Link to="/">
-                      <Grid container alignItems="center">
-                        <HomeOutlinedIcon style={{ color: orange[700] }} />
-                        <Typography color="textPrimary">Inicio</Typography>
-                      </Grid>{" "}
-                    </Link>
-                  </Button>
-                </Grid>
                 <Grid container justify="flex-end" alignItems="center">
                   {userInfo ? (
                     <div>

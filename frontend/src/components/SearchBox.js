@@ -45,10 +45,10 @@ const useStyles = makeStyles((theme) => ({
       width: "100ch",
     },
     [theme.breakpoints.down("sm")]: {
-      width: "40ch",
+      width: "30ch",
     },
     [theme.breakpoints.down("xs")]: {
-      width: "30ch",
+      width: "20ch",
     },
   },
 }));

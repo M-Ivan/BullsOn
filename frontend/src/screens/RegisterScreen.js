@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Link } from "react-router-dom";
+import { Link, withRouter } from "react-router-dom";
 import { register } from "../actions/userActions";
 import ReactLoading from "react-loading";
 import MessageBox from "../components/MessageBox";
@@ -25,13 +25,16 @@ const useStyles = makeStyles({
       background: "#e16828",
     },
   },
-
+  title: {
+    marginLeft: "1rem",
+    padding: "1rem",
+  },
   label: {
     textTransform: "capitalize",
   },
 });
 
-export default function RegisterScreen(props) {
+export default withRouter(function RegisterScreen(props) {
   const classes = useStyles();
   //Hooks
   const [username, setUserame] = useState("");
@@ -47,7 +50,9 @@ export default function RegisterScreen(props) {
     : "/";
 
   const userRegister = useSelector((state) => state.userRegister);
-  const { userInfo, loading, error } = userRegister;
+  const { loading, error } = userRegister;
+  const userSignin = useSelector((state) => state.userSignin);
+  const { userInfo } = userSignin;
 
   const dispatch = useDispatch();
   const submitHandler = (e) => {
@@ -63,6 +68,8 @@ export default function RegisterScreen(props) {
       props.history.push(redirect);
     }
   }, [props.history, redirect, userInfo]);
+  console.log("redir", redirect);
+
   return (
     <div>
       <Container maxWidth="sm" fixed>
@@ -197,4 +204,4 @@ export default function RegisterScreen(props) {
       </Container>
     </div>
   );
-}
+});

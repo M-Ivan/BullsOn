@@ -116,7 +116,7 @@ export const followUser = (userId) => async (dispatch, getState) => {
   try {
     const { data } = await Axios.put(
       `/api/users/${userId}/follow`,
-      { username: userInfo.username },
+      {},
       {
         headers: { Authorization: `Bearer ${userInfo.token}` },
       }
@@ -143,7 +143,7 @@ export const unfollowUser = (userId) => async (dispatch, getState) => {
   try {
     const { data } = await Axios.put(
       `/api/users/${userId}/unfollow`,
-      { username: userInfo.username },
+      {},
       {
         headers: { Authorization: `Bearer ${userInfo.token}` },
       }

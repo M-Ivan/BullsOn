@@ -13,6 +13,7 @@ import {
   Avatar,
   IconButton,
   Typography,
+  Divider,
 } from "@material-ui/core";
 import { red } from "@material-ui/core/colors";
 import ScreenShareOutlinedIcon from "@material-ui/icons/ScreenShareOutlined";
@@ -35,6 +36,12 @@ import ChatIcon from "@material-ui/icons/Chat";
 const useStyles = makeStyles((theme) => ({
   root: {
     maxWidth: "100%",
+    borderBottom: "1px solid #e0e0e0",
+    borderRadius: "0px",
+    // Provisorio hasta diseñar el lado derecho
+    [theme.breakpoints.up("md")]: {
+      borderRight: "1px solid #e0e0e0",
+    },
   },
   media: {
     height: 0,
@@ -96,26 +103,48 @@ export default withRouter(function RenderPost(props) {
   const dispatch = useDispatch();
 
   const submitCommentHandler = () => {
-    dispatch(addComment(postId, comment));
-    setCommentForm(false);
+    if (userInfo) {
+      dispatch(addComment(postId, comment));
+      setCommentForm(false);
+    } else {
+      props.history.push("/signin");
+      setCommentForm(false);
+    }
   };
 
   //TODO: Handler para redirect a signIn si no hay userInfo
   const likeHandler = () => {
-    dispatch(likePost(postId));
+    if (userInfo) {
+      dispatch(likePost(postId));
+    } else {
+      props.history.push("/signin");
+    }
   };
   const unlikeHandler = () => {
-    dispatch(unlikePost(postId));
+    if (userInfo) {
+      dispatch(unlikePost(postId));
+    } else {
+      props.history.push("/signin");
+    }
   };
   const repostHandler = () => {
-    dispatch(repostPost(postId));
+    if (userInfo) {
+      dispatch(repostPost(postId));
+    } else {
+      props.history.push("/signin");
+    }
   };
   const unrepostHandler = () => {
-    dispatch(unrepostPost(postId));
+    if (userInfo) {
+      dispatch(unrepostPost(postId));
+    } else {
+      props.history.push("/signin");
+    }
   };
 
   return (
-    <Card variant="outlined" key={post._id} className={classes.root}>
+    <Card className={classes.root} elevation={0} key={post._id}>
+      {" "}
       <CardHeader
         avatar={
           <Link to={`/${profile.username}`}>
@@ -150,7 +179,6 @@ export default withRouter(function RenderPost(props) {
           post.createdAt.substring(11, 16)
         }
       />
-
       {
         // TODO: Revisar por que solo devuelve el ID Del autor
         // Pero no otras caracteristicas.
@@ -173,7 +201,7 @@ export default withRouter(function RenderPost(props) {
         </CardContent>
       </Link>
       <CardActions disableSpacing>
-        {post && userInfo ? (
+        {post ? (
           <IconButton
             className={classes.commentBtn}
             onClick={() => setCommentForm(true)}
@@ -203,7 +231,7 @@ export default withRouter(function RenderPost(props) {
             {post.repost.length}
           </IconButton>
         ) : (
-          <IconButton>
+          <IconButton onClick={repostHandler}>
             <RepeatIcon />
             {post.repost.length}
           </IconButton>
@@ -227,7 +255,7 @@ export default withRouter(function RenderPost(props) {
             </Grid>
           </IconButton>
         ) : (
-          <IconButton>
+          <IconButton onClick={likeHandler}>
             <Grid container alignItems="center" className={classes.likeIcon}>
               <StarIcon />
               {post.likes.length}{" "}

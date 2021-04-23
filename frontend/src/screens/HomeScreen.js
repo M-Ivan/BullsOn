@@ -1,6 +1,15 @@
 import React, { useState, useEffect } from "react";
-import { Container, Button, Grid, makeStyles } from "@material-ui/core/index";
-import TextField from "@material-ui/core/TextField";
+import {
+  Container,
+  Button,
+  Grid,
+  makeStyles,
+  TextField,
+  Divider,
+  Box,
+  withStyles,
+  Typography,
+} from "@material-ui/core/index";
 import ReactLoading from "react-loading";
 import RenderPost from "../components/RenderPost";
 import { useDispatch, useSelector } from "react-redux";
@@ -9,7 +18,18 @@ import { listPosts, createPost } from "../actions/postActions";
 import MessageBox from "../components/MessageBox";
 import PostAddIcon from "@material-ui/icons/PostAdd";
 
-const useStyles = makeStyles({
+import NavLarge from "../components/NavLarge";
+
+const useStyles = makeStyles((theme) => ({
+  root: {
+    borderLeft: "1px solid #e0e0e0",
+    borderRight: "1px solid #e0e0e0",
+    borderBottom: "1px solid #e0e0e0",
+  },
+  title: {
+    marginLeft: "1rem",
+    padding: "1rem",
+  },
   btnRoundedOr: {
     background: "#ea6d0b",
     borderRadius: "3rem",
@@ -21,8 +41,33 @@ const useStyles = makeStyles({
     "&:hover": {
       background: "#e16828",
     },
+    postForm: {},
   },
-});
+}));
+
+const MyTextField = withStyles({
+  root: {
+    marginLeft: "1rem",
+    marginRight: "1rem",
+    marginTop: "0.3rem",
+
+    "& .MuiInput-underline:after": {
+      borderBottomColor: "#ea6d0b",
+    },
+    "& label": {},
+    "& label.Mui-focused": {
+      color: "#ea6d0b",
+    },
+    "& .MuiOutlinedInput-root": {
+      "& label": {
+        fontSize: "1.05rem",
+      },
+      "&.Mui-focused fieldset": {
+        borderColor: "#ea6d0b",
+      },
+    },
+  },
+})(TextField);
 
 export default function HomeScreen(props) {
   const classes = useStyles();
@@ -87,103 +132,106 @@ export default function HomeScreen(props) {
   return (
     <div>
       <Container maxWidth="lg" fixed>
-        <Grid container justify="flex-start" direction="column">
-          <Grid item xs={12}>
-            <h1>Inicio</h1>
+        <Grid container className={classes.root}>
+          <Grid item xs={12} className={classes.title}>
+            <Typography variant="h4" color="textPrimary">
+              Inicio
+            </Typography>
           </Grid>
-        </Grid>
-        <Grid item xs={12}>
-          <hr />
-        </Grid>
-        <Grid container justify="center">
-          <Grid item xs={3}></Grid>
-          <Grid item xs={12} md={6}>
-            {userInfo ? (
-              <Grid item xs={12}>
-                <form onSubmit={submitHandler}>
-                  <Grid
-                    container
-                    className="form-control"
-                    direction="column"
-                    justify="center"
-                  >
-                    <TextField
-                      id="postText"
-                      variant="outlined"
-                      multiline
-                      label="Comparte con el mundo"
-                      placeholder="En que estas pensando?.."
-                      rows={6}
-                      value={post}
-                      onChange={(e) => setPost(e.target.value)}
-                    />
-                  </Grid>
-                  <Grid
-                    container
-                    justify="center"
-                    alignItems="flex-end"
-                    direction="column"
-                  >
-                    {post.length > 0 ? (
-                      <Button
-                        classes={{
-                          root: classes.btnRoundedOr,
-                        }}
-                        variant="contained"
-                        type="submit"
-                      >
-                        <PostAddIcon />
-                        Compartir una idea
-                      </Button>
-                    ) : (
-                      <Button
-                        classes={{
-                          root: classes.btnRoundedOr,
-                        }}
-                        variant="contained"
-                        disabled
-                      >
-                        <PostAddIcon />
-                        Compartir una idea
-                      </Button>
-                    )}
-                  </Grid>
-                </form>
+          <Grid item xs={12}>
+            <Divider />
+          </Grid>
+          <Grid container justify="center">
+            <NavLarge />
+            <Grid item xs={12} lg={6}>
+              {userInfo ? (
                 <Grid item xs={12}>
-                  <div className="feed-separation">
-                    <br />
-                  </div>{" "}
+                  <form onSubmit={submitHandler}>
+                    <Grid
+                      container
+                      className="form-control"
+                      direction="column"
+                      justify="center"
+                    >
+                      <MyTextField
+                        id="postText"
+                        variant="standard"
+                        multiline
+                        label="Hola, Mundo!"
+                        placeholder="En que estas pensando?.."
+                        rows={6}
+                        value={post}
+                        onChange={(e) => setPost(e.target.value)}
+                      />
+                    </Grid>
+                    <Grid
+                      container
+                      justify="center"
+                      alignItems="flex-end"
+                      direction="column"
+                    >
+                      {" "}
+                      {post.length > 0 ? (
+                        <Button
+                          classes={{
+                            root: classes.btnRoundedOr,
+                          }}
+                          variant="contained"
+                          type="submit"
+                        >
+                          <PostAddIcon />
+                          Compartir una idea
+                        </Button>
+                      ) : (
+                        <Button
+                          classes={{
+                            root: classes.btnRoundedOr,
+                          }}
+                          variant="contained"
+                          disabled
+                        >
+                          <PostAddIcon />
+                          Compartir una idea
+                        </Button>
+                      )}
+                    </Grid>
+                  </form>
+                </Grid>
+              ) : null}
+              <Grid item xs={12}>
+                <div className="feed-separation">
+                  <br />
+                </div>
+              </Grid>
+              <Divider />
+              <Grid
+                container
+                direction="row"
+                justify="center"
+                alignItems="center"
+              >
+                <Grid item xs={12}>
+                  {loading ? (
+                    <ReactLoading color="#2d91f0" type="bars" />
+                  ) : error ? (
+                    <MessageBox variant="danger">{error}</MessageBox>
+                  ) : (
+                    <>
+                      {posts.length === 0 && (
+                        <MessageBox>Nada que mostrar</MessageBox>
+                      )}
+                      {posts.map((post) => (
+                        <RenderPost key={post._id} post={post} />
+                      ))}
+                    </>
+                  )}
                 </Grid>
               </Grid>
-            ) : null}
-            <Grid
-              container
-              direction="row"
-              justify="center"
-              alignItems="center"
-              spacing={1}
-            >
-              <Grid item xs={12}>
-                {loading ? (
-                  <ReactLoading color="#2d91f0" type="bars" />
-                ) : error ? (
-                  <MessageBox variant="danger">{error}</MessageBox>
-                ) : (
-                  <>
-                    {posts.length === 0 && (
-                      <MessageBox>Nada que mostrar</MessageBox>
-                    )}
-                    {posts.map((post) => (
-                      <RenderPost key={post._id} post={post} />
-                    ))}
-                  </>
-                )}
-              </Grid>
             </Grid>
+            <Grid item xs={3}></Grid>
           </Grid>
-          <Grid item xs={3}></Grid>
         </Grid>
-      </Container>
+      </Container>{" "}
     </div>
   );
 }
