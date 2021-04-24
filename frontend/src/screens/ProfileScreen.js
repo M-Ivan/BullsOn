@@ -10,7 +10,11 @@ import {
   Typography,
   Divider,
   Hidden,
+  IconButton,
+  TextField,
+  withStyles,
 } from "@material-ui/core/";
+import EditIcon from "@material-ui/icons/Edit";
 import { detailsUser, followUser, unfollowUser } from "../actions/userActions";
 import { red } from "@material-ui/core/colors";
 import Avatar from "@material-ui/core/Avatar";
@@ -22,6 +26,7 @@ import {
   USER_UNFOLLOW_RESET,
 } from "../constants/userConstants";
 import NavLarge from "../components/NavLarge";
+import { useState } from "react";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -66,11 +71,35 @@ const useStyles = makeStyles((theme) => ({
     margin: theme.spacing(2),
     marginTop: theme.spacing(3),
   },
+  descriptionTextField: {
+    width: "25rem",
+  },
 }));
+const MyTextField = withStyles({
+  root: {
+    marginRight: "20px",
+    "& .MuiInput-underline:after": {
+      borderBottomColor: "#ea6d0b",
+    },
+    "& label": {},
+    "& label.Mui-focused": {
+      color: "#ea6d0b",
+    },
+    "& .MuiOutlinedInput-root": {
+      "& label": {
+        fontSize: "1.05rem",
+      },
+      "&.Mui-focused fieldset": {
+        borderColor: "#ea6d0b",
+      },
+    },
+  },
+})(TextField);
 
 export default function ProfileScreen(props) {
   const classes = useStyles();
   const dispatch = useDispatch();
+
   const userSignin = useSelector((state) => state.userSignin);
   const { userInfo } = userSignin;
   const userDetails = useSelector((state) => state.userDetails);
@@ -94,6 +123,17 @@ export default function ProfileScreen(props) {
   const userUnfollow = useSelector((state) => state.userUnfollow);
   const { success: successUnfollow } = userUnfollow;
 
+  //state
+  const [editMode, setEditMode] = useState(false);
+  const [name, setName] = useState("");
+  const [lastname, setLastname] = useState("");
+  const [description, setDescription] = useState("");
+  const [username, setUsername] = useState("");
+  const [editName, setEditName] = useState(false);
+  const [editLastname, setEditLastname] = useState(false);
+  const [editDescription, setEditDescription] = useState(false);
+  const [editUsername, setEditUsername] = useState(false);
+  // utils
   const profileId = props.match.params.username;
   const postTotal = posts && reposts ? posts.concat(reposts) : null;
   // console.log("postTotal", postTotal);
@@ -143,14 +183,33 @@ export default function ProfileScreen(props) {
   ]);
 
   const followHandler = () => {
-    dispatch(followUser(profileId));
+    if (userInfo) {
+      dispatch(followUser(profileId));
+    } else {
+      props.history.push("/signin");
+    }
   };
   const unfollowHandler = () => {
     dispatch(unfollowUser(profileId));
   };
+  const editProfileHandler = () => {
+    setEditMode(true);
+  };
+  const saveProfileHandler = () => {
+    setEditMode(false);
+    setEditName(false);
+    setEditLastname(false);
+    setEditUsername(false);
+    setEditDescription(false);
+  };
+
   return (
     <div>
-      {console.log("user", user)}
+      {console.log("name", name)}
+      {console.log("lastname", lastname)}
+      {console.log("username", username)}
+      {console.log("description", description)}
+      {console.log("editMode", editMode)}
       {
         //   {console.log("reposts", reposts)}
         //   {console.log("posts", posts)
@@ -201,28 +260,36 @@ export default function ProfileScreen(props) {
                   </Grid>
                   <Grid item xs={9}>
                     <Grid container direction="column" alignItems="flex-end">
-                      {userInfo && user && userInfo._id === user._id ? (
+                      {userInfo &&
+                      user &&
+                      userInfo._id === user._id &&
+                      editMode === false ? (
                         <Box m={3}>
                           <Button
                             size="large"
                             variant="outlined"
                             color="primary"
+                            onClick={editProfileHandler}
                           >
                             Editar perfil
                           </Button>
                         </Box>
-                      ) : !user.followers.includes(userInfo.username) ? (
+                      ) : userInfo &&
+                        user &&
+                        userInfo._id === user._id &&
+                        editMode === true ? (
                         <Box m={3}>
                           <Button
-                            onClick={followHandler}
                             size="large"
                             variant="contained"
                             color="primary"
+                            onClick={saveProfileHandler}
                           >
-                            Seguir{" "}
+                            Guardar cambios{" "}
                           </Button>
                         </Box>
-                      ) : (
+                      ) : userInfo &&
+                        !user.followers.includes(userInfo.username) ? (
                         <Box m={3}>
                           <Button
                             onClick={unfollowHandler}
@@ -233,6 +300,17 @@ export default function ProfileScreen(props) {
                             Dejar de seguir
                           </Button>
                         </Box>
+                      ) : (
+                        <Box m={3}>
+                          <Button
+                            onClick={followHandler}
+                            size="large"
+                            variant="contained"
+                            color="primary"
+                          >
+                            Seguir{" "}
+                          </Button>
+                        </Box>
                       )}
                     </Grid>
                   </Grid>
@@ -241,24 +319,127 @@ export default function ProfileScreen(props) {
                   <Grid container className={classes.nameSection}>
                     <Grid item xs={12}>
                       <Typography gutterBottom variant="h4" component="h2">
-                        {user.profile.name + " " + user.profile.lastname}
+                        {editName ? (
+                          <Grid container alignItems="center">
+                            <MyTextField
+                              value={name}
+                              onChange={(e) => setName(e.target.value)}
+                              label="Nombre(s)"
+                              margin="dense"
+                            />
+                            <MyTextField
+                              value={lastname}
+                              onChange={(e) => setLastname(e.target.value)}
+                              label="Apellido"
+                              margin="dense"
+                            />
+                            {editMode ? (
+                              <IconButton
+                                size="small"
+                                onClick={() => setEditName(!editName)}
+                              >
+                                {" "}
+                                <EditIcon />
+                              </IconButton>
+                            ) : null}
+                          </Grid>
+                        ) : editMode && name && lastname ? (
+                          name + " " + lastname
+                        ) : (
+                          user.profile.name + " " + user.profile.lastname
+                        )}
+                        {editMode && !editName ? (
+                          <IconButton
+                            size="small"
+                            onClick={() => setEditName(!editName)}
+                          >
+                            {" "}
+                            <EditIcon />
+                          </IconButton>
+                        ) : null}
                       </Typography>
                     </Grid>
                     <Grid item xs={12}>
                       <Typography variant="body1" color="textSecondary">
-                        {"@" + user.profile.username}
+                        {editUsername ? (
+                          <Grid container alignItems="center">
+                            <MyTextField
+                              value={username}
+                              onChange={(e) => setUsername(e.target.value)}
+                              label="@User"
+                              margin="dense"
+                            />
+                            {editMode ? (
+                              <IconButton
+                                size="small"
+                                onClick={() => setEditUsername(!editUsername)}
+                              >
+                                {" "}
+                                <EditIcon />
+                              </IconButton>
+                            ) : null}
+                          </Grid>
+                        ) : editMode && username ? (
+                          "@" + username
+                        ) : (
+                          "@" + user.profile.username
+                        )}
+                        {editMode && !editUsername ? (
+                          <IconButton
+                            size="small"
+                            onClick={() => setEditUsername(!editUsername)}
+                          >
+                            {" "}
+                            <EditIcon />
+                          </IconButton>
+                        ) : null}
                       </Typography>
                     </Grid>
                   </Grid>
-                  <Grid container className={classes.descriptionSection}>
-                    <Typography
-                      variant="body"
-                      color="textPrimary"
-                      component="p"
-                    >
-                      {user ? user.profile.description : null}
-                    </Typography>
-                  </Grid>
+
+                  <Typography variant="body" color="textPrimary" component="p">
+                    {" "}
+                    <Grid container className={classes.descriptionSection}>
+                      {editDescription ? (
+                        <Grid container alignItems="center">
+                          <MyTextField
+                            className={classes.descriptionTextField}
+                            multiline
+                            rows={2}
+                            value={description}
+                            onChange={(e) => setDescription(e.target.value)}
+                            label="Biografia"
+                            placeholder="Escribe una breve descripción de tu persona...."
+                            margin="dense"
+                          />
+
+                          {editMode ? (
+                            <IconButton
+                              size="small"
+                              onClick={() =>
+                                setEditDescription(!editDescription)
+                              }
+                            >
+                              {" "}
+                              <EditIcon />
+                            </IconButton>
+                          ) : null}
+                        </Grid>
+                      ) : editMode && description ? (
+                        description
+                      ) : (
+                        user.profile.description
+                      )}
+                      {editMode && !editDescription ? (
+                        <IconButton
+                          size="small"
+                          onClick={() => setEditDescription(!editDescription)}
+                        >
+                          <EditIcon />
+                        </IconButton>
+                      ) : null}{" "}
+                    </Grid>
+                  </Typography>
                   <Divider />
                   <Grid container className={classes.followSection}>
                     {" "}
