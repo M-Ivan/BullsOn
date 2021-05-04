@@ -12,6 +12,7 @@ import {
 } from "../actions/postActions";
 import MessageBox from "../components/MessageBox";
 import ReactLoading from "react-loading";
+import TopicsNav from "../components/TopicsNav";
 import {
   Container,
   Button,
@@ -27,6 +28,7 @@ import {
   Typography,
   Box,
   Divider,
+  Hidden,
 } from "@material-ui/core/index";
 import { red } from "@material-ui/core/colors";
 import ScreenShareOutlinedIcon from "@material-ui/icons/ScreenShareOutlined";
@@ -39,6 +41,8 @@ import RenderComments from "../components/RenderComments";
 import StarOutlineIcon from "@material-ui/icons/StarOutline";
 import ChatIcon from "@material-ui/icons/Chat";
 import NavLarge from "../components/NavLarge";
+import RenderUsers from "../components/RenderUsers";
+import { detailsUser, listUsers } from "../actions/userActions";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -123,6 +127,7 @@ export default function PostScreen(props) {
   const { success: successUnrepost } = postUnrepost;
   const userSignin = useSelector((state) => state.userSignin);
   const { userInfo } = userSignin;
+  const userList = useSelector((state) => state.userList);
 
   useEffect(() => {
     if (
@@ -136,8 +141,8 @@ export default function PostScreen(props) {
     }
     dispatch(detailsPost(postId));
   }, [
-    postId,
     dispatch,
+    postId,
     successCommentAdd,
     successLikeAdd,
     successUnrepost,
@@ -184,14 +189,13 @@ export default function PostScreen(props) {
       props.history.push("/signin");
     }
   };
-
+  console.log("userList", userList);
   return (
-    <Container maxWidth="lg">
+    <Container maxWidth="lg" fixed>
       <Grid container className={classes.root}>
         <Grid item xs={12} className={classes.title}>
           <Typography variant="h4" color="textPrimary">
-            Compartido por{" "}
-            {post ? post.profile.profile.username : "un inversor anonimo"}
+            Compartido por {post ? post.profile._id : "un inversor anonimo"}
           </Typography>
         </Grid>
         <Grid item xs={12}>
@@ -205,24 +209,26 @@ export default function PostScreen(props) {
           <Grid xs={12}>
             <Grid container direction="row" justify="center">
               <NavLarge />
-              <Grid item xs={6}>
+              <Grid item xs={12} lg={6}>
                 <Card elevation={0} key={post._id}>
-                  <Link to={`/${post.profile.profile.username}`}>
-                    <CardHeader
-                      avatar={
+                  <CardHeader
+                    avatar={
+                      <Link to={`/${post.profile.profile.username}`}>
                         <Avatar
                           aria-label="recipe"
                           src={post ? post.profile.profile.profile : null}
                           className={classes.avatar}
                         ></Avatar>
-                      }
-                      action={
-                        <IconButton aria-label="settings">
-                          <MoreVertIcon />
-                        </IconButton>
-                      }
-                      title={
-                        <div>
+                      </Link>
+                    }
+                    action={
+                      <IconButton aria-label="settings">
+                        <MoreVertIcon />
+                      </IconButton>
+                    }
+                    title={
+                      <div>
+                        <Link to={`/${post.profile.profile.username}`}>
                           <Typography color="textPrimary" variant="h6">
                             {post.profile.profile.name +
                               " " +
@@ -231,16 +237,16 @@ export default function PostScreen(props) {
                           <Typography color="textSecondary">
                             <strong> {post.profile.profile.username}</strong>
                           </Typography>
-                        </div>
-                      }
-                      subheader={
-                        "Publicado el: " +
-                        post.createdAt.substring(0, 10) +
-                        "   A las:  " +
-                        post.createdAt.substring(11, 16)
-                      }
-                    />
-                  </Link>
+                        </Link>
+                      </div>
+                    }
+                    subheader={
+                      "Publicado el: " +
+                      post.createdAt.substring(0, 10) +
+                      "   A las:  " +
+                      post.createdAt.substring(11, 16)
+                    }
+                  />
 
                   {post.image ? (
                     <CardMedia
@@ -364,19 +370,20 @@ export default function PostScreen(props) {
                             +1 <ChatIcon className={classes.iconSmall} />
                           </Button>
                         </Grid>
-                      </Grid>{" "}
+                      </Grid>
                     </Box>
                   ) : null}
                 </Card>
+                <Divider />
                 {post.comments
                   ? post.comments.map((comment) => (
                       <RenderComments key={comment._id} comment={comment} />
                     ))
                   : null}
               </Grid>
-              <Grid item xs={3}>
-                <h1>Perfiles del post</h1>
-              </Grid>{" "}
+              <Hidden>
+                <TopicsNav />
+              </Hidden>
             </Grid>
           </Grid>
         )}

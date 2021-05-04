@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import {
   Button,
@@ -11,6 +11,7 @@ import {
   Box,
   Typography,
   Divider,
+  Grid,
 } from "@material-ui/core";
 import { followUser, unfollowUser, detailsUser } from "../actions/userActions";
 import { useDispatch, useSelector } from "react-redux";
@@ -20,6 +21,8 @@ import {
   USER_UNFOLLOW_RESET,
 } from "../constants/userConstants";
 import { Link, withRouter } from "react-router-dom";
+import MessageBox from "../components/MessageBox";
+import ReactLoading from "react-loading";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -57,14 +60,16 @@ const useStyles = makeStyles((theme) => ({
 
 export default function RenderUsers(props) {
   const dispatch = useDispatch();
-  const classes = useStyles();
   const { user } = props;
+  const classes = useStyles();
   const userSignin = useSelector((state) => state.userSignin);
   const { userInfo } = userSignin;
   const userFollow = useSelector((state) => state.userFollow);
   const { success: successFollow } = userFollow;
   const userUnfollow = useSelector((state) => state.userUnfollow);
   const { success: successUnfollow } = userUnfollow;
+  const userDetails = useSelector((state) => state.userDetails);
+  const { loading, error } = userDetails;
 
   const followHandler = () => {
     if (userInfo) {
@@ -76,7 +81,6 @@ export default function RenderUsers(props) {
       dispatch(unfollowUser(user.username));
     }
   };
-  console.log("userInfo", userInfo);
 
   useEffect(() => {
     if (successFollow) {
@@ -87,70 +91,84 @@ export default function RenderUsers(props) {
       dispatch(detailsUser(user._id));
       dispatch({ type: USER_UNFOLLOW_RESET });
     }
+    dispatch(detailsUser(user._id));
   }, [dispatch, successFollow, user._id, successUnfollow]);
 
   console.log("user", user);
+
   return (
-    <List disablePadding className={classes.root}>
-      <Link to={`/${user.username}`}>
-        <ListItem key={user._id} button>
-          <ListItemAvatar>
-            <Avatar alt={user.username} src={user.profile.profile} />
-          </ListItemAvatar>
-          <ListItemText
-            id={user}
-            primary={
-              <Typography variant="h6" color="textPrimary">
-                {`${user.profile.name} ${user.profile.lastname}`}
-              </Typography>
-            }
-            secondary={
-              <Box>
-                {`@${user.username}`}
-                <Typography variant="body2" color="textPrimary">
-                  {user.profile.description}
-                </Typography>
-              </Box>
-            }
-          />
-          <ListItemSecondaryAction>
-            {user && userInfo && !user.followers.includes(userInfo.username) ? (
-              <Button
-                disableElevation
-                variant="contained"
-                classes={{ root: classes.followButton }}
-                onClick={followHandler}
-              >
-                Seguir
-              </Button>
-            ) : user &&
-              userInfo &&
-              user.followers.includes(userInfo.username) ? (
-              <Button
-                disableElevation
-                classes={{ root: classes.unfollowButton }}
-                onClick={unfollowHandler}
-              >
-                Dejar de seguir
-              </Button>
-            ) : (
-              !userInfo && (
-                <Link to="/signin">
-                  <Button
-                    disableElevation
-                    variant="contained"
-                    classes={{ root: classes.followButton }}
-                    onClick={followHandler}
-                  >
-                    Seguir
-                  </Button>
-                </Link>
-              )
-            )}
-          </ListItemSecondaryAction>
-        </ListItem>
-      </Link>
-      <Divider component="li" />
-    </List>
+    <Grid>
+      {loading ? (
+        <ReactLoading className="loading" color="#2d91f0" type="cylon" />
+      ) : error ? (
+        <MessageBox variant="danger">{error}</MessageBox>
+      ) : (
+        <List disablePadding className={classes.root}>
+          <Link to={`/${user.profile.username}`}>
+            <ListItem key={user._id} button>
+              <ListItemAvatar>
+                <Avatar alt={user.username} src={user.profile.profile} />
+              </ListItemAvatar>
+              <ListItemText
+                id={user}
+                primary={
+                  <Typography variant="h6" color="textPrimary">
+                    {`${user.profile.name} ${user.profile.lastname}`}
+                  </Typography>
+                }
+                secondary={
+                  <Box>
+                    {`@${user.profile.username}`}
+                    <Typography variant="body2" color="textPrimary">
+                      {user.profile.description}
+                    </Typography>
+                  </Box>
+                }
+              />
+              <ListItemSecondaryAction>
+                {user.followers || user.following ? (
+                  user &&
+                  userInfo &&
+                  !user.followers.includes(userInfo.username) ? (
+                    <Button
+                      disableElevation
+                      variant="contained"
+                      classes={{ root: classes.followButton }}
+                      onClick={followHandler}
+                    >
+                      Seguir
+                    </Button>
+                  ) : user &&
+                    userInfo &&
+                    user.followers.includes(userInfo.username) ? (
+                    <Button
+                      disableElevation
+                      classes={{ root: classes.unfollowButton }}
+                      onClick={unfollowHandler}
+                    >
+                      Dejar de seguir
+                    </Button>
+                  ) : (
+                    !userInfo && (
+                      <Link to="/signin">
+                        <Button
+                          disableElevation
+                          variant="contained"
+                          classes={{ root: classes.followButton }}
+                          onClick={followHandler}
+                        >
+                          Seguir
+                        </Button>
+                      </Link>
+                    )
+                  )
+                ) : null}
+              </ListItemSecondaryAction>
+            </ListItem>
+          </Link>
+          <Divider component="li" />
+        </List>
+      )}
+    </Grid>
   );
 }

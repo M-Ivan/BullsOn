@@ -10,11 +10,11 @@ import {
   Avatar,
   Typography,
 } from "@material-ui/core";
+import { Link } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
   root: {
     width: "100%",
-    maxWidth: "36ch",
     backgroundColor: theme.palette.background.paper,
   },
   inline: {
@@ -31,20 +31,26 @@ export default function RenderComments(props) {
     <List className={classes.root}>
       {console.log(props)}
       <ListItem alignItems="flex-start">
-        <ListItemAvatar>
-          <Avatar alt={profile.username} src={profile.profile} />
-        </ListItemAvatar>
+        <Link to={`/${profile.username}`}>
+          <ListItemAvatar>
+            <Avatar alt={profile.username} src={profile.profile} />
+          </ListItemAvatar>
+        </Link>
         <ListItemText
           primary={
-            <Typography color="textPrimary" variant="h7">
-              {`${profile.name} ${profile.lastname}`}
-            </Typography>
+            <Link to={`/${profile.username}`}>
+              <Typography color="textPrimary" variant="h7">
+                {`${profile.name} ${profile.lastname}`}
+              </Typography>{" "}
+            </Link>
           }
           secondary={
             <Box>
-              <Typography color="textSecondary">
-                <strong>{profile.username}</strong>{" "}
-              </Typography>
+              <Link to={`/${profile.username}`}>
+                <Typography color="textSecondary">
+                  <strong>{profile.username}</strong>{" "}
+                </Typography>
+              </Link>
               <Typography color="textSecondary" gutterBottom>
                 {"Publicado el: " +
                   comment.createdAt.substring(0, 10) +
@@ -63,7 +69,7 @@ export default function RenderComments(props) {
           }
         />
       </ListItem>
-      <Divider variant="inset" component="li" />
+      <Divider component="li" variant="inset" />
     </List>
   );
 }
