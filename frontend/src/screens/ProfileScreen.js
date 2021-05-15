@@ -27,6 +27,7 @@ import {
 } from "../constants/userConstants";
 import NavLarge from "../components/NavLarge";
 import { useState } from "react";
+import TopicsNav from "../components/TopicsNav";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -46,9 +47,7 @@ const useStyles = makeStyles((theme) => ({
   },
   profileRoot: {
     borderRadius: "0px",
-    [theme.breakpoints.up("md")]: {
-      borderRight: "1px solid #e0e0e0",
-    },
+    [theme.breakpoints.up("md")]: {},
   },
   media: {
     height: 170,
@@ -232,7 +231,7 @@ export default function ProfileScreen(props) {
             </Grid>
             <NavLarge />
 
-            <Grid item xs={12} md={6}>
+            <Grid item xs={12} lg={6}>
               <Card elevation={0} className={classes.profileRoot}>
                 {
                   //  loading ? (
@@ -468,7 +467,7 @@ export default function ProfileScreen(props) {
                 null}
               </Grid>
             </Grid>
-            <Grid item xs={3}></Grid>
+            <TopicsNav />
           </Grid>
         </Container>
       ) : null}

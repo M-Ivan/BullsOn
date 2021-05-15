@@ -41,8 +41,6 @@ import RenderComments from "../components/RenderComments";
 import StarOutlineIcon from "@material-ui/icons/StarOutline";
 import ChatIcon from "@material-ui/icons/Chat";
 import NavLarge from "../components/NavLarge";
-import RenderUsers from "../components/RenderUsers";
-import { detailsUser, listUsers } from "../actions/userActions";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -252,7 +250,7 @@ export default function PostScreen(props) {
                     <CardMedia
                       className={classes.media}
                       image={post.image}
-                      title="Paella dish"
+                      title={post.post}
                     />
                   ) : null}
                   <CardContent>

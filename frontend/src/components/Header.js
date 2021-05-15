@@ -28,6 +28,8 @@ import ExitToAppOutlinedIcon from "@material-ui/icons/ExitToAppOutlined";
 import AccountCircleRoundedIcon from "@material-ui/icons/AccountCircleRounded";
 import { orange, green, red } from "@material-ui/core/colors";
 import SearchBox from "./SearchBox";
+import TrendingUpIcon from "@material-ui/icons/TrendingUp";
+import TrendingDownIcon from "@material-ui/icons/TrendingDown";
 
 const drawerWidth = 240;
 
@@ -215,7 +217,7 @@ export default function Header(props) {
                     </IconButton>
                   </Hidden>
                   <Link className="brand" to="/">
-                    InvestIn
+                    <i class="fa fa-bitcoin"></i>ullsOn <TrendingUpIcon />
                   </Link>
                 </Grid>
 

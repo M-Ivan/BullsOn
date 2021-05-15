@@ -74,7 +74,7 @@ export const detailsPost = (postId) => async (dispatch) => {
   }
 };
 
-export const createPost = (post) => async (dispatch, getState) => {
+export const createPost = (post, image) => async (dispatch, getState) => {
   dispatch({ type: POST_CREATE_REQUEST, payload: { post } });
   const {
     userSignin: { userInfo },
@@ -82,7 +82,7 @@ export const createPost = (post) => async (dispatch, getState) => {
   try {
     const { data } = await Axios.post(
       "/api/posts",
-      { post },
+      { post, image },
       {
         headers: { Authorization: `Bearer ${userInfo.token}` },
       }

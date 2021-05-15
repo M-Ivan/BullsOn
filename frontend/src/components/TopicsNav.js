@@ -13,6 +13,8 @@ import { Link } from "react-router-dom";
 import AccountCircleRoundedIcon from "@material-ui/icons/AccountCircleRounded";
 import ExitToAppOutlinedIcon from "@material-ui/icons/ExitToAppOutlined";
 import { signout } from "../actions/userActions";
+import TrendingUpIcon from "@material-ui/icons/TrendingUp";
+import TrendingDownIcon from "@material-ui/icons/TrendingDown";
 
 const useStyles = makeStyles({
   navLg: { margin: "1rem", marginTop: "3rem" },
@@ -21,20 +23,17 @@ const useStyles = makeStyles({
     marginBottom: "1rem",
     color: orange[800],
   },
+  btcIcon: {
+    color: "#ff9900",
+  },
+  iconBtn: {},
   border: {
-    borderRight: "1px solid #e0e0e0",
+    borderLeft: "1px solid #e0e0e0",
   },
 });
 
-export default function NavLarge() {
+export default function TopicsNav() {
   const classes = useStyles();
-  const userSignin = useSelector((state) => state.userSignin);
-  const { userInfo } = userSignin;
-  const dispatch = useDispatch();
-
-  const signoutHandler = () => {
-    dispatch(signout());
-  };
 
   return (
     <Grid item xs={3} className={classes.border}>
@@ -46,52 +45,74 @@ export default function NavLarge() {
           className={classes.navLg}
         >
           <Button classes={{ root: classes.navBtn }} size="large">
-            <Link to="/">
+            <Link to="/search/query/bitcoin">
               <Grid container alignItems="center">
                 <Typography variant="h5" color="textPrimary">
-                  <i class="fa fa-bitcoin"></i> # Bitcoin
+                  <i className={`fa fa-btc ${classes.btcIcon}`}></i> # Bitcoin
                 </Typography>
               </Grid>{" "}
             </Link>
           </Button>
-          {userInfo ? (
-            // Agregar ICONO FA Ethereum
-            <Button classes={{ root: classes.navBtn }} size="large">
-              <Link to={`/${userInfo.username}`}>
-                <Grid container alignItems="center">
-                  <AccountCircleRoundedIcon style={{ color: orange[700] }} />
-                  <Typography variant="h5" color="textPrimary">
-                    # Ethereum
-                  </Typography>
-                </Grid>{" "}
-              </Link>
-            </Button>
-          ) : null}
-          {userInfo ? (
-            <Button
-              classes={{ root: classes.navBtn }}
-              size="large"
-              onClick={signoutHandler}
-            >
+
+          <Button classes={{ root: classes.navBtn }} size="large">
+            <Link to="/search/query/ethereum">
               <Grid container alignItems="center">
-                <ExitToAppOutlinedIcon style={{ color: red[700] }} />
                 <Typography variant="h5" color="textPrimary">
-                  # Long
+                  # Ethereum
                 </Typography>
               </Grid>{" "}
-            </Button>
-          ) : (
-            <Button classes={{ root: classes.navBtn }} size="large">
-              <Link to="/signin">
+            </Link>
+          </Button>
+
+          <Button classes={{ root: classes.navBtn }} size="large">
+            <Link to="/search/query/bull">
+              <Typography variant="h5" color="textPrimary">
+                {" "}
                 <Grid container alignItems="center">
-                  <ExitToAppOutlinedIcon style={{ color: green[500] }} />
-                  <Typography variant="h5" color="textPrimary">
-                    # Short
-                  </Typography>
-                </Grid>{" "}
-              </Link>
-            </Button>
-          )}
+                  # Bull
+                </Grid>
+              </Typography>
+            </Link>
+          </Button>
+          <Button classes={{ root: classes.navBtn }} size="large">
+            <Link to="/search/query/bear">
+              <Typography variant="h5" color="textPrimary">
+                {" "}
+                <Grid container alignItems="center">
+                  # Bear
+                </Grid>
+              </Typography>
+            </Link>
+          </Button>
+
+          <Button classes={{ root: classes.navBtn }} size="large">
+            <Link to="/search/query/long">
+              <Typography variant="h5" color="textPrimary">
+                {" "}
+                <Grid container alignItems="center">
+                  <TrendingUpIcon
+                    className={classes.iconBtn}
+                    style={{ color: green[700], width: "25px", height: "25px" }}
+                  />
+                  # Long
+                </Grid>
+              </Typography>
+            </Link>
+          </Button>
+
+          <Button classes={{ root: classes.navBtn }} size="large">
+            <Link to="/search/query/short">
+              <Typography variant="h5" color="textPrimary">
+                <Grid container alignItems="center">
+                  <TrendingDownIcon
+                    className={classes.iconBtn}
+                    style={{ color: red[500], width: "25px", height: "25px" }}
+                  />
+                  # Short
+                </Grid>
+              </Typography>
+            </Link>
+          </Button>
         </Grid>
       </Hidden>
     </Grid>

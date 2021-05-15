@@ -17,8 +17,11 @@ import { POST_CREATE_RESET } from "../constants/postConstants";
 import { listPosts, createPost } from "../actions/postActions";
 import MessageBox from "../components/MessageBox";
 import PostAddIcon from "@material-ui/icons/PostAdd";
+import ImageIcon from "@material-ui/icons/Image";
+import Axios from "axios";
 
 import NavLarge from "../components/NavLarge";
+import TopicsNav from "../components/TopicsNav";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -29,6 +32,11 @@ const useStyles = makeStyles((theme) => ({
   title: {
     marginLeft: "1rem",
     padding: "1rem",
+  },
+  imgUploadBtn: {
+    border: "1px solid #00a6ff",
+    color: "#00a6ff",
+    margin: "0.5rem",
   },
   btnRoundedOr: {
     background: "#ea6d0b",
@@ -85,6 +93,7 @@ export default function HomeScreen(props) {
   const { userInfo } = userSignin;
   const dispatch = useDispatch();
   const [post, setPost] = useState("");
+  const [image, setImage] = useState("");
   const commentAdd = useSelector((state) => state.commentAdd);
   const { success: successCommentAdd } = commentAdd;
   const postLike = useSelector((state) => state.postLike);
@@ -123,10 +132,32 @@ export default function HomeScreen(props) {
     successCreate,
   ]);
 
+  const [loadingUpload, setLoadingUpload] = useState(false);
+  const [errorUpload, setErrorUpload] = useState("");
+  const uploadFileHandler = async (e) => {
+    const file = e.target.files[0];
+    const bodyFormData = new FormData();
+    bodyFormData.append("image", file);
+    setLoadingUpload(true);
+    try {
+      const { data } = await Axios.post("/api/uploads", bodyFormData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+          Authorization: `Bearer ${userInfo.token}`,
+        },
+      });
+      setImage(data);
+      setLoadingUpload(false);
+    } catch (error) {
+      setErrorUpload(error.message);
+      setLoadingUpload(false);
+    }
+  };
+
   const submitHandler = (e) => {
     e.preventDefault();
     //Hace dispatch al nuevo post
-    dispatch(createPost(post));
+    dispatch(createPost(post, image));
   };
 
   return (
@@ -164,36 +195,63 @@ export default function HomeScreen(props) {
                         onChange={(e) => setPost(e.target.value)}
                       />
                     </Grid>
-                    <Grid
-                      container
-                      justify="center"
-                      alignItems="flex-end"
-                      direction="column"
-                    >
-                      {" "}
-                      {post.length > 0 ? (
-                        <Button
-                          classes={{
-                            root: classes.btnRoundedOr,
-                          }}
-                          variant="contained"
-                          type="submit"
-                        >
-                          <PostAddIcon />
-                          Compartir una idea
-                        </Button>
-                      ) : (
-                        <Button
-                          classes={{
-                            root: classes.btnRoundedOr,
-                          }}
-                          variant="contained"
-                          disabled
-                        >
-                          <PostAddIcon />
-                          Compartir una idea
-                        </Button>
-                      )}
+                    <Grid container justify="flex-end" direction="row">
+                      <Grid item xs={7}>
+                        <Grid container justify="flex-end">
+                          <Button
+                            classes={{ root: classes.imgUploadBtn }}
+                            variant="outlined"
+                            component="label"
+                          >
+                            {" "}
+                            <ImageIcon />
+                            <input
+                              type="file"
+                              hidden
+                              onChange={uploadFileHandler}
+                            />
+                          </Button>
+                          {loadingUpload && (
+                            <div className="row center">
+                              <ReactLoading
+                                className="loading"
+                                color="#2d91f0"
+                                type="cylon"
+                              />{" "}
+                            </div>
+                          )}
+                          {errorUpload && (
+                            <MessageBox variant="danger">
+                              {errorUpload}
+                            </MessageBox>
+                          )}
+                        </Grid>
+                      </Grid>
+                      <Grid item xs={5}>
+                        {post.length > 0 ? (
+                          <Button
+                            classes={{
+                              root: classes.btnRoundedOr,
+                            }}
+                            variant="contained"
+                            type="submit"
+                          >
+                            <PostAddIcon />
+                            Compartir una idea
+                          </Button>
+                        ) : (
+                          <Button
+                            classes={{
+                              root: classes.btnRoundedOr,
+                            }}
+                            variant="contained"
+                            disabled
+                          >
+                            <PostAddIcon />
+                            Compartir una idea
+                          </Button>
+                        )}
+                      </Grid>
                     </Grid>
                   </form>
                 </Grid>
@@ -228,7 +286,7 @@ export default function HomeScreen(props) {
                 </Grid>
               </Grid>
             </Grid>
-            <Grid item xs={3}></Grid>
+            <TopicsNav />
           </Grid>
         </Grid>
       </Container>{" "}

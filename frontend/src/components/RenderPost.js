@@ -39,9 +39,7 @@ const useStyles = makeStyles((theme) => ({
     borderBottom: "1px solid #e0e0e0",
     borderRadius: "0px",
     // Provisorio hasta diseñar el lado derecho
-    [theme.breakpoints.up("md")]: {
-      borderRight: "1px solid #e0e0e0",
-    },
+    [theme.breakpoints.up("md")]: {},
   },
   media: {
     height: 0,
@@ -188,11 +186,7 @@ export default withRouter(function RenderPost(props) {
       }
       <Link to={`/${profile.username}/post/${post._id}`}>
         {post.image ? (
-          <CardMedia
-            className={classes.media}
-            image={post.image}
-            title="Paella dish"
-          />
+          <CardMedia className={classes.media} image={post.image} />
         ) : null}
         <CardContent>
           <Typography variant="body" color="textPrimary" component="p">
