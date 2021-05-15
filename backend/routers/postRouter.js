@@ -31,6 +31,8 @@ postRouter.get(
     );
 
     res.send(posts);
+    console.log("posts", posts);
+    console.log("order", posts);
   })
 );
 

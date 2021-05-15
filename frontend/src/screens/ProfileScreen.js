@@ -288,7 +288,7 @@ export default function ProfileScreen(props) {
                           </Button>
                         </Box>
                       ) : userInfo &&
-                        !user.followers.includes(userInfo.username) ? (
+                        user.followers.includes(userInfo.username) ? (
                         <Box m={3}>
                           <Button
                             onClick={unfollowHandler}

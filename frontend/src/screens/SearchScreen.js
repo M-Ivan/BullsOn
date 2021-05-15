@@ -13,6 +13,7 @@ import {
   makeStyles,
   Divider,
   Container,
+  InputBase,
 } from "@material-ui/core";
 import RenderPost from "../components/RenderPost";
 import { useState } from "react";
@@ -21,6 +22,7 @@ import PropTypes from "prop-types";
 import RenderUsers from "../components/RenderUsers";
 import { withRouter } from "react-router";
 import NavLarge from "../components/NavLarge";
+import TopicsNav from "../components/TopicsNav";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -78,8 +80,7 @@ function a11yProps(index) {
 export default withRouter(function SearchScreen(props) {
   const classes = useStyles();
   const query = props.match.params.query;
-  const profile = props.match.params.profile;
-  const order = useState("nuevos");
+  const [profile, setProfile] = useState("");
 
   const dispatch = useDispatch();
   const postList = useSelector((state) => state.postList);
@@ -99,23 +100,29 @@ export default withRouter(function SearchScreen(props) {
   const [showing, setShowing] = useState(0);
 
   useEffect(() => {
-    dispatch(listPosts({ post: query, order }));
+    dispatch(listPosts({ post: query }));
     dispatch(listUsers({ user: query }));
   }, [query, successFollow, successUnfollow]);
 
   const getFilterUrl = (filter) => {
     const filterQuery = filter.query || query;
     const filterProfile = filter.profile || profile;
-    const sortOrder = filter.order || order;
-    return `/search/?query=${filterQuery}&profile=${filterProfile}&order=${sortOrder}`;
+    return `/search/?query=${filterQuery}&profile=${filterProfile}`;
   };
   // console.log("props", props);
   console.log("posts", posts);
   console.log("users", users);
-  console.log("showing", showing);
 
   const handleChange = (event, newValue) => {
     setShowing(newValue);
+    // newValue:
+    // 0 = Destacados, 1 = Mas recientes, 2 = Usuarios
+  };
+  const profileFilterHandler = (e) => {
+    if (profile) {
+      e.preventDefault();
+      dispatch(listPosts({ post: query, profile: profile }));
+    }
   };
 
   return (
@@ -125,8 +132,23 @@ export default withRouter(function SearchScreen(props) {
           <Typography variant="h4" color="textPrimary">
             Busqueda
           </Typography>
+          <form onSubmit={profileFilterHandler}>
+            <label>Filtrar por perfil: </label>
+            <InputBase
+              label=""
+              placeholder="@ o nombre/apellido"
+              onChange={(e) => setProfile(e.target.value)}
+              classes={{
+                root: classes.inputRoot,
+                input: classes.inputInput,
+              }}
+              inputProps={{ type: "text", name: "q", id: "q" }}
+            />
+          </form>
         </Grid>
-        <Divider />
+        <Grid item xs={12}>
+          <Divider />
+        </Grid>
         <NavLarge />
         <Grid item xs={12} md={6}>
           <AppBar position="static" className={classes.tabs}>
@@ -138,9 +160,8 @@ export default withRouter(function SearchScreen(props) {
               textColor="secondary"
               variant="fullWidth"
             >
-              <Tab label="Destacados" {...a11yProps(0)} />
-              <Tab label="Mas recientes" {...a11yProps(1)} />
-              <Tab label="Usuarios" {...a11yProps(2)} />
+              <Tab label="Posts" {...a11yProps(0)} />
+              <Tab label="Usuarios" {...a11yProps(1)} />
             </Tabs>
           </AppBar>
 
@@ -159,19 +180,14 @@ export default withRouter(function SearchScreen(props) {
                   palabras solicitadas.
                 </MessageBox>
               )}
-              {posts && posts.length === 0 && showing === 1 && (
-                <MessageBox>
-                  Lo sentimos, no encontramos publicaciones que incluyan las
-                  palabras solicitadas.
-                </MessageBox>
-              )}
-              {users && users.length === 0 && showing === 2 && (
+
+              {users && users.length === 0 && showing === 1 && (
                 <MessageBox>No se encontraron usuarios.</MessageBox>
               )}
-              {posts && showing === 1
+              {posts && showing === 0
                 ? posts.map((post) => <RenderPost key={post._id} post={post} />)
                 : null}
-              {users && showing === 2
+              {users && showing === 1
                 ? users.map((user) => (
                     <RenderUsers key={user._id} user={user} />
                   ))
@@ -179,7 +195,7 @@ export default withRouter(function SearchScreen(props) {
             </>
           )}
         </Grid>
-        <Grid item xs={3}></Grid>
+        <TopicsNav />
       </Grid>
     </Container>
   );
