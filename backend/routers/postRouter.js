@@ -21,14 +21,16 @@ postRouter.get(
           },
         }
       : {};
-
+    const sortOrder = { likes: -1 } && { reposts: -1 } && { comments: -1 };
     const posts = await Post.find({
       ...postFilter,
       ...profileFilter,
-    }).populate(
-      "profile",
-      "profile.name profile.lastname profile.profile profile.username"
-    );
+    })
+      .populate(
+        "profile",
+        "profile.name profile.lastname profile.profile profile.username"
+      )
+      .sort(sortOrder);
 
     res.send(posts);
     console.log("posts", posts);

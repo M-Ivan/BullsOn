@@ -22,6 +22,10 @@ import {
   USER_LIST_SUCCESS,
   USER_LIST_FAIL,
   USER_LIST_RESET,
+  USER_PROFILE_UPDATE_REQUEST,
+  USER_PROFILE_UPDATE_SUCCESS,
+  USER_PROFILE_UPDATE_FAIL,
+  USER_PROFILE_UPDATE_RESET,
 } from "../constants/userConstants";
 
 export const userListReducer = (
@@ -70,6 +74,24 @@ export const userSigninReducer = (state = {}, action) => {
   }
 };
 
+export const userProfileUpdateReducer = (
+  state = { loading: true, success: null },
+  action
+) => {
+  switch (action.type) {
+    case USER_PROFILE_UPDATE_REQUEST:
+      return { loading: true };
+    case USER_PROFILE_UPDATE_SUCCESS:
+      return { loading: false, success: true, userInfo: action.payload };
+    case USER_PROFILE_UPDATE_FAIL:
+      return { loading: false, error: action.payload };
+    case USER_PROFILE_UPDATE_RESET:
+      return {};
+    default:
+      return state;
+  }
+};
+
 export const userDetailsReducer = (state = { loading: true }, action) => {
   switch (action.type) {
     case USER_DETAILS_REQUEST:
@@ -79,13 +101,16 @@ export const userDetailsReducer = (state = { loading: true }, action) => {
     case USER_DETAILS_FAIL:
       return { loading: false, error: action.payload };
     case USER_DETAILS_RESET:
-      return { loading: true };
+      return {};
     default:
       return state;
   }
 };
 
-export const userFollowReducer = (state = {}, action) => {
+export const userFollowReducer = (
+  state = { loading: false, success: null },
+  action
+) => {
   switch (action.type) {
     case USER_FOLLOW_REQUEST:
       return { loading: true };

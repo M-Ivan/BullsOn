@@ -106,6 +106,9 @@ export default function HomeScreen(props) {
   const { success: successUnrepost } = postUnrepost;
 
   useEffect(() => {
+    if (!userInfo) {
+      props.history.push("/signin");
+    }
     dispatch(listPosts({}));
     if (successCreate) {
       dispatch({ type: POST_CREATE_RESET });

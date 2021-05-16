@@ -233,7 +233,7 @@ export default function PostScreen(props) {
                               post.profile.profile.lastname}
                           </Typography>
                           <Typography color="textSecondary">
-                            <strong> {post.profile.profile.username}</strong>
+                            <strong>@{post.profile.profile.username}</strong>
                           </Typography>
                         </Link>
                       </div>

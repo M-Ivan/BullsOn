@@ -19,22 +19,6 @@ userRouter.get(
           },
         }
       : {};
-    const nameFilter = user
-      ? {
-          "profile.name": {
-            $regex: user,
-            $options: "i",
-          },
-        }
-      : {};
-    const lastnameFilter = user
-      ? {
-          "profile.lastname": {
-            $regex: user,
-            $options: "i",
-          },
-        }
-      : {};
 
     const users = await User.find({
       ...userFilter,
@@ -130,6 +114,39 @@ userRouter.get(
       console.log(user);
     } else {
       res.status(404).send({ message: "Usuario no encontrado" });
+    }
+  })
+);
+
+userRouter.put(
+  "/:username",
+  expressAsyncHandler(async (req, res) => {
+    const user = await User.findById(req.body.userId);
+    if (user) {
+      user.profile.name = req.body.name || user.profile.name;
+      user.profile.lastname = req.body.lastname || user.profile.lastname;
+      user.profile.profile = req.body.profile || user.profile.profile;
+      user.profile.description =
+        req.body.description || user.profile.description;
+      user.username = req.body.username || user.username;
+      user.profile.background = req.body.background || user.profile.background;
+      if (req.body.password) {
+        user.password = bcrypt.hashSync(req.body.password, 8);
+      }
+      if (req.body.email) {
+        user.email = req.body.email;
+      }
+      const updatedUser = await user.save();
+      res.send({
+        _id: updatedUser._id,
+        name: updatedUser.profile.name,
+        lastname: updatedUser.profile.lastname,
+        profile: updatedUser.profile.profile,
+        description: updatedUser.profile.description,
+        username: updatedUser.username,
+        background: updatedUser.profile.background,
+        email: updatedUser.email,
+      });
     }
   })
 );

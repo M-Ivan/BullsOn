@@ -15,7 +15,12 @@ import {
   withStyles,
 } from "@material-ui/core/";
 import EditIcon from "@material-ui/icons/Edit";
-import { detailsUser, followUser, unfollowUser } from "../actions/userActions";
+import {
+  detailsUser,
+  followUser,
+  unfollowUser,
+  updateProfile,
+} from "../actions/userActions";
 import { red } from "@material-ui/core/colors";
 import Avatar from "@material-ui/core/Avatar";
 import Box from "@material-ui/core/Box";
@@ -23,12 +28,14 @@ import RenderPost from "../components/RenderPost";
 import { listPosts, listReposts } from "../actions/postActions";
 import {
   USER_FOLLOW_RESET,
+  USER_PROFILE_UPDATE_RESET,
   USER_UNFOLLOW_RESET,
 } from "../constants/userConstants";
 import NavLarge from "../components/NavLarge";
 import { useState } from "react";
 import TopicsNav from "../components/TopicsNav";
-
+import AddAPhotoIcon from "@material-ui/icons/AddAPhoto";
+import Axios from "axios";
 const useStyles = makeStyles((theme) => ({
   root: {
     maxWidth: "auto",
@@ -51,6 +58,16 @@ const useStyles = makeStyles((theme) => ({
   },
   media: {
     height: 170,
+    width: "100%",
+  },
+  mediaBgEdit: {
+    height: 170,
+    width: "100%",
+  },
+  bgIcon: {
+    color: "#ffffff",
+    width: "100px",
+    height: "100px",
   },
   avatar: {
     backgroundColor: red[500],
@@ -65,6 +82,12 @@ const useStyles = makeStyles((theme) => ({
   descriptionSection: {
     margin: theme.spacing(2),
     marginBottom: theme.spacing(3),
+  },
+  profilePicUploadBtn: {
+    borderRadius: "50%",
+  },
+  backgroundUploadBtn: {
+    width: "100%",
   },
   followSection: {
     margin: theme.spacing(2),
@@ -121,12 +144,16 @@ export default function ProfileScreen(props) {
   const { success: successFollow } = userFollow;
   const userUnfollow = useSelector((state) => state.userUnfollow);
   const { success: successUnfollow } = userUnfollow;
+  const userProfileUpdate = useSelector((state) => state.userProfileUpdate);
+  const { success: successUpdate } = userProfileUpdate;
 
   //state
   const [editMode, setEditMode] = useState(false);
   const [name, setName] = useState("");
   const [lastname, setLastname] = useState("");
   const [description, setDescription] = useState("");
+  const [profilePic, setProfilePic] = useState("");
+  const [background, setBackground] = useState("");
   const [username, setUsername] = useState("");
   const [editName, setEditName] = useState(false);
   const [editLastname, setEditLastname] = useState(false);
@@ -155,6 +182,11 @@ export default function ProfileScreen(props) {
       dispatch(detailsUser(profileId));
       dispatch({ type: USER_UNFOLLOW_RESET });
     }
+    if (successUpdate) {
+      dispatch(detailsUser(profileId));
+      dispatch({ type: USER_PROFILE_UPDATE_RESET });
+    }
+
     if (!user) {
       dispatch(detailsUser(profileId));
       dispatch(listPosts({ profile: profileId }));
@@ -162,8 +194,6 @@ export default function ProfileScreen(props) {
     }
     if (user && profileId !== user.username) {
       dispatch(detailsUser(profileId));
-      //TODO: Arreglar este problema, busca por ambos parametros
-      //Por lo que la respuesta es 0 posts
       dispatch(listPosts({ profile: profileId }));
       dispatch(listReposts({ profile: profileId }));
     }
@@ -179,7 +209,50 @@ export default function ProfileScreen(props) {
     successUnrepost,
     successFollow,
     successUnfollow,
+    successUpdate,
   ]);
+
+  const [loadingUpload, setLoadingUpload] = useState(false);
+  const [errorUpload, setErrorUpload] = useState("");
+  const uploadProfilePicHandler = async (e) => {
+    const file = e.target.files[0];
+    const bodyFormData = new FormData();
+    bodyFormData.append("image", file);
+    setLoadingUpload(true);
+    try {
+      const { data } = await Axios.post("/api/uploads", bodyFormData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+          Authorization: `Bearer ${userInfo.token}`,
+        },
+      });
+      setProfilePic(data);
+      setLoadingUpload(false);
+    } catch (error) {
+      setErrorUpload(error.message);
+      setLoadingUpload(false);
+    }
+  };
+
+  const uploadBackgroundHandler = async (e) => {
+    const file = e.target.files[0];
+    const bodyFormData = new FormData();
+    bodyFormData.append("image", file);
+    setLoadingUpload(true);
+    try {
+      const { data } = await Axios.post("/api/uploads", bodyFormData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+          Authorization: `Bearer ${userInfo.token}`,
+        },
+      });
+      setBackground(data);
+      setLoadingUpload(false);
+    } catch (error) {
+      setErrorUpload(error.message);
+      setLoadingUpload(false);
+    }
+  };
 
   const followHandler = () => {
     if (userInfo) {
@@ -194,7 +267,19 @@ export default function ProfileScreen(props) {
   const editProfileHandler = () => {
     setEditMode(true);
   };
-  const saveProfileHandler = () => {
+  const saveProfileHandler = (e) => {
+    e.preventDefault();
+    dispatch(
+      updateProfile({
+        userId: user._id,
+        name,
+        lastname,
+        profile: profilePic,
+        description,
+        username,
+        background,
+      })
+    );
     setEditMode(false);
     setEditName(false);
     setEditLastname(false);
@@ -243,18 +328,96 @@ export default function ProfileScreen(props) {
                   //  ) : null
                 }
                 <Box m={1}>
-                  <CardMedia
-                    className={classes.media}
-                    image="/images/p1.jpg"
-                  ></CardMedia>
+                  {editMode ? (
+                    <Button
+                      classes={{ root: classes.backgroundUploadBtn }}
+                      component="label"
+                    >
+                      <CardMedia
+                        className={classes.mediaBgEdit}
+                        image={
+                          user.profile.background
+                            ? user.profile.background
+                            : "/images/p1.jpg"
+                        }
+                        style={{
+                          justifyContent: "center",
+                          display: "flex",
+                          filter: "brightness(70%)",
+                        }}
+                      >
+                        <Grid
+                          container
+                          justify="center"
+                          alignItems="center"
+                          direction="column"
+                        >
+                          <AddAPhotoIcon className={classes.bgIcon} />
+                        </Grid>
+                      </CardMedia>
+                      <input
+                        type="file"
+                        hidden
+                        onChange={uploadBackgroundHandler}
+                      />
+                    </Button>
+                  ) : (
+                    <CardMedia
+                      className={classes.media}
+                      image={
+                        user.profile.background
+                          ? user.profile.background
+                          : "/images/p1.jpg"
+                      }
+                    ></CardMedia>
+                  )}
                 </Box>
                 <Grid container>
                   <Grid item xs={3}>
                     <Grid container alignItems="center" direction="column">
-                      <Avatar
-                        src={user ? user.profile.profile : null}
-                        className={classes.avatar}
-                      ></Avatar>
+                      {editMode ? (
+                        <Button
+                          classes={{ root: classes.profilePicUploadBtn }}
+                          component="label"
+                        >
+                          <Avatar
+                            src={
+                              user.profile.profile ? user.profile.profile : null
+                            }
+                            className={classes.avatar}
+                            style={{
+                              justifyContent: "center",
+                              display: "flex",
+                            }}
+                          ></Avatar>
+                          <AddAPhotoIcon />
+
+                          <input
+                            type="file"
+                            hidden
+                            onChange={uploadProfilePicHandler}
+                          />
+                        </Button>
+                      ) : (
+                        <Box>
+                          <Avatar
+                            src={user ? user.profile.profile : null}
+                            className={classes.avatar}
+                          ></Avatar>
+                        </Box>
+                      )}
+                      {loadingUpload && (
+                        <div className="row center">
+                          <ReactLoading
+                            className="loading"
+                            color="#2d91f0"
+                            type="cylon"
+                          />{" "}
+                        </div>
+                      )}
+                      {errorUpload && (
+                        <MessageBox variant="danger">{errorUpload}</MessageBox>
+                      )}
                     </Grid>
                   </Grid>
                   <Grid item xs={9}>
@@ -284,7 +447,7 @@ export default function ProfileScreen(props) {
                             color="primary"
                             onClick={saveProfileHandler}
                           >
-                            Guardar cambios{" "}
+                            Guardar cambios
                           </Button>
                         </Box>
                       ) : userInfo &&

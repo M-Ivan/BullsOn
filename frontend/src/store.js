@@ -15,6 +15,7 @@ import {
   userDetailsReducer,
   userFollowReducer,
   userListReducer,
+  userProfileUpdateReducer,
   userRegisterReducer,
   userSigninReducer,
   userUnfollowReducer,
@@ -43,6 +44,7 @@ const reducer = combineReducers({
   userFollow: userFollowReducer,
   userUnfollow: userUnfollowReducer,
   userList: userListReducer,
+  userProfileUpdate: userProfileUpdateReducer,
 });
 const composeEnhancer = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 

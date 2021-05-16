@@ -165,7 +165,7 @@ export default withRouter(function RenderPost(props) {
                 {profile.name + " " + profile.lastname}
               </Typography>
               <Typography color="textSecondary">
-                <strong>{profile.username}</strong>
+                <strong>@{profile.username}</strong>
               </Typography>
             </div>
           </Link>

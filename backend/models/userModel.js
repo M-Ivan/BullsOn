@@ -16,6 +16,7 @@ const userSchema = new mongoose.Schema(
       profile: String,
       description: String,
       username: String,
+      background: String,
     },
   },
   {
