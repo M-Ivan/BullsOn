@@ -4,6 +4,9 @@ import userRouter from "./routers/userRouter.js";
 import postRouter from "./routers/postRouter.js";
 import uploadRouter from "./routers/uploadRouter.js";
 import path from "path";
+import dotenv from "dotenv";
+
+dotenv.config();
 
 const app = express();
 app.use(express.json());
