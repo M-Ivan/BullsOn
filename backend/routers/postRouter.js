@@ -1,5 +1,6 @@
 import express from "express";
 import expressAsyncHandler from "express-async-handler";
+import data from "../data.js";
 import Post from "../models/postModel.js";
 
 import { isAdmin, isAuth } from "../utils.js";
@@ -35,6 +36,14 @@ postRouter.get(
     res.send(posts);
     console.log("posts", posts);
     console.log("order", posts);
+  })
+);
+
+postRouter.get(
+  "/db/seed",
+  expressAsyncHandler(async (req, res) => {
+    const createdPosts = await Post.insertMany(data.posts);
+    res.send({ createdPosts });
   })
 );
 
