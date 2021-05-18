@@ -1,6 +1,6 @@
 # Bulls On Red Social
 
-![amazona](/template/images/bullsOn.png)
+![bullsOn](/template/bullsOn.png)
 
 ## Demo online del proyecto:
 
