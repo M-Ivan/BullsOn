@@ -8,20 +8,7 @@ const data = {
       image: null,
       post: "Esto es una prueba",
       profile: "M-Ivan",
-      comments: [
-        {
-          likes: 0,
-
-          profile: "M-Ivan",
-          comment: "Comentario 1",
-        },
-        {
-          likes: 0,
-
-          profile: "M-Ivan",
-          comment: "comentario 2",
-        },
-      ],
+      comments: [],
     },
     {
       likes: ["M-Ivan"],
@@ -29,14 +16,7 @@ const data = {
       image: null,
       post: "Esto es un post de otra cuenta",
       profile: "Ivan-M",
-      comments: [
-        {
-          likes: 0,
-
-          profile: "M-Ivan",
-          comment: "esto es un comentario ",
-        },
-      ],
+      comments: [],
     },
     {
       likes: [],
@@ -60,15 +40,7 @@ const data = {
       image: "/uploads/1621116521920.jpg",
       post: "Bitcoin cae un 12%! Elon Musk anuncia que Tesla suspendera temporalmente los pagos con la criptomoneda. Las acciones de TSLA también caen con el anuncio.\nA pesar de la caida, no creo que el escenario cambie a gran escala, seguimos en bull market",
       profile: "M-Ivan",
-      comments: [
-        {
-          likes: 0,
-
-          profile: "Dana 123",
-          comment:
-            "Terrible, estoy -30% por culpa de este que no se decide, a holdear",
-        },
-      ],
+      comments: [],
     },
     {
       likes: [],

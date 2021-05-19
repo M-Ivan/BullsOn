@@ -9,7 +9,6 @@ import {
   CardMedia,
   Typography,
   Divider,
-  Hidden,
   IconButton,
   TextField,
   withStyles,
