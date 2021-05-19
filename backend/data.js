@@ -50,6 +50,14 @@ const data = {
       profile: "Dana 123",
       comments: [],
     },
+    {
+      likes: ["M-Ivan", "LuisTrading"],
+      repost: ["M-Ivan"],
+      image: "/uploads/1621453011041.jpg",
+      post: "Día rojo....",
+      profile: "LuisTrading",
+      comments: [],
+    },
   ],
   users: [
     {
@@ -67,7 +75,7 @@ const data = {
         description: "Programador MERN. 21 años.",
         username: "M-Ivan",
         profile: "/uploads/1621194906058.jpg",
-        background: "/uploads/1621195470542.jpg",
+        background: "/uploads/1621452760296.jpg",
       },
     },
     {
@@ -102,18 +110,21 @@ const data = {
       },
     },
     {
-      _id: "Abel 123",
+      _id: "LuisTrading",
       isAdmin: false,
-      followers: [],
-      following: [],
+      followers: ["M-Ivan"],
+      following: ["M-Ivan"],
       disabled: false,
-      username: "Abel 123",
-      email: "abel@example.com",
+      username: "LuisTrading",
+      email: "luis@example.com",
       password: bcrypt.hashSync("1234", 8),
       profile: {
-        name: "Abel",
-        lastname: "cejas",
-        username: "Abel 123",
+        name: "Luis",
+        lastname: "Lopez",
+        username: "LuisTrading",
+        description: "Trader // Bull",
+        background: "/uploads/1621453270415.jpg",
+        profile: "/uploads/1621453425620.jpg",
       },
     },
     {
