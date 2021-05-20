@@ -37,50 +37,6 @@ const useStyles = makeStyles((theme) => ({
     marginLeft: "1rem",
     padding: "1rem",
   },
-  profileRoot: {
-    borderRadius: "0px",
-    [theme.breakpoints.up("md")]: {},
-  },
-  media: {
-    height: 170,
-    width: "100%",
-  },
-  mediaBgEdit: {
-    height: 170,
-    width: "100%",
-  },
-  bgIcon: {
-    color: "#ffffff",
-    width: "100px",
-    height: "100px",
-  },
-  avatar: {
-    backgroundColor: red[500],
-    width: "100px",
-    height: "100px",
-    border: "5px solid #000000",
-    zIndex: "10",
-  },
-  nameSection: {
-    margin: theme.spacing(2),
-  },
-  descriptionSection: {
-    margin: theme.spacing(2),
-    marginBottom: theme.spacing(3),
-  },
-  profilePicUploadBtn: {
-    borderRadius: "50%",
-  },
-  backgroundUploadBtn: {
-    width: "100%",
-  },
-  followSection: {
-    margin: theme.spacing(2),
-    marginTop: theme.spacing(3),
-  },
-  descriptionTextField: {
-    width: "25rem",
-  },
 }));
 
 export default function ProfileScreen(props) {

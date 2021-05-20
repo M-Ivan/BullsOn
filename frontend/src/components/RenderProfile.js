@@ -14,21 +14,6 @@ import Avatar from "@material-ui/core/Avatar";
 import Box from "@material-ui/core/Box";
 
 const useStyles = makeStyles((theme) => ({
-  root: {
-    maxWidth: "auto",
-    "&:hover": {
-      cursor: "normal",
-    },
-
-    borderLeft: "1px solid #e0e0e0",
-    borderRight: "1px solid #e0e0e0",
-    borderBottom: "1px solid #e0e0e0",
-    borderRadius: "0px",
-  },
-  title: {
-    marginLeft: "1rem",
-    padding: "1rem",
-  },
   profileRoot: {
     borderRadius: "0px",
     [theme.breakpoints.up("md")]: {},
@@ -36,15 +21,6 @@ const useStyles = makeStyles((theme) => ({
   media: {
     height: 170,
     width: "100%",
-  },
-  mediaBgEdit: {
-    height: 170,
-    width: "100%",
-  },
-  bgIcon: {
-    color: "#ffffff",
-    width: "100px",
-    height: "100px",
   },
   avatar: {
     backgroundColor: red[500],
@@ -60,18 +36,9 @@ const useStyles = makeStyles((theme) => ({
     margin: theme.spacing(2),
     marginBottom: theme.spacing(3),
   },
-  profilePicUploadBtn: {
-    borderRadius: "50%",
-  },
-  backgroundUploadBtn: {
-    width: "100%",
-  },
   followSection: {
     margin: theme.spacing(2),
     marginTop: theme.spacing(3),
-  },
-  descriptionTextField: {
-    width: "25rem",
   },
 }));
 

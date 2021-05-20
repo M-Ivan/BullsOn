@@ -24,28 +24,9 @@ import AddAPhotoIcon from "@material-ui/icons/AddAPhoto";
 import Axios from "axios";
 
 const useStyles = makeStyles((theme) => ({
-  root: {
-    maxWidth: "auto",
-    "&:hover": {
-      cursor: "normal",
-    },
-
-    borderLeft: "1px solid #e0e0e0",
-    borderRight: "1px solid #e0e0e0",
-    borderBottom: "1px solid #e0e0e0",
-    borderRadius: "0px",
-  },
-  title: {
-    marginLeft: "1rem",
-    padding: "1rem",
-  },
   profileRoot: {
     borderRadius: "0px",
     [theme.breakpoints.up("md")]: {},
-  },
-  media: {
-    height: 170,
-    width: "100%",
   },
   mediaBgEdit: {
     height: 170,
