@@ -1,4 +1,4 @@
-import { BrowserRouter, Route, withRouter } from "react-router-dom";
+import { BrowserRouter, Route } from "react-router-dom";
 import "./App.css";
 import Header from "./components/Header";
 import HomeScreen from "./screens/HomeScreen";

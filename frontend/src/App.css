@@ -56,8 +56,9 @@ a:hover {
   font-size: 1.8rem;
   font-weight: 600;
   padding: 0.5rem;
-  color: #424242;
   text-decoration: none;
+  color: #424242;
+  border-radius: 0.3rem;
 }
 .brand:hover {
   color: #424242;

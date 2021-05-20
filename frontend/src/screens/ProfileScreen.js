@@ -2,27 +2,11 @@ import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import MessageBox from "../components/MessageBox";
 import ReactLoading from "react-loading";
-import { Container, Button, Grid, makeStyles } from "@material-ui/core/index";
-import {
-  Card,
-  CardContent,
-  CardMedia,
-  Typography,
-  Divider,
-  IconButton,
-  TextField,
-  withStyles,
-} from "@material-ui/core/";
-import EditIcon from "@material-ui/icons/Edit";
-import {
-  detailsUser,
-  followUser,
-  unfollowUser,
-  updateProfile,
-} from "../actions/userActions";
+import { Container, Grid, makeStyles } from "@material-ui/core/index";
+import { Typography, Divider } from "@material-ui/core/";
+import { detailsUser } from "../actions/userActions";
 import { red } from "@material-ui/core/colors";
-import Avatar from "@material-ui/core/Avatar";
-import Box from "@material-ui/core/Box";
+
 import RenderPost from "../components/RenderPost";
 import { listPosts, listReposts } from "../actions/postActions";
 import {
@@ -33,8 +17,10 @@ import {
 import NavLarge from "../components/NavLarge";
 import { useState } from "react";
 import TopicsNav from "../components/TopicsNav";
-import AddAPhotoIcon from "@material-ui/icons/AddAPhoto";
-import Axios from "axios";
+
+import RenderProfile from "../components/RenderProfile";
+import ProfileEdit from "../components/ProfileEdit";
+
 const useStyles = makeStyles((theme) => ({
   root: {
     maxWidth: "auto",
@@ -96,26 +82,6 @@ const useStyles = makeStyles((theme) => ({
     width: "25rem",
   },
 }));
-const MyTextField = withStyles({
-  root: {
-    marginRight: "20px",
-    "& .MuiInput-underline:after": {
-      borderBottomColor: "#ea6d0b",
-    },
-    "& label": {},
-    "& label.Mui-focused": {
-      color: "#ea6d0b",
-    },
-    "& .MuiOutlinedInput-root": {
-      "& label": {
-        fontSize: "1.05rem",
-      },
-      "&.Mui-focused fieldset": {
-        borderColor: "#ea6d0b",
-      },
-    },
-  },
-})(TextField);
 
 export default function ProfileScreen(props) {
   const classes = useStyles();
@@ -148,16 +114,7 @@ export default function ProfileScreen(props) {
 
   //state
   const [editMode, setEditMode] = useState(false);
-  const [name, setName] = useState("");
-  const [lastname, setLastname] = useState("");
-  const [description, setDescription] = useState("");
-  const [profilePic, setProfilePic] = useState("");
-  const [background, setBackground] = useState("");
-  const [username, setUsername] = useState("");
-  const [editName, setEditName] = useState(false);
-  const [editLastname, setEditLastname] = useState(false);
-  const [editDescription, setEditDescription] = useState(false);
-  const [editUsername, setEditUsername] = useState(false);
+
   // utils
   const profileId = props.match.params.username;
   const postTotal = posts && reposts ? posts.concat(reposts) : null;
@@ -184,6 +141,7 @@ export default function ProfileScreen(props) {
     if (successUpdate) {
       dispatch(detailsUser(profileId));
       dispatch({ type: USER_PROFILE_UPDATE_RESET });
+      setEditMode(false);
     }
 
     if (!user) {
@@ -211,87 +169,13 @@ export default function ProfileScreen(props) {
     successUpdate,
   ]);
 
-  const [loadingUpload, setLoadingUpload] = useState(false);
-  const [errorUpload, setErrorUpload] = useState("");
-  const uploadProfilePicHandler = async (e) => {
-    const file = e.target.files[0];
-    const bodyFormData = new FormData();
-    bodyFormData.append("image", file);
-    setLoadingUpload(true);
-    try {
-      const { data } = await Axios.post("/api/uploads", bodyFormData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-          Authorization: `Bearer ${userInfo.token}`,
-        },
-      });
-      setProfilePic(data);
-      setLoadingUpload(false);
-    } catch (error) {
-      setErrorUpload(error.message);
-      setLoadingUpload(false);
-    }
-  };
-
-  const uploadBackgroundHandler = async (e) => {
-    const file = e.target.files[0];
-    const bodyFormData = new FormData();
-    bodyFormData.append("image", file);
-    setLoadingUpload(true);
-    try {
-      const { data } = await Axios.post("/api/uploads", bodyFormData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-          Authorization: `Bearer ${userInfo.token}`,
-        },
-      });
-      setBackground(data);
-      setLoadingUpload(false);
-    } catch (error) {
-      setErrorUpload(error.message);
-      setLoadingUpload(false);
-    }
-  };
-
-  const followHandler = () => {
-    if (userInfo) {
-      dispatch(followUser(profileId));
-    } else {
-      props.history.push("/signin");
-    }
-  };
-  const unfollowHandler = () => {
-    dispatch(unfollowUser(profileId));
-  };
-  const editProfileHandler = () => {
-    setEditMode(true);
-  };
-  const saveProfileHandler = (e) => {
-    e.preventDefault();
-    dispatch(
-      updateProfile({
-        userId: user._id,
-        name,
-        lastname,
-        profile: profilePic,
-        description,
-        username,
-        background,
-      })
-    );
-    setEditMode(false);
-    setEditName(false);
-    setEditLastname(false);
-    setEditUsername(false);
-    setEditDescription(false);
+  //pasar como prop a renderProfile.
+  const editProfileCallback = (childData) => {
+    setEditMode(childData);
   };
 
   return (
     <div>
-      {console.log("name", name)}
-      {console.log("lastname", lastname)}
-      {console.log("username", username)}
-      {console.log("description", description)}
       {console.log("editMode", editMode)}
       {
         //   {console.log("reposts", reposts)}
@@ -315,301 +199,16 @@ export default function ProfileScreen(props) {
             <NavLarge />
 
             <Grid item xs={12} lg={6}>
-              <Card elevation={0} className={classes.profileRoot}>
-                {
-                  //  loading ? (
-                  //   <div className="row center">
-                  //      <ReactLoading className="loading" color="#2d91f0" type="cylon" />{" "}
-                  //    </div>
-                  //  ) : error ? (
-                  //    <MessageBox variant="danger">{error}</MessageBox>
-                  //  ) : null
-                }
-                <Box m={1}>
-                  {editMode ? (
-                    <Button
-                      classes={{ root: classes.backgroundUploadBtn }}
-                      component="label"
-                    >
-                      <CardMedia
-                        className={classes.mediaBgEdit}
-                        image={
-                          user.profile.background
-                            ? user.profile.background
-                            : "/images/p1.jpg"
-                        }
-                        style={{
-                          justifyContent: "center",
-                          display: "flex",
-                          filter: "brightness(70%)",
-                        }}
-                      >
-                        <Grid
-                          container
-                          justify="center"
-                          alignItems="center"
-                          direction="column"
-                        >
-                          <AddAPhotoIcon className={classes.bgIcon} />
-                        </Grid>
-                      </CardMedia>
-                      <input
-                        type="file"
-                        hidden
-                        onChange={uploadBackgroundHandler}
-                      />
-                    </Button>
-                  ) : (
-                    <CardMedia
-                      className={classes.media}
-                      image={
-                        user.profile.background
-                          ? user.profile.background
-                          : "/images/p1.jpg"
-                      }
-                    ></CardMedia>
-                  )}
-                </Box>
-                <Grid container>
-                  <Grid item xs={3}>
-                    <Grid container alignItems="center" direction="column">
-                      {editMode ? (
-                        <Button
-                          classes={{ root: classes.profilePicUploadBtn }}
-                          component="label"
-                        >
-                          <Avatar
-                            src={
-                              user.profile.profile ? user.profile.profile : null
-                            }
-                            className={classes.avatar}
-                            style={{
-                              justifyContent: "center",
-                              display: "flex",
-                            }}
-                          ></Avatar>
-                          <AddAPhotoIcon />
-
-                          <input
-                            type="file"
-                            hidden
-                            onChange={uploadProfilePicHandler}
-                          />
-                        </Button>
-                      ) : (
-                        <Box>
-                          <Avatar
-                            src={user ? user.profile.profile : null}
-                            className={classes.avatar}
-                          ></Avatar>
-                        </Box>
-                      )}
-                      {loadingUpload && (
-                        <div className="row center">
-                          <ReactLoading
-                            className="loading"
-                            color="#2d91f0"
-                            type="cylon"
-                          />{" "}
-                        </div>
-                      )}
-                      {errorUpload && (
-                        <MessageBox variant="danger">{errorUpload}</MessageBox>
-                      )}
-                    </Grid>
-                  </Grid>
-                  <Grid item xs={9}>
-                    <Grid container direction="column" alignItems="flex-end">
-                      {userInfo &&
-                      user &&
-                      userInfo._id === user._id &&
-                      editMode === false ? (
-                        <Box m={3}>
-                          <Button
-                            size="large"
-                            variant="outlined"
-                            color="primary"
-                            onClick={editProfileHandler}
-                          >
-                            Editar perfil
-                          </Button>
-                        </Box>
-                      ) : userInfo &&
-                        user &&
-                        userInfo._id === user._id &&
-                        editMode === true ? (
-                        <Box m={3}>
-                          <Button
-                            size="large"
-                            variant="contained"
-                            color="primary"
-                            onClick={saveProfileHandler}
-                          >
-                            Guardar cambios
-                          </Button>
-                        </Box>
-                      ) : userInfo &&
-                        user.followers.includes(userInfo.username) ? (
-                        <Box m={3}>
-                          <Button
-                            onClick={unfollowHandler}
-                            size="large"
-                            variant="contained"
-                            color="primary"
-                          >
-                            Dejar de seguir
-                          </Button>
-                        </Box>
-                      ) : (
-                        <Box m={3}>
-                          <Button
-                            onClick={followHandler}
-                            size="large"
-                            variant="contained"
-                            color="primary"
-                          >
-                            Seguir{" "}
-                          </Button>
-                        </Box>
-                      )}
-                    </Grid>
-                  </Grid>
-                </Grid>
-                <CardContent>
-                  <Grid container className={classes.nameSection}>
-                    <Grid item xs={12}>
-                      <Typography gutterBottom variant="h4" component="h2">
-                        {editName ? (
-                          <Grid container alignItems="center">
-                            <MyTextField
-                              value={name}
-                              onChange={(e) => setName(e.target.value)}
-                              label="Nombre(s)"
-                              margin="dense"
-                            />
-                            <MyTextField
-                              value={lastname}
-                              onChange={(e) => setLastname(e.target.value)}
-                              label="Apellido"
-                              margin="dense"
-                            />
-                            {editMode ? (
-                              <IconButton
-                                size="small"
-                                onClick={() => setEditName(!editName)}
-                              >
-                                {" "}
-                                <EditIcon />
-                              </IconButton>
-                            ) : null}
-                          </Grid>
-                        ) : editMode && name && lastname ? (
-                          name + " " + lastname
-                        ) : (
-                          user.profile.name + " " + user.profile.lastname
-                        )}
-                        {editMode && !editName ? (
-                          <IconButton
-                            size="small"
-                            onClick={() => setEditName(!editName)}
-                          >
-                            {" "}
-                            <EditIcon />
-                          </IconButton>
-                        ) : null}
-                      </Typography>
-                    </Grid>
-                    <Grid item xs={12}>
-                      <Typography variant="body1" color="textSecondary">
-                        {editUsername ? (
-                          <Grid container alignItems="center">
-                            <MyTextField
-                              value={username}
-                              onChange={(e) => setUsername(e.target.value)}
-                              label="@User"
-                              margin="dense"
-                            />
-                            {editMode ? (
-                              <IconButton
-                                size="small"
-                                onClick={() => setEditUsername(!editUsername)}
-                              >
-                                {" "}
-                                <EditIcon />
-                              </IconButton>
-                            ) : null}
-                          </Grid>
-                        ) : editMode && username ? (
-                          "@" + username
-                        ) : (
-                          "@" + user.profile.username
-                        )}
-                        {editMode && !editUsername ? (
-                          <IconButton
-                            size="small"
-                            onClick={() => setEditUsername(!editUsername)}
-                          >
-                            {" "}
-                            <EditIcon />
-                          </IconButton>
-                        ) : null}
-                      </Typography>
-                    </Grid>
-                  </Grid>
-
-                  <Typography variant="body" color="textPrimary" component="p">
-                    {" "}
-                    <Grid container className={classes.descriptionSection}>
-                      {editDescription ? (
-                        <Grid container alignItems="center">
-                          <MyTextField
-                            className={classes.descriptionTextField}
-                            multiline
-                            rows={2}
-                            value={description}
-                            onChange={(e) => setDescription(e.target.value)}
-                            label="Biografia"
-                            placeholder="Escribe una breve descripción de tu persona...."
-                            margin="dense"
-                          />
-
-                          {editMode ? (
-                            <IconButton
-                              size="small"
-                              onClick={() =>
-                                setEditDescription(!editDescription)
-                              }
-                            >
-                              {" "}
-                              <EditIcon />
-                            </IconButton>
-                          ) : null}
-                        </Grid>
-                      ) : editMode && description ? (
-                        description
-                      ) : (
-                        user.profile.description
-                      )}
-                      {editMode && !editDescription ? (
-                        <IconButton
-                          size="small"
-                          onClick={() => setEditDescription(!editDescription)}
-                        >
-                          <EditIcon />
-                        </IconButton>
-                      ) : null}{" "}
-                    </Grid>
-                  </Typography>
-                  <Divider />
-                  <Grid container className={classes.followSection}>
-                    {" "}
-                    <Typography variant="body" component="p">
-                      {`${user.following.length} siguiendo
-                ${user.followers.length} seguidores`}
-                    </Typography>
-                  </Grid>
-                </CardContent>
-              </Card>{" "}
+              {editMode ? (
+                <ProfileEdit user={user} userInfo={userInfo} />
+              ) : (
+                <RenderProfile
+                  user={user}
+                  userInfo={userInfo}
+                  editProfileCallback={editProfileCallback}
+                  profileId={profileId}
+                />
+              )}
               <Divider />
               <Grid item xs={12}>
                 {loadingPosts ? (

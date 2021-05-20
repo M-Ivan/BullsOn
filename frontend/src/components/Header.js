@@ -29,7 +29,6 @@ import AccountCircleRoundedIcon from "@material-ui/icons/AccountCircleRounded";
 import { orange, green, red } from "@material-ui/core/colors";
 import SearchBox from "./SearchBox";
 import TrendingUpIcon from "@material-ui/icons/TrendingUp";
-import TrendingDownIcon from "@material-ui/icons/TrendingDown";
 import BusinessCenterIcon from "@material-ui/icons/BusinessCenter";
 
 const drawerWidth = 240;

@@ -129,7 +129,6 @@ userRouter.put(
       user.profile.profile = req.body.profile || user.profile.profile;
       user.profile.description =
         req.body.description || user.profile.description;
-      user.username = req.body.username || user.username;
       user.profile.background = req.body.background || user.profile.background;
       if (req.body.password) {
         user.password = bcrypt.hashSync(req.body.password, 8);
