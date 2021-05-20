@@ -3,9 +3,7 @@ import {
   Container,
   Grid,
   makeStyles,
-  TextField,
   Divider,
-  withStyles,
   Typography,
 } from "@material-ui/core/index";
 import RenderPost from "../components/RenderPost";
@@ -31,42 +29,13 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const MyTextField = withStyles({
-  root: {
-    marginLeft: "1rem",
-    marginRight: "1rem",
-    marginTop: "0.3rem",
-
-    "& .MuiInput-underline:after": {
-      borderBottomColor: "#ea6d0b",
-    },
-    "& label": {},
-    "& label.Mui-focused": {
-      color: "#ea6d0b",
-    },
-    "& .MuiOutlinedInput-root": {
-      "& label": {
-        fontSize: "1.05rem",
-      },
-      "&.Mui-focused fieldset": {
-        borderColor: "#ea6d0b",
-      },
-    },
-  },
-})(TextField);
-
 export default function HomeScreen(props) {
   const classes = useStyles();
   //Hooks
   const postList = useSelector((state) => state.postList);
   const { loading, error, posts } = postList;
   const postCreate = useSelector((state) => state.postCreate);
-  const {
-    loading: loadingCreate,
-    error: errorCreate,
-    success: successCreate,
-    post: createdPost,
-  } = postCreate;
+  const { success: successCreate, post: createdPost } = postCreate;
   const userSignin = useSelector((state) => state.userSignin);
   const { userInfo } = userSignin;
   const dispatch = useDispatch();

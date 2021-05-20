@@ -303,7 +303,6 @@ export default function ProfileScreen(props) {
       }
       {user ? (
         <Container fixed maxWidth="lg">
-          {" "}
           <Grid container className={classes.root}>
             <Grid item xs={12} className={classes.title}>
               <Typography variant="h4" color="textPrimary">

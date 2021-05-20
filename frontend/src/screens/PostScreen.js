@@ -278,7 +278,7 @@ export default function PostScreen(props) {
                         {post.comments.length}{" "}
                       </Grid>
                     </IconButton>
-                    Respuestas
+                    <Hidden mdDown>Respuestas</Hidden>{" "}
                     {post &&
                     userInfo &&
                     !post.repost.includes(userInfo.username) ? (
@@ -299,7 +299,7 @@ export default function PostScreen(props) {
                         {post.repost.length}
                       </IconButton>
                     )}
-                    Repost
+                    <Hidden mdDown>Repost</Hidden>
                     {post &&
                     userInfo &&
                     !post.likes.includes(userInfo.username) ? (
@@ -341,7 +341,7 @@ export default function PostScreen(props) {
                         </Grid>
                       </IconButton>
                     )}
-                    Me gusta
+                    <Hidden mdDown>Me gusta</Hidden>{" "}
                     <IconButton aria-label="share">
                       <ScreenShareOutlinedIcon />
                     </IconButton>

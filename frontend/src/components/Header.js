@@ -30,6 +30,7 @@ import { orange, green, red } from "@material-ui/core/colors";
 import SearchBox from "./SearchBox";
 import TrendingUpIcon from "@material-ui/icons/TrendingUp";
 import TrendingDownIcon from "@material-ui/icons/TrendingDown";
+import BusinessCenterIcon from "@material-ui/icons/BusinessCenter";
 
 const drawerWidth = 240;
 
@@ -217,7 +218,10 @@ export default function Header(props) {
                     </IconButton>
                   </Hidden>
                   <Link className="brand" to="/">
-                    <i class="fa fa-bitcoin"></i>ullsOn <TrendingUpIcon />
+                    <i class="fa fa-bitcoin" style={{ color: orange[800] }}></i>
+                    ulls<span style={{ color: green[600] }}>O</span>
+                    <span style={{ color: green[600] }}>n</span>
+                    <TrendingUpIcon />
                   </Link>
                 </Grid>
 
@@ -241,12 +245,16 @@ export default function Header(props) {
                 <Hidden only={["xs", "sm", "md"]}>
                   <Grid item xs={3}>
                     <Grid container alignItems="center" justify="flex-end">
-                      <div className="navlink">
-                        <a href="https://m-ivan.github.io/">
-                          <i className="fa fa-gripfire"></i>Ir a mi portafolio{" "}
-                          <i className="fa fa-gripfire"></i>
-                        </a>
-                      </div>
+                      <a href="https://m-ivan.github.io">
+                        <Button classes={{ root: classes.navlink }}>
+                          <Typography variant="button" display="block">
+                            <Grid container alignItems="center">
+                              <BusinessCenterIcon />
+                              Ir a mi portafolio{" "}
+                            </Grid>
+                          </Typography>
+                        </Button>
+                      </a>
                     </Grid>
                   </Grid>
                 </Hidden>
