@@ -7,6 +7,7 @@ import ProfileScreen from "./screens/ProfileScreen";
 import RegisterScreen from "./screens/RegisterScreen";
 import SearchScreen from "./screens/SearchScreen";
 import SigninScreen from "./screens/SigninScreen";
+import { withWidth } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 
 const useStyles = makeStyles((theme) => ({
@@ -20,8 +21,9 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function App() {
+function App(props) {
   const classes = useStyles();
+
   return (
     <BrowserRouter>
       <Route render={({ history }) => <Header history={history} />}></Route>

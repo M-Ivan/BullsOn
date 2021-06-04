@@ -29,6 +29,7 @@ import {
   Box,
   Divider,
   Hidden,
+  Zoom,
 } from "@material-ui/core/index";
 import { red } from "@material-ui/core/colors";
 import ScreenShareOutlinedIcon from "@material-ui/icons/ScreenShareOutlined";
@@ -199,170 +200,172 @@ export default function PostScreen(props) {
             <Grid container direction="row" justify="center">
               <NavLarge />
               <Grid item xs={12} lg={6}>
-                <Card elevation={0} key={post._id}>
-                  <CardHeader
-                    avatar={
-                      <Link to={`/${post.profile.profile.username}`}>
-                        <Avatar
-                          aria-label="recipe"
-                          src={post ? post.profile.profile.profile : null}
-                          className={classes.avatar}
-                        ></Avatar>
-                      </Link>
-                    }
-                    action={
-                      <IconButton aria-label="settings">
-                        <MoreVertIcon />
-                      </IconButton>
-                    }
-                    title={
-                      <div>
+                <Zoom in {...{ timeout: 500 }}>
+                  <Card elevation={0} key={post._id}>
+                    <CardHeader
+                      avatar={
                         <Link to={`/${post.profile.profile.username}`}>
-                          <Typography color="textPrimary" variant="h6">
-                            {post.profile.profile.name +
-                              " " +
-                              post.profile.profile.lastname}
-                          </Typography>
-                          <Typography color="textSecondary">
-                            <strong>@{post.profile.profile.username}</strong>
-                          </Typography>
+                          <Avatar
+                            aria-label="recipe"
+                            src={post ? post.profile.profile.profile : null}
+                            className={classes.avatar}
+                          ></Avatar>
                         </Link>
-                      </div>
-                    }
-                    subheader={
-                      "Publicado el: " +
-                      post.createdAt.substring(0, 10) +
-                      "   A las:  " +
-                      post.createdAt.substring(11, 16)
-                    }
-                  />
-
-                  {post.image ? (
-                    <CardMedia
-                      className={classes.media}
-                      image={post.image}
-                      title={post.post}
+                      }
+                      action={
+                        <IconButton aria-label="settings">
+                          <MoreVertIcon />
+                        </IconButton>
+                      }
+                      title={
+                        <div>
+                          <Link to={`/${post.profile.profile.username}`}>
+                            <Typography color="textPrimary" variant="h6">
+                              {post.profile.profile.name +
+                                " " +
+                                post.profile.profile.lastname}
+                            </Typography>
+                            <Typography color="textSecondary">
+                              <strong>@{post.profile.profile.username}</strong>
+                            </Typography>
+                          </Link>
+                        </div>
+                      }
+                      subheader={
+                        "Publicado el: " +
+                        post.createdAt.substring(0, 10) +
+                        "   A las:  " +
+                        post.createdAt.substring(11, 16)
+                      }
                     />
-                  ) : null}
-                  <CardContent>
-                    <Typography
-                      variant="body"
-                      color="textPrimary"
-                      component="p"
-                    >
-                      {post.post}
-                    </Typography>
-                  </CardContent>
 
-                  <CardActions disableSpacing>
-                    {" "}
-                    <IconButton
-                      className={classes.commentBtn}
-                      onClick={() => setCommentForm(true)}
-                    >
-                      <Grid container alignItems="center">
-                        {!commentForm ? (
-                          <ChatBubbleOutlineIcon />
-                        ) : (
-                          <ChatIcon className={classes.activeComment} />
-                        )}
-                        {post.comments.length}{" "}
-                      </Grid>
-                    </IconButton>
-                    <Hidden mdDown>Respuestas</Hidden>{" "}
-                    {post &&
-                    userInfo &&
-                    !post.repost.includes(userInfo.username) ? (
-                      <IconButton onClick={repostHandler}>
-                        <RepeatIcon />
-                        {post.repost.length}
-                      </IconButton>
-                    ) : post &&
-                      userInfo &&
-                      post.repost.includes(userInfo.username) ? (
-                      <IconButton onClick={unrepostHandler}>
-                        <RepeatIcon className={classes.activeRepost} />
-                        {post.repost.length}
-                      </IconButton>
-                    ) : (
-                      <IconButton onClick={repostHandler}>
-                        <RepeatIcon />
-                        {post.repost.length}
-                      </IconButton>
-                    )}
-                    <Hidden mdDown>Repost</Hidden>
-                    {post &&
-                    userInfo &&
-                    !post.likes.includes(userInfo.username) ? (
+                    {post.image ? (
+                      <CardMedia
+                        className={classes.media}
+                        image={post.image}
+                        title={post.post}
+                      />
+                    ) : null}
+                    <CardContent>
+                      <Typography
+                        variant="body"
+                        color="textPrimary"
+                        component="p"
+                      >
+                        {post.post}
+                      </Typography>
+                    </CardContent>
+
+                    <CardActions disableSpacing>
+                      {" "}
                       <IconButton
-                        onClick={likeHandler}
-                        aria-label="indicar me gusta"
-                        className={classes.likeIcon}
+                        className={classes.commentBtn}
+                        onClick={() => setCommentForm(true)}
                       >
                         <Grid container alignItems="center">
-                          <StarOutlineIcon />
-                          {post.likes.length}{" "}
+                          {!commentForm ? (
+                            <ChatBubbleOutlineIcon />
+                          ) : (
+                            <ChatIcon className={classes.activeComment} />
+                          )}
+                          {post.comments.length}{" "}
                         </Grid>
                       </IconButton>
-                    ) : post &&
+                      <Hidden mdDown>Respuestas</Hidden>{" "}
+                      {post &&
                       userInfo &&
-                      post.likes.includes(userInfo.username) ? (
-                      <IconButton
-                        onClick={unlikeHandler}
-                        aria-label="ya no me gusta"
-                      >
-                        <Grid
-                          container
-                          alignItems="center"
+                      !post.repost.includes(userInfo.username) ? (
+                        <IconButton onClick={repostHandler}>
+                          <RepeatIcon />
+                          {post.repost.length}
+                        </IconButton>
+                      ) : post &&
+                        userInfo &&
+                        post.repost.includes(userInfo.username) ? (
+                        <IconButton onClick={unrepostHandler}>
+                          <RepeatIcon className={classes.activeRepost} />
+                          {post.repost.length}
+                        </IconButton>
+                      ) : (
+                        <IconButton onClick={repostHandler}>
+                          <RepeatIcon />
+                          {post.repost.length}
+                        </IconButton>
+                      )}
+                      <Hidden mdDown>Repost</Hidden>
+                      {post &&
+                      userInfo &&
+                      !post.likes.includes(userInfo.username) ? (
+                        <IconButton
+                          onClick={likeHandler}
+                          aria-label="indicar me gusta"
                           className={classes.likeIcon}
                         >
-                          <StarIcon className={classes.likedIcon} />
-                          {post.likes.length}{" "}
-                        </Grid>
-                      </IconButton>
-                    ) : (
-                      <IconButton
-                        onClick={likeHandler}
-                        aria-label="indicar me gusta"
-                        className={classes.likeIcon}
-                      >
-                        <Grid container alignItems="center">
-                          <StarOutlineIcon />
-                          {post.likes.length}{" "}
-                        </Grid>
-                      </IconButton>
-                    )}
-                    <Hidden mdDown>Me gusta</Hidden>{" "}
-                    <IconButton aria-label="share">
-                      <ScreenShareOutlinedIcon />
-                    </IconButton>
-                  </CardActions>
-                  {commentForm ? (
-                    <Box className={classes.commentForm}>
-                      <Grid container alignItems="center">
-                        <Grid item xs={10}>
-                          <TextField
-                            id="comment-form"
-                            value={comment}
-                            onChange={(e) => setComment(e.target.value)}
-                            fullWidth
-                            label="Agregar un comentario..."
-                          ></TextField>
-                        </Grid>
-                        <Grid item xs={2}>
-                          <Button
-                            className={classes.activeComment}
-                            variant="outlined"
-                            size="small"
-                            onClick={submitCommentHandler}
+                          <Grid container alignItems="center">
+                            <StarOutlineIcon />
+                            {post.likes.length}{" "}
+                          </Grid>
+                        </IconButton>
+                      ) : post &&
+                        userInfo &&
+                        post.likes.includes(userInfo.username) ? (
+                        <IconButton
+                          onClick={unlikeHandler}
+                          aria-label="ya no me gusta"
+                        >
+                          <Grid
+                            container
+                            alignItems="center"
+                            className={classes.likeIcon}
                           >
-                            +1 <ChatIcon className={classes.iconSmall} />
-                          </Button>
+                            <StarIcon className={classes.likedIcon} />
+                            {post.likes.length}{" "}
+                          </Grid>
+                        </IconButton>
+                      ) : (
+                        <IconButton
+                          onClick={likeHandler}
+                          aria-label="indicar me gusta"
+                          className={classes.likeIcon}
+                        >
+                          <Grid container alignItems="center">
+                            <StarOutlineIcon />
+                            {post.likes.length}{" "}
+                          </Grid>
+                        </IconButton>
+                      )}
+                      <Hidden mdDown>Me gusta</Hidden>{" "}
+                      <IconButton aria-label="share">
+                        <ScreenShareOutlinedIcon />
+                      </IconButton>
+                    </CardActions>
+                    {commentForm ? (
+                      <Box className={classes.commentForm}>
+                        <Grid container alignItems="center">
+                          <Grid item xs={10}>
+                            <TextField
+                              id="comment-form"
+                              value={comment}
+                              onChange={(e) => setComment(e.target.value)}
+                              fullWidth
+                              label="Agregar un comentario..."
+                            ></TextField>
+                          </Grid>
+                          <Grid item xs={2}>
+                            <Button
+                              className={classes.activeComment}
+                              variant="outlined"
+                              size="small"
+                              onClick={submitCommentHandler}
+                            >
+                              +1 <ChatIcon className={classes.iconSmall} />
+                            </Button>
+                          </Grid>
                         </Grid>
-                      </Grid>
-                    </Box>
-                  ) : null}
-                </Card>
+                      </Box>
+                    ) : null}
+                  </Card>
+                </Zoom>
                 <Divider />
                 {post.comments
                   ? post.comments.map((comment) => (

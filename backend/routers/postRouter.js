@@ -1,7 +1,7 @@
 import express from "express";
 import expressAsyncHandler from "express-async-handler";
 import data from "../data.js";
-import Post from "../models/postModel.js";
+import { Post, Comment } from "../models/postModel.js";
 
 import { isAdmin, isAuth } from "../utils.js";
 
@@ -34,8 +34,6 @@ postRouter.get(
       .sort(sortOrder);
 
     res.send(posts);
-    console.log("posts", posts);
-    console.log("order", posts);
   })
 );
 
@@ -120,7 +118,6 @@ postRouter.post(
         message: "Comentario publicado",
         comment: updatedPost.comments[updatedPost.comments.length - 1],
       });
-      console.log(updatedPost.comments);
     } else {
       res.status(404).send({
         message: "Post no encontrado",
@@ -135,16 +132,18 @@ postRouter.put(
   expressAsyncHandler(async (req, res) => {
     const postId = req.params.id;
     const commentId = req.params.commentId;
-    const post = await Post.findById(postId);
-    console.log("comment", commentId);
-    if (post) {
-      const comment = await Post.findById(commentId);
-      post.comments.comment.likes.push(req.body.username);
-      const updatedComent = await comment.save();
+    const post = await Post.findByIdAndUpdate(postId);
+    // Cuando buscamos subdocumentos en mongoose
+    // usamos id en lugar de la promise findById
+    const comment = post.comments.id(commentId);
+
+    if (comment) {
+      comment.likes.push(req.body.username);
+      const updatedPost = await post.save();
       res.status(201).send({
         message: "Like publicado",
       });
-      console.log("likeado", updatedComent);
+      console.log("updatedPost", updatedPost);
     } else {
       res.status(404).send({
         message: "Comentario no encontrado",
@@ -154,20 +153,22 @@ postRouter.put(
 );
 
 postRouter.put(
-  "/:id/comments/:commentId/likes",
-  isAuth,
+  "/:id/comments/:commentId/unlike",
   expressAsyncHandler(async (req, res) => {
     const postId = req.params.id;
     const commentId = req.params.commentId;
     const post = await Post.findByIdAndUpdate(postId);
-    if (post) {
-      const comment = await Post.comments.findByIdAndUpdate(commentId);
-      post.comments.comment.likes.pull(req.body.username);
-      const updatedComent = await comment.save();
+    // Cuando buscamos subdocumentos en mongoose
+    // usamos id en lugar de la promise findById
+    const comment = post.comments.id(commentId);
+
+    if (comment) {
+      comment.likes.pull(req.body.username);
+      const updatedPost = await post.save();
       res.status(201).send({
-        message: "Like publicado",
+        message: "Like removido",
       });
-      console.log("likeado", updatedComent);
+      console.log("updatedPost", updatedPost);
     } else {
       res.status(404).send({
         message: "Comentario no encontrado",
@@ -188,7 +189,6 @@ postRouter.put(
       res.status(201).send({
         message: "Like publicado",
       });
-      console.log("likeado", updatedPost);
     } else {
       res.status(404).send({
         message: "Post no encontrado",
@@ -209,7 +209,6 @@ postRouter.put(
       res.status(201).send({
         message: "Like removido",
       });
-      console.log("deslikeado", updatedPost);
     } else {
       res.status(404).send({
         message: "Post no encontrado",
@@ -230,7 +229,6 @@ postRouter.put(
       res.status(201).send({
         message: "Reposteado",
       });
-      console.log("repost", updatedPost);
     } else {
       res.status(404).send({
         message: "Post no encontrado",
@@ -251,7 +249,6 @@ postRouter.put(
       res.status(201).send({
         message: "Repost deshecho",
       });
-      console.log("desrepost", updatedPost);
     } else {
       res.status(404).send({
         message: "Post no encontrado",
