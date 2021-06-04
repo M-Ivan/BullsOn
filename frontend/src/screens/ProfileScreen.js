@@ -5,7 +5,6 @@ import ReactLoading from "react-loading";
 import { Container, Grid, makeStyles } from "@material-ui/core/index";
 import { Typography, Divider } from "@material-ui/core/";
 import { detailsUser } from "../actions/userActions";
-import { red } from "@material-ui/core/colors";
 
 import RenderPost from "../components/RenderPost";
 import { listPosts, listReposts } from "../actions/postActions";

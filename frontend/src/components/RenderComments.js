@@ -7,10 +7,16 @@ import {
   Divider,
   ListItemText,
   ListItemAvatar,
+  Grid,
   Avatar,
   Typography,
+  Button,
 } from "@material-ui/core";
+import ThumbUpIcon from "@material-ui/icons/ThumbUp";
 import { Link } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
+import { likeComment, unlikeComment } from "../actions/commentActions";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -20,16 +26,56 @@ const useStyles = makeStyles((theme) => ({
   inline: {
     display: "inline",
   },
+  button: {
+    color: "#000",
+    "&:hover": {
+      backgroundColor: "#00000000",
+      textDecoration: "underline",
+    },
+  },
+  ActiveButton: {
+    color: "#2878e1",
+    "&:hover": {
+      backgroundColor: "#00000000",
+      textDecoration: "underline",
+    },
+  },
+  icon: {
+    width: "20px",
+    height: "20px",
+    color: "#2878e1",
+  },
 }));
 
 export default function RenderComments(props) {
-  const { comment } = props;
+  const { comment, postId, commentId } = props;
   const { profile } = comment.profile;
   const classes = useStyles();
+  const userSignin = useSelector((state) => state.userSignin);
+  const { userInfo } = userSignin;
+  const dispatch = useDispatch();
+
+  console.log("comment", comment);
+  console.log("postId", postId);
+  console.log("commentId", commentId);
+
+  const likeHandler = () => {
+    if (userInfo) {
+      dispatch(likeComment(postId, commentId));
+    } else {
+      props.history.push("/signin");
+    }
+  };
+  const unlikeHandler = () => {
+    if (userInfo) {
+      dispatch(unlikeComment(postId));
+    } else {
+      props.history.push("/signin");
+    }
+  };
 
   return (
     <List className={classes.root}>
-      {console.log(props)}
       <ListItem alignItems="flex-start">
         <Link to={`/${profile.username}`}>
           <ListItemAvatar>
@@ -63,12 +109,30 @@ export default function RenderComments(props) {
                 className={classes.inline}
                 color="textPrimary"
               >
-                {comment.comment}
+                {comment.comment} <br />
+                <Grid container>
+                  {comment.likes.length}
+                  {comment.likes.includes(userInfo.username) ? (
+                    <Button
+                      onClick={unlikeHandler}
+                      className={classes.ActiveButton}
+                    >
+                      Ya no me gusta
+                      <ThumbUpIcon className={classes.icon} />
+                    </Button>
+                  ) : (
+                    <Button onClick={likeHandler} className={classes.button}>
+                      Me gusta
+                      <ThumbUpIcon className={classes.icon} />
+                    </Button>
+                  )}
+                </Grid>
               </Typography>
             </Box>
           }
         />
       </ListItem>
+
       <Divider component="li" variant="inset" />
     </List>
   );

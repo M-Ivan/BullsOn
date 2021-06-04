@@ -1,3 +1,8 @@
+.color-picker {
+  color: #e16828;
+  color: #2878e1;
+}
+
 .prueba {
   background: linear-gradient(45deg, #ff01bf 30%, #ff1010 90%);
   color: white;
@@ -9,10 +14,10 @@ body {
 }
 a {
   text-decoration: none;
-  color: #0059ff;
+  color: none;
 }
 a:hover {
-  color: #2370ff;
+  color: none;
 }
 
 .navlink a {
@@ -52,14 +57,6 @@ a:hover {
   width: 90%;
 }
 
-.brand {
-  font-size: 1.8rem;
-  font-weight: 600;
-  padding: 0.5rem;
-  text-decoration: none;
-  color: #424242;
-  border-radius: 0.3rem;
-}
 .brand:hover {
   color: #424242;
 }
@@ -71,12 +68,6 @@ a:hover {
 
 .form-control {
   margin-bottom: 1.6rem;
-}
-
-.toolBar {
-  background-color: #ffd700;
-  color: #424242;
-  padding: 0.2rem;
 }
 
 .feed-separation {

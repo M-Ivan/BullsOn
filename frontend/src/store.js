@@ -1,6 +1,10 @@
 import { createStore, compose, applyMiddleware, combineReducers } from "redux";
 import thunk from "redux-thunk";
 import {
+  commentLikeReducer,
+  commentUnlikeReducer,
+} from "./reducers/commentReducer";
+import {
   postCreateReducer,
   postListReducer,
   postDetailsReducer,
@@ -45,6 +49,8 @@ const reducer = combineReducers({
   userUnfollow: userUnfollowReducer,
   userList: userListReducer,
   userProfileUpdate: userProfileUpdateReducer,
+  commentLike: commentLikeReducer,
+  commentUnlike: commentUnlikeReducer,
 });
 const composeEnhancer = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 

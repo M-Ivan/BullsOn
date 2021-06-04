@@ -129,6 +129,53 @@ postRouter.post(
   })
 );
 
+// Hacer debug
+postRouter.put(
+  "/:id/comments/:commentId/likes",
+  expressAsyncHandler(async (req, res) => {
+    const postId = req.params.id;
+    const commentId = req.params.commentId;
+    const post = await Post.findById(postId);
+    console.log("comment", commentId);
+    if (post) {
+      const comment = await Post.findById(commentId);
+      post.comments.comment.likes.push(req.body.username);
+      const updatedComent = await comment.save();
+      res.status(201).send({
+        message: "Like publicado",
+      });
+      console.log("likeado", updatedComent);
+    } else {
+      res.status(404).send({
+        message: "Comentario no encontrado",
+      });
+    }
+  })
+);
+
+postRouter.put(
+  "/:id/comments/:commentId/likes",
+  isAuth,
+  expressAsyncHandler(async (req, res) => {
+    const postId = req.params.id;
+    const commentId = req.params.commentId;
+    const post = await Post.findByIdAndUpdate(postId);
+    if (post) {
+      const comment = await Post.comments.findByIdAndUpdate(commentId);
+      post.comments.comment.likes.pull(req.body.username);
+      const updatedComent = await comment.save();
+      res.status(201).send({
+        message: "Like publicado",
+      });
+      console.log("likeado", updatedComent);
+    } else {
+      res.status(404).send({
+        message: "Comentario no encontrado",
+      });
+    }
+  })
+);
+
 postRouter.put(
   "/:id/likes",
   isAuth,

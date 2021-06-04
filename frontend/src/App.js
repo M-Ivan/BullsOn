@@ -7,13 +7,26 @@ import ProfileScreen from "./screens/ProfileScreen";
 import RegisterScreen from "./screens/RegisterScreen";
 import SearchScreen from "./screens/SearchScreen";
 import SigninScreen from "./screens/SigninScreen";
+import { makeStyles } from "@material-ui/core/styles";
+
+const useStyles = makeStyles((theme) => ({
+  root: {
+    padding: "7rem 0",
+    [theme.breakpoints.down("xs")]: {
+      padding: "6.5rem 0",
+    },
+    margin: 0,
+    overflow: "hidden",
+  },
+}));
 
 function App() {
+  const classes = useStyles();
   return (
     <BrowserRouter>
       <Route render={({ history }) => <Header history={history} />}></Route>
 
-      <main>
+      <main className={classes.root}>
         <Route path="/" exact component={HomeScreen}></Route>
         <Route path="/signin" component={SigninScreen}></Route>
         <Route path="/register" component={RegisterScreen}></Route>

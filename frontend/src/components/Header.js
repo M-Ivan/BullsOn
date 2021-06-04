@@ -7,6 +7,7 @@ import {
   makeStyles,
   Toolbar,
   Typography,
+  Box,
 } from "@material-ui/core";
 import SearchIcon from "@material-ui/icons/Search";
 import { Link } from "react-router-dom";
@@ -34,8 +35,22 @@ import BusinessCenterIcon from "@material-ui/icons/BusinessCenter";
 const drawerWidth = 240;
 
 const useStyles = makeStyles((theme) => ({
-  grow: {
-    flexGrow: 1,
+  root: {
+    alignItems: "center",
+  },
+  appbar: {
+    top: "0%",
+
+    left: "0%",
+    color: "#1b1b1b",
+    backgroundColor: "#ffd700",
+  },
+  brand: {
+    fontSize: "1.8rem",
+    fontWeight: 600,
+    padding: "0.5rem",
+    color: "#424242",
+    borderRadius: "0.3rem",
   },
   menuButton: {
     marginRight: theme.spacing(2),
@@ -69,54 +84,52 @@ const useStyles = makeStyles((theme) => ({
     "&:hover": {
       backgroundColor: "#68686823",
     },
-    list: {
-      width: 250,
-    },
-    fullList: {
-      width: "auto",
-    },
-    drawer: {
-      width: drawerWidth,
-      flexShrink: 0,
-    },
-    drawerPaper: {
-      width: drawerWidth,
-    },
-    drawerHeader: {
-      display: "flex",
-      alignItems: "center",
-      padding: theme.spacing(0, 1),
-      // necessary for content to be below app bar
-      ...theme.mixins.toolbar,
-      justifyContent: "flex-end",
-    },
-    content: {
-      flexGrow: 1,
-      padding: theme.spacing(3),
-      transition: theme.transitions.create("margin", {
-        easing: theme.transitions.easing.sharp,
-        duration: theme.transitions.duration.leavingScreen,
-      }),
-      marginLeft: -drawerWidth,
-    },
-    contentShift: {
-      transition: theme.transitions.create("margin", {
-        easing: theme.transitions.easing.easeOut,
-        duration: theme.transitions.duration.enteringScreen,
-      }),
-      marginLeft: 0,
-    },
+  },
+  list: {
+    width: 250,
+  },
+  fullList: {
+    width: "auto",
+  },
+  drawer: {
+    width: drawerWidth,
+    flexShrink: 0,
+  },
+  drawerPaper: {
+    width: drawerWidth,
+  },
+  drawerHeader: {
+    display: "flex",
+    alignItems: "center",
+    padding: theme.spacing(0, 1),
+    // necessary for content to be below app bar
+    ...theme.mixins.toolbar,
+    justifyContent: "flex-end",
+  },
+  content: {
+    flexGrow: 1,
+    padding: theme.spacing(3),
+    transition: theme.transitions.create("margin", {
+      easing: theme.transitions.easing.sharp,
+      duration: theme.transitions.duration.leavingScreen,
+    }),
+    marginLeft: -drawerWidth,
+  },
+  contentShift: {
+    transition: theme.transitions.create("margin", {
+      easing: theme.transitions.easing.easeOut,
+      duration: theme.transitions.duration.enteringScreen,
+    }),
+    marginLeft: 0,
   },
 }));
 
 export default function Header(props) {
+  const classes = useStyles();
+
   const [userAnchorEl, setUserAnchorEl] = useState(false);
   const userSignin = useSelector((state) => state.userSignin);
   const { userInfo } = userSignin;
-  const [showSearchBox, setShowSearchBox] = useState(false);
-
-  console.log("showSearchBox", showSearchBox);
-
   const [menuOpen, setMenuOpen] = useState(false);
 
   const dispatch = useDispatch();
@@ -134,7 +147,12 @@ export default function Header(props) {
   const listMenu = () => (
     <div>
       <div className={classes.drawerHeader}>
-        <h1 className="brand">Navegación</h1>
+        <Link className={classes.brand} to="/">
+          <i class="fa fa-bitcoin" style={{ color: orange[800] }}></i>
+          ulls<span style={{ color: green[600] }}>O</span>
+          <span style={{ color: green[600] }}>n</span>
+          <TrendingUpIcon />{" "}
+        </Link>
       </div>
       <Divider />
       <List>
@@ -146,12 +164,7 @@ export default function Header(props) {
             <ListItemText style={{ color: orange[800] }} primary="Inicio" />
           </ListItem>
         </Link>
-        <ListItem button onClick={() => setShowSearchBox(!showSearchBox)}>
-          <ListItemIcon>
-            <SearchIcon style={{ color: orange[700] }} />
-          </ListItemIcon>
-          <ListItemText style={{ color: orange[800] }} primary="Buscar..." />
-        </ListItem>
+
         {userInfo ? (
           <>
             <Link to={`/${userInfo.username}`}>
@@ -189,125 +202,108 @@ export default function Header(props) {
     </div>
   );
 
-  const classes = useStyles();
   return (
-    <div>
-      <Grid container spacing={2}>
-        <Grid xs={12}>
-          <AppBar position="static" elevation={1}>
-            <Toolbar className="toolBar">
-              <Grid container alignItems="center" justify="flex-start">
-                <Grid item xs={6} lg={3} md={3}>
-                  <Hidden only={["lg", "xl"]}>
-                    <IconButton
-                      onClick={() => setMenuOpen(!menuOpen)}
-                      edge="start"
-                      color="inherit"
-                      aria-label="menu"
-                    >
-                      <MenuIcon />
-                      <SwipeableDrawer
-                        className={classes.drawer}
-                        open={menuOpen}
-                        onClose={() => setMenuOpen(false)}
-                        onOpen={() => setMenuOpen(true)}
-                      >
-                        {listMenu()}
-                      </SwipeableDrawer>
-                    </IconButton>
-                  </Hidden>
-                  <Link className="brand" to="/">
-                    <i class="fa fa-bitcoin" style={{ color: orange[800] }}></i>
-                    ulls<span style={{ color: green[600] }}>O</span>
-                    <span style={{ color: green[600] }}>n</span>
-                    <TrendingUpIcon />
-                  </Link>
-                </Grid>
+    <Grid container className={classes.root}>
+      <AppBar color="transparent" elevation={1} className={classes.appbar}>
+        <Toolbar>
+          <Grid container alignItems="center" justify="flex-start">
+            <Grid item xs={12} lg={3} md={3}>
+              <Hidden only={["lg", "xl"]}>
+                <IconButton
+                  onClick={() => setMenuOpen(!menuOpen)}
+                  edge="start"
+                  color="inherit"
+                  aria-label="menu"
+                >
+                  <MenuIcon />
+                  <SwipeableDrawer
+                    className={classes.drawer}
+                    open={menuOpen}
+                    onClose={() => setMenuOpen(false)}
+                    onOpen={() => setMenuOpen(true)}
+                  >
+                    {listMenu()}
+                  </SwipeableDrawer>
+                </IconButton>
+              </Hidden>
+              <Link className={classes.brand} to="/">
+                <i class="fa fa-bitcoin" style={{ color: orange[800] }}></i>
+                ulls<span style={{ color: green[600] }}>O</span>
+                <span style={{ color: green[600] }}>n</span>
+                <TrendingUpIcon />{" "}
+              </Link>
+            </Grid>
 
-                {showSearchBox ? (
-                  <Hidden only={["lg", "xl"]}>
-                    <Grid item xs={6}>
-                      <Toolbar className="toolBar">
-                        <Grid container justify="center">
-                          <SearchBox />
+            <Grid item lg={6} xs={12}>
+              <Hidden mdDown>
+                <SearchBox />
+              </Hidden>
+            </Grid>
+            <Hidden mdDown>
+              <Grid item xs={3}>
+                <Grid container alignItems="center" justify="flex-end">
+                  <a href="https://m-ivan.github.io">
+                    <Button classes={{ root: classes.navlink }}>
+                      <Typography variant="button" display="block">
+                        <Grid container alignItems="center">
+                          <BusinessCenterIcon />
+                          Ir a mi portafolio{" "}
                         </Grid>
-                      </Toolbar>
-                    </Grid>
-                  </Hidden>
-                ) : null}
-                <Grid item lg={6} xs={7}>
-                  <Hidden only={["xs", "sm", "md"]}>
-                    <SearchBox />{" "}
-                  </Hidden>
+                      </Typography>
+                    </Button>
+                  </a>
                 </Grid>
-
-                <Hidden only={["xs", "sm", "md"]}>
-                  <Grid item xs={3}>
-                    <Grid container alignItems="center" justify="flex-end">
-                      <a href="https://m-ivan.github.io">
-                        <Button classes={{ root: classes.navlink }}>
-                          <Typography variant="button" display="block">
-                            <Grid container alignItems="center">
-                              <BusinessCenterIcon />
-                              Ir a mi portafolio{" "}
-                            </Grid>
-                          </Typography>
-                        </Button>
-                      </a>
-                    </Grid>
-                  </Grid>
-                </Hidden>
               </Grid>
-            </Toolbar>
-
-            <Hidden only={["xs", "sm", "md"]}>
-              <Toolbar className="toolBar">
-                <Grid container justify="flex-end" alignItems="center">
-                  {userInfo ? (
-                    <div>
-                      <div>
-                        <Button
-                          classes={{ root: classes.navlink }}
-                          aria-controls="simple-menu"
-                          aria-haspopup="true"
-                          onClick={handleUserMenu}
-                        >
-                          {" "}
-                          <i className="fa fa-user-circle"></i>
-                          {userInfo.username}
-                        </Button>
-                      </div>
-                      <Menu
-                        id="simple-menu"
-                        anchorEl={userAnchorEl}
-                        keepMounted
-                        open={Boolean(userAnchorEl)}
-                        onClose={handleUserMenuClose}
-                      >
-                        <MenuItem onClick={handleUserMenuClose}>
-                          <Link to={`/${userInfo.username}`}>Mi perfil</Link>
-                        </MenuItem>
-                        <MenuItem onClick={handleUserMenuClose}>
-                          <Link to={`/${userInfo.username}/settings`}>
-                            Configuración
-                          </Link>
-                        </MenuItem>
-                        <MenuItem onClick={signoutHandler}>
-                          Cerrar sesión
-                        </MenuItem>
-                      </Menu>
-                    </div>
-                  ) : (
-                    <div className="navlink">
-                      <Link to="/signin">Iniciar Sesión</Link>
-                    </div>
-                  )}
-                </Grid>
-              </Toolbar>
             </Hidden>
-          </AppBar>
-        </Grid>
-      </Grid>
-    </div>
+          </Grid>
+        </Toolbar>
+
+        <Hidden lgUp>
+          <Toolbar>
+            <SearchBox />
+          </Toolbar>
+        </Hidden>
+
+        <Hidden mdDown>
+          <Toolbar>
+            {userInfo ? (
+              <Grid container justify="flex-end">
+                <Button
+                  classes={{ root: classes.navlink }}
+                  aria-controls="simple-menu"
+                  aria-haspopup="true"
+                  onClick={handleUserMenu}
+                >
+                  <i className="fa fa-user-circle"></i>
+                  {userInfo.username}
+                </Button>
+
+                <Menu
+                  id="simple-menu"
+                  anchorEl={userAnchorEl}
+                  keepMounted
+                  open={Boolean(userAnchorEl)}
+                  onClose={handleUserMenuClose}
+                >
+                  <MenuItem onClick={handleUserMenuClose}>
+                    <Link to={`/${userInfo.username}`}>Mi perfil</Link>
+                  </MenuItem>
+                  <MenuItem onClick={handleUserMenuClose}>
+                    <Link to={`/${userInfo.username}/settings`}>
+                      Configuración
+                    </Link>
+                  </MenuItem>
+                  <MenuItem onClick={signoutHandler}>Cerrar sesión</MenuItem>
+                </Menu>
+              </Grid>
+            ) : (
+              <div className="navlink">
+                <Link to="/signin">Iniciar Sesión</Link>
+              </div>
+            )}
+          </Toolbar>
+        </Hidden>
+      </AppBar>
+    </Grid>
   );
 }

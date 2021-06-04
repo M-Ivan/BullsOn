@@ -24,45 +24,79 @@ import AddAPhotoIcon from "@material-ui/icons/AddAPhoto";
 import Axios from "axios";
 
 const useStyles = makeStyles((theme) => ({
-  profileRoot: {
+  root: {
     borderRadius: "0px",
-    [theme.breakpoints.up("md")]: {},
+    [theme.breakpoints.up("sm")]: {},
   },
-  mediaBgEdit: {
+  save: {
+    marginRight: "10px",
+    borderRadius: "3rem",
+    color: "#fff",
+    backgroundColor: "#ea6d0b",
+    [theme.breakpoints.down("x")]: { fontSize: "8pt" },
+    "&:hover": {
+      backgroundColor: "#e16828",
+      boxShadow: "0 2px 2px #00000050",
+    },
+  },
+
+  media: {
     height: 170,
     width: "100%",
+    display: "flex",
+    alignItems: "center",
   },
+
   bgIcon: {
     color: "#ffffff",
     width: "100px",
     height: "100px",
+    zIndex: 2,
   },
+
   avatar: {
     backgroundColor: red[500],
     width: "100px",
     height: "100px",
+    [theme.breakpoints.down("xs")]: {
+      width: "70px",
+      height: "70px",
+    },
     border: "5px solid #000000",
-    zIndex: "10",
+    display: "flex",
+    justifyContent: "center",
   },
-  nameSection: {
+
+  name: {
     margin: theme.spacing(2),
+    [theme.breakpoints.down("xs")]: {
+      margin: 0,
+    },
   },
+
   descriptionSection: {
     margin: theme.spacing(2),
     marginBottom: theme.spacing(3),
+    [theme.breakpoints.down("xs")]: {
+      margin: 0,
+    },
   },
   profilePicUploadBtn: {
     borderRadius: "50%",
   },
   backgroundUploadBtn: {
     width: "100%",
+    padding: 0,
   },
   followSection: {
-    margin: theme.spacing(2),
     marginTop: theme.spacing(3),
+    [theme.breakpoints.down("xs")]: {
+      margin: 0,
+      marginTop: "1rem",
+    },
   },
-  descriptionTextField: {
-    width: "25rem",
+  textField: {
+    width: "70%",
   },
 }));
 const MyTextField = withStyles({
@@ -159,14 +193,14 @@ export default function ProfileEdit(props) {
   };
 
   return (
-    <Card elevation={0} className={classes.profileRoot}>
+    <Card elevation={0} className={classes.root}>
       <Box m={1}>
         <Button
           classes={{ root: classes.backgroundUploadBtn }}
           component="label"
         >
           <CardMedia
-            className={classes.mediaBgEdit}
+            className={classes.media}
             image={
               user.profile.background
                 ? user.profile.background
@@ -178,21 +212,21 @@ export default function ProfileEdit(props) {
               filter: "brightness(70%)",
             }}
           >
-            <Grid
-              container
-              justify="center"
-              alignItems="center"
-              direction="column"
-            >
-              <AddAPhotoIcon className={classes.bgIcon} />
-            </Grid>
+            <AddAPhotoIcon className={classes.bgIcon} />
           </CardMedia>
           <input type="file" hidden onChange={uploadBackgroundHandler} />
         </Button>
       </Box>
       <Grid container>
-        <Grid item xs={3}>
-          <Grid container alignItems="center" direction="column">
+        <Grid
+          item
+          xs={6}
+          style={{
+            display: "grid",
+            justifyContent: "flex-start",
+          }}
+        >
+          <Grid container alignItems="center" direction="column" justify="">
             <Button
               classes={{ root: classes.profilePicUploadBtn }}
               component="label"
@@ -200,46 +234,52 @@ export default function ProfileEdit(props) {
               <Avatar
                 src={user.profile.profile ? user.profile.profile : null}
                 className={classes.avatar}
-                style={{
-                  justifyContent: "center",
-                  display: "flex",
-                }}
-              ></Avatar>
-              <AddAPhotoIcon />
+              >
+                {" "}
+              </Avatar>
 
               <input type="file" hidden onChange={uploadProfilePicHandler} />
             </Button>
-            {loadingUpload && (
-              <div className="row center">
-                <ReactLoading
-                  className="loading"
-                  color="#2d91f0"
-                  type="cylon"
-                />{" "}
-              </div>
-            )}
-            {errorUpload && (
-              <MessageBox variant="danger">{errorUpload}</MessageBox>
-            )}
+            <Button
+              style={{
+                borderRadius: "50%",
+              }}
+              component="label"
+            >
+              {" "}
+              <input type="file" hidden onChange={uploadProfilePicHandler} />
+              <AddAPhotoIcon />
+            </Button>
           </Grid>
+          {loadingUpload && (
+            <div className="row center">
+              <ReactLoading className="loading" color="#2d91f0" type="cylon" />{" "}
+            </div>
+          )}
+          {errorUpload && (
+            <MessageBox variant="danger">{errorUpload}</MessageBox>
+          )}
         </Grid>{" "}
-        <Grid item xs={9}>
-          <Grid container direction="column" alignItems="flex-end">
-            <Box m={3}>
-              <Button
-                size="large"
-                variant="contained"
-                color="primary"
-                onClick={saveProfileHandler}
-              >
-                Guardar cambios
-              </Button>
-            </Box>
-          </Grid>
+        <Grid
+          item
+          xs={6}
+          style={{
+            display: "flex",
+            justifyContent: "flex-end",
+            alignItems: "center",
+          }}
+        >
+          <Button
+            onClick={saveProfileHandler}
+            size="large"
+            className={classes.save}
+          >
+            Guardar
+          </Button>
         </Grid>
       </Grid>
       <CardContent>
-        <Grid container className={classes.nameSection}>
+        <Grid container>
           <Grid item xs={12}>
             <Typography gutterBottom variant="h4" component="h2">
               {editName ? (
@@ -278,19 +318,24 @@ export default function ProfileEdit(props) {
             </Typography>
           </Grid>
           <Grid item xs={12}>
-            <Typography variant="body1" color="textSecondary">
+            <Typography variant="body1" color="textSecondary" gutterBottom>
               {"@" + user.profile.username}
             </Typography>
           </Grid>
         </Grid>
 
-        <Typography variant="body" color="textPrimary" component="p">
+        <Typography
+          variant="body"
+          color="textPrimary"
+          component="p"
+          gutterBottom
+        >
           {" "}
-          <Grid container className={classes.descriptionSection}>
+          <Grid container>
             {editDescription ? (
               <Grid container alignItems="center">
                 <MyTextField
-                  className={classes.descriptionTextField}
+                  className={classes.textField}
                   multiline
                   rows={2}
                   value={description}

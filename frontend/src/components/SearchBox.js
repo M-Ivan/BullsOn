@@ -6,6 +6,7 @@ import { withRouter } from "react-router";
 const useStyles = makeStyles((theme) => ({
   search: {
     boxShadow: "0px 0px 5px #3636363f",
+
     position: "relative",
     borderRadius: theme.shape.borderRadius,
     backgroundColor: fade(theme.palette.common.white, 0.15),
@@ -15,10 +16,6 @@ const useStyles = makeStyles((theme) => ({
     marginRight: theme.spacing(2),
     marginLeft: 0,
     width: "100%",
-    [theme.breakpoints.up("sm")]: {
-      marginLeft: theme.spacing(3),
-      width: "auto",
-    },
   },
   searchIcon: {
     padding: theme.spacing(0, 2),
@@ -31,25 +28,13 @@ const useStyles = makeStyles((theme) => ({
   },
   inputRoot: {
     color: "inherit",
+    width: "100%",
   },
   inputInput: {
     padding: theme.spacing(1, 1, 1, 0),
     // vertical padding + font size from searchIcon
     paddingLeft: `calc(1em + ${theme.spacing(4)}px)`,
     transition: theme.transitions.create("width"),
-    width: "100%",
-    [theme.breakpoints.down("md")]: {
-      width: "55ch",
-    },
-    [theme.breakpoints.up("lg")]: {
-      width: "100ch",
-    },
-    [theme.breakpoints.down("sm")]: {
-      width: "30ch",
-    },
-    [theme.breakpoints.down("xs")]: {
-      width: "20ch",
-    },
   },
 }));
 
@@ -67,25 +52,21 @@ export default withRouter(function SearchBox(props) {
   };
 
   return (
-    <div>
-      <Grid container alignItems="center" justify="center">
-        <div className={classes.search}>
-          <div className={classes.searchIcon}>
-            <SearchIcon />
-          </div>
-          <form onSubmit={searchHandler}>
-            <InputBase
-              placeholder="Buscar..."
-              onChange={(e) => setQuery(e.target.value)}
-              classes={{
-                root: classes.inputRoot,
-                input: classes.inputInput,
-              }}
-              inputProps={{ type: "text", name: "q", id: "q" }}
-            />
-          </form>
-        </div>
-      </Grid>
+    <div className={classes.search}>
+      <div className={classes.searchIcon}>
+        <SearchIcon />
+      </div>
+      <form onSubmit={searchHandler}>
+        <InputBase
+          placeholder="Buscar..."
+          onChange={(e) => setQuery(e.target.value)}
+          classes={{
+            root: classes.inputRoot,
+            input: classes.inputInput,
+          }}
+          inputProps={{ type: "text", name: "q", id: "q" }}
+        />
+      </form>
     </div>
   );
 });

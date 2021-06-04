@@ -22,6 +22,32 @@ const useStyles = makeStyles((theme) => ({
     height: 170,
     width: "100%",
   },
+  button: {
+    marginRight: "10px",
+    borderRadius: "3rem",
+    color: "#ea6d0b",
+    border: "2px solid #ea6d0b",
+    [theme.breakpoints.down("sm")]: { fontSize: "8pt" },
+    "&:hover": {
+      backgroundColor: "#e16828",
+      color: "#fff",
+      boxShadow: "0 2px 2px #00000050",
+    },
+  },
+  active: {
+    marginRight: "10px",
+    borderRadius: "3rem",
+    color: "#fff",
+    backgroundColor: "#ea6d0b",
+
+    [theme.breakpoints.down("sm")]: { fontSize: "8pt" },
+    "&:hover": {
+      backgroundColor: "#e16828",
+      color: "#fff",
+      boxShadow: "0 2px 2px #00000050",
+    },
+  },
+
   avatar: {
     backgroundColor: red[500],
     width: "100px",
@@ -29,16 +55,14 @@ const useStyles = makeStyles((theme) => ({
     border: "5px solid #000000",
     zIndex: "10",
   },
-  nameSection: {
-    margin: theme.spacing(2),
-  },
-  descriptionSection: {
-    margin: theme.spacing(2),
-    marginBottom: theme.spacing(3),
-  },
+  nameSection: {},
+  descriptionSection: {},
   followSection: {
-    margin: theme.spacing(2),
     marginTop: theme.spacing(3),
+    [theme.breakpoints.down("xs")]: {
+      margin: 0,
+      marginTop: "1rem",
+    },
   },
 }));
 
@@ -101,9 +125,8 @@ export default function RenderProfile(props) {
               <Box m={3}>
                 <Button
                   size="large"
-                  variant="outlined"
-                  color="primary"
                   onClick={editProfileHandler}
+                  className={classes.button}
                 >
                   Editar perfil
                 </Button>
@@ -113,8 +136,7 @@ export default function RenderProfile(props) {
                 <Button
                   onClick={unfollowHandler}
                   size="large"
-                  variant="contained"
-                  color="primary"
+                  className={classes.active}
                 >
                   Dejar de seguir
                 </Button>
@@ -124,8 +146,7 @@ export default function RenderProfile(props) {
                 <Button
                   onClick={followHandler}
                   size="large"
-                  variant="contained"
-                  color="primary"
+                  className={classes.button}
                 >
                   Seguir{" "}
                 </Button>
@@ -142,12 +163,17 @@ export default function RenderProfile(props) {
             </Typography>
           </Grid>
           <Grid item xs={12}>
-            <Typography variant="body1" color="textSecondary">
+            <Typography variant="body1" color="textSecondary" gutterBottom>
               {"@" + user.profile.username}
             </Typography>
           </Grid>
         </Grid>
-        <Typography variant="body" color="textPrimary" component="p">
+        <Typography
+          variant="body"
+          color="textPrimary"
+          component="p"
+          gutterBottom
+        >
           {" "}
           <Grid container className={classes.descriptionSection}>
             {user.profile.description}
@@ -156,7 +182,7 @@ export default function RenderProfile(props) {
         <Divider />
         <Grid container className={classes.followSection}>
           {" "}
-          <Typography variant="body" component="p">
+          <Typography variant="body" component="p" gutterBottom>
             {`${user.following.length} siguiendo
                 ${user.followers.length} seguidores`}
           </Typography>

@@ -4,7 +4,7 @@ const commentSchema = new mongoose.Schema(
   {
     profile: { type: mongoose.Schema.Types.String, ref: "User" },
     comment: { type: String, required: true },
-    likes: { type: Number, default: 0 },
+    likes: [{ type: String, ref: "User" }],
   },
   { timestamps: true }
 );

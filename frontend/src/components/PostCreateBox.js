@@ -16,12 +16,13 @@ import ReactLoading from "react-loading";
 import { POST_CREATE_RESET } from "../constants/postConstants";
 
 const useStyles = makeStyles((theme) => ({
-  imgUploadBtn: {
+  root: {},
+  imgBtn: {
     border: "1px solid #00a6ff",
     color: "#00a6ff",
     margin: "0.5rem",
   },
-  btnRoundedOr: {
+  button: {
     background: "#ea6d0b",
     borderRadius: "3rem",
     border: 0,
@@ -31,6 +32,13 @@ const useStyles = makeStyles((theme) => ({
     boxShadow: "0 3px 5px 2px rgba(255, 105, 135, .3)",
     "&:hover": {
       background: "#e16828",
+    },
+  },
+  buttonsBox: {
+    display: "flex",
+    justifyContent: "flex-end",
+    [theme.breakpoints.down("md")]: {
+      justifyContent: "center",
     },
   },
 }));
@@ -106,80 +114,73 @@ export default function PostCreateBox(props) {
   };
 
   return (
-    <div>
-      <Grid item xs={12}>
-        <form onSubmit={submitHandler}>
-          <Grid
-            container
-            className="form-control"
-            direction="column"
-            justify="center"
-          >
-            <MyTextField
-              id="postText"
-              variant="standard"
-              multiline
-              label="Hola, Mundo!"
-              placeholder="En que estas pensando?.."
-              rows={6}
-              value={post}
-              onChange={(e) => setPost(e.target.value)}
-            />
+    <Grid className={classes.root}>
+      <form onSubmit={submitHandler}>
+        <Grid container className="form-control">
+          <MyTextField
+            style={{ width: "100%" }}
+            id="postText"
+            variant="standard"
+            multiline
+            label="Hola, Mundo!"
+            placeholder="En que estas pensando?.."
+            rows={6}
+            value={post}
+            onChange={(e) => setPost(e.target.value)}
+          />
+        </Grid>
+        <Grid container justify="flex-end">
+          <Grid item xs={12} lg={7} className={classes.buttonsBox}>
+            <Button
+              classes={{ root: classes.imgBtn }}
+              variant="outlined"
+              component="label"
+            >
+              {" "}
+              <ImageIcon />
+              <input type="file" hidden onChange={uploadFileHandler} />
+            </Button>
           </Grid>
-          <Grid container justify="flex-end" direction="row">
-            <Grid item xs={7}>
-              <Grid container justify="flex-end">
-                <Button
-                  classes={{ root: classes.imgUploadBtn }}
-                  variant="outlined"
-                  component="label"
-                >
-                  {" "}
-                  <ImageIcon />
-                  <input type="file" hidden onChange={uploadFileHandler} />
-                </Button>
-                {loadingUpload && (
-                  <div className="row center">
-                    <ReactLoading
-                      className="loading"
-                      color="#2d91f0"
-                      type="cylon"
-                    />{" "}
-                  </div>
-                )}
-                {errorUpload && (
-                  <MessageBox variant="danger">{errorUpload}</MessageBox>
-                )}
-              </Grid>
-            </Grid>
-            <Grid item xs={5}>
-              {post.length > 0 ? (
-                <Button
-                  classes={{
-                    root: classes.btnRoundedOr,
-                  }}
-                  variant="contained"
-                  type="submit"
-                >
-                  <PostAddIcon />
-                  Compartir una idea
-                </Button>
-              ) : (
-                <Button
-                  classes={{
-                    root: classes.btnRoundedOr,
-                  }}
-                  variant="contained"
-                  disabled
-                >
-                  <PostAddIcon />
-                  Compartir una idea
-                </Button>
-              )}
-            </Grid>
+
+          <Grid item xs={12} lg={5} className={classes.buttonsBox}>
+            {loadingUpload && (
+              <div className="row center">
+                <ReactLoading
+                  className="loading"
+                  color="#2d91f0"
+                  type="cylon"
+                />{" "}
+              </div>
+            )}
+            {errorUpload && (
+              <MessageBox variant="danger">{errorUpload}</MessageBox>
+            )}
+            {post.length > 0 ? (
+              <Button
+                classes={{
+                  root: classes.button,
+                }}
+                variant="contained"
+                type="submit"
+              >
+                <PostAddIcon />
+                Compartir una idea
+              </Button>
+            ) : (
+              <Button
+                classes={{
+                  root: classes.button,
+                }}
+                variant="contained"
+                disabled
+              >
+                <PostAddIcon />
+                Compartir una idea
+              </Button>
+            )}{" "}
           </Grid>
-        </form>
-      </Grid>
-    </div>
+        </Grid>
+      </form>
+    </Grid>
   );
 }

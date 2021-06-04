@@ -24,8 +24,10 @@ const useStyles = makeStyles((theme) => ({
     borderBottom: "1px solid #e0e0e0",
   },
   title: {
-    marginLeft: "1rem",
-    padding: "1rem",
+    marginLeft: "0rem",
+    padding: "1rem 2rem",
+    borderTop: "1px solid #e0e0e0",
+    borderBottom: "1px solid #e0e0e0",
   },
 }));
 
@@ -89,9 +91,7 @@ export default function HomeScreen(props) {
               Inicio
             </Typography>
           </Grid>
-          <Grid item xs={12}>
-            <Divider />
-          </Grid>
+
           <Grid container justify="center">
             <NavLarge />
             <Grid item xs={12} lg={6}>
