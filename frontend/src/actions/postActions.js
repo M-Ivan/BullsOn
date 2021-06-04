@@ -28,6 +28,9 @@ import {
   USER_REPOST_LIST_FAIL,
   USER_REPOST_LIST_REQUEST,
   USER_REPOST_LIST_SUCCESS,
+  POST_DELETE_REQUEST,
+  POST_DELETE_SUCCESS,
+  POST_DELETE_FAIL,
 } from "../constants/postConstants";
 
 export const listPosts =
@@ -237,5 +240,24 @@ export const unrepostPost = (postId) => async (dispatch, getState) => {
         ? error.response.data.message
         : error.message;
     dispatch({ type: POST_UNREPOST_ADD_FAIL, payload: message });
+  }
+};
+
+export const deletePost = (postId) => async (dispatch, getState) => {
+  dispatch({ type: POST_DELETE_REQUEST, payload: postId });
+  const {
+    userSignin: { userInfo },
+  } = getState();
+  try {
+    const { data } = Axios.delete(`/api/posts/${postId}`, {
+      headers: { Authorization: `Bearer ${userInfo.token}` },
+    });
+    dispatch({ type: POST_DELETE_SUCCESS, payload: data });
+  } catch (error) {
+    const message =
+      error.response && error.response.data.message
+        ? error.response.data.message
+        : error.message;
+    dispatch({ type: POST_DELETE_FAIL, payload: message });
   }
 };

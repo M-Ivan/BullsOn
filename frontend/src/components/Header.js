@@ -282,7 +282,7 @@ export default function Header(props) {
                   id="simple-menu"
                   anchorEl={userAnchorEl}
                   keepMounted
-                  open={Boolean(userAnchorEl)}
+                  open={userAnchorEl}
                   onClose={handleUserMenuClose}
                 >
                   <MenuItem onClick={handleUserMenuClose}>

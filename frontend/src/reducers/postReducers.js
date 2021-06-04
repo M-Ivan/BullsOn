@@ -33,6 +33,10 @@ import {
   USER_REPOST_LIST_SUCCESS,
   USER_REPOST_LIST_FAIL,
   POST_LIST_RESET,
+  POST_DELETE_REQUEST,
+  POST_DELETE_SUCCESS,
+  POST_DELETE_FAIL,
+  POST_DELETE_RESET,
 } from "../constants/postConstants";
 
 export const postListReducer = (
@@ -166,6 +170,21 @@ export const postUnrepostReducer = (state = {}, action) => {
     case POST_UNREPOST_ADD_FAIL:
       return { loading: false, error: action.payload };
     case POST_UNREPOST_ADD_RESET:
+      return {};
+    default:
+      return state;
+  }
+};
+
+export const postDeleteReducer = (state = {}, action) => {
+  switch (action.type) {
+    case POST_DELETE_REQUEST:
+      return { loading: true };
+    case POST_DELETE_SUCCESS:
+      return { loading: false, success: true, post: action.payload };
+    case POST_DELETE_FAIL:
+      return { loading: false, error: action.payload };
+    case POST_DELETE_RESET:
       return {};
     default:
       return state;

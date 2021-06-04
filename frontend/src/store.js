@@ -14,6 +14,7 @@ import {
   postRepostReducer,
   postUnrepostReducer,
   repostListReducer,
+  postDeleteReducer,
 } from "./reducers/postReducers";
 import {
   userDetailsReducer,
@@ -51,6 +52,7 @@ const reducer = combineReducers({
   userProfileUpdate: userProfileUpdateReducer,
   commentLike: commentLikeReducer,
   commentUnlike: commentUnlikeReducer,
+  postDelete: postDeleteReducer,
 });
 const composeEnhancer = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 

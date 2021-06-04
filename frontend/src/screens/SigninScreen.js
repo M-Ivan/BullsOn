@@ -114,7 +114,7 @@ export default withRouter(function SigninScreen(props) {
               Primera vez en el sitio?{" "}
               <Link to={`/register?redirect=${redirect}`}>
                 {" "}
-                *Únete a InvestIn
+                *Únete a BullsOn
               </Link>
             </div>
           </Grid>

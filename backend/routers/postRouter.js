@@ -71,14 +71,15 @@ postRouter.post(
   })
 );
 
-postRouter.post(
+postRouter.delete(
   "/:id",
+  isAuth,
   expressAsyncHandler(async (req, res) => {
     const post = await Post.findById(req.params.id);
-    if (post) {
-      post.likes + 1;
 
-      res.send(post);
+    if (req.user._id === post.profile) {
+      const deletePost = await post.remove();
+      res.send({ message: "Post borrado", product: deletePost });
     } else {
       res.status(404).send({ message: "Post no encontrado" });
     }
@@ -129,6 +130,7 @@ postRouter.post(
 // Hacer debug
 postRouter.put(
   "/:id/comments/:commentId/likes",
+  isAuth,
   expressAsyncHandler(async (req, res) => {
     const postId = req.params.id;
     const commentId = req.params.commentId;
@@ -154,6 +156,7 @@ postRouter.put(
 
 postRouter.put(
   "/:id/comments/:commentId/unlike",
+  isAuth,
   expressAsyncHandler(async (req, res) => {
     const postId = req.params.id;
     const commentId = req.params.commentId;

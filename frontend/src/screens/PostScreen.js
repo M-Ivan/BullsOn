@@ -9,6 +9,7 @@ import {
   repostPost,
   unlikePost,
   unrepostPost,
+  deletePost,
 } from "../actions/postActions";
 import MessageBox from "../components/MessageBox";
 import ReactLoading from "react-loading";
@@ -30,6 +31,8 @@ import {
   Divider,
   Hidden,
   Zoom,
+  Menu,
+  MenuItem,
 } from "@material-ui/core/index";
 import { red } from "@material-ui/core/colors";
 import ScreenShareOutlinedIcon from "@material-ui/icons/ScreenShareOutlined";
@@ -42,6 +45,11 @@ import RenderComments from "../components/RenderComments";
 import StarOutlineIcon from "@material-ui/icons/StarOutline";
 import ChatIcon from "@material-ui/icons/Chat";
 import NavLarge from "../components/NavLarge";
+import {
+  DeleteOutline,
+  MenuOpen,
+} from "../../node_modules/@material-ui/icons/index";
+import { booleanLiteral } from "../../../../../../.cache/typescript/4.2/node_modules/@babel/types/lib/index";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -103,6 +111,7 @@ export default function PostScreen(props) {
   const dispatch = useDispatch();
   const [commentForm, setCommentForm] = useState(false);
   const [comment, setComment] = useState("");
+  const [anchorEl, setAnchorEl] = useState(null);
   const postDetails = useSelector((state) => state.postDetails);
   const { loading, error, post } = postDetails;
   const commentAdd = useSelector((state) => state.commentAdd);
@@ -148,6 +157,22 @@ export default function PostScreen(props) {
       props.history.push("/signin");
       setCommentForm(false);
     }
+  };
+
+  const handleClick = (e) => {
+    setAnchorEl(e.currentTarget);
+  };
+
+  const handleCloseMenu = () => {
+    setAnchorEl(null);
+  };
+
+  const deleteHandler = () => {
+    if (userInfo.username === post.profile._id) {
+      dispatch(deletePost(postId));
+      props.history.push("/");
+    }
+    setAnchorEl(null);
   };
 
   //TODO: Handler para redirect a signIn si no hay userInfo
@@ -213,9 +238,29 @@ export default function PostScreen(props) {
                         </Link>
                       }
                       action={
-                        <IconButton aria-label="settings">
-                          <MoreVertIcon />
-                        </IconButton>
+                        <Grid container justify="flex-end">
+                          <IconButton
+                            className={classes.navlink}
+                            aria-label="settings"
+                            onClick={handleClick}
+                            aria-controls="simple-menu"
+                            aria-haspopup="true"
+                          >
+                            <MoreVertIcon />{" "}
+                          </IconButton>
+                          <Menu
+                            id="simple-menu"
+                            anchorEl={anchorEl}
+                            keepMounted
+                            open={Boolean(anchorEl)}
+                            onClose={handleCloseMenu}
+                          >
+                            <MenuItem onClick={deleteHandler}>
+                              <DeleteOutline />
+                              Borrar post
+                            </MenuItem>
+                          </Menu>
+                        </Grid>
                       }
                       title={
                         <div>
