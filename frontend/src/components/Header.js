@@ -6,10 +6,10 @@ import {
   IconButton,
   makeStyles,
   Toolbar,
+  createMuiTheme,
+  Switch,
   Typography,
-  Box,
 } from "@material-ui/core";
-import SearchIcon from "@material-ui/icons/Search";
 import { Link } from "react-router-dom";
 import MenuIcon from "@material-ui/icons/Menu";
 import { useDispatch, useSelector } from "react-redux";
@@ -23,27 +23,24 @@ import List from "@material-ui/core/List";
 import Divider from "@material-ui/core/Divider";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
-import ListItemText from "@material-ui/core/ListItemText";
 import HomeOutlinedIcon from "@material-ui/icons/HomeOutlined";
 import ExitToAppOutlinedIcon from "@material-ui/icons/ExitToAppOutlined";
 import AccountCircleRoundedIcon from "@material-ui/icons/AccountCircleRounded";
 import { orange, green, red } from "@material-ui/core/colors";
 import SearchBox from "./SearchBox";
 import TrendingUpIcon from "@material-ui/icons/TrendingUp";
-import BusinessCenterIcon from "@material-ui/icons/BusinessCenter";
+import Brightness3Icon from "@material-ui/icons/Brightness3";
 
-const drawerWidth = 240;
+const drawerWidth = 250;
 
 const useStyles = makeStyles((theme) => ({
   root: {
     alignItems: "center",
   },
   appbar: {
-    top: "0%",
-
-    left: "0%",
     color: "#1b1b1b",
     backgroundColor: "#ffd700",
+    borderBottom: "3px solid #ef6c00",
   },
   brand: {
     fontSize: "1.8rem",
@@ -85,18 +82,15 @@ const useStyles = makeStyles((theme) => ({
       backgroundColor: "#68686823",
     },
   },
-  list: {
-    width: 250,
-  },
-  fullList: {
-    width: "auto",
+  drawerRoot: {
+    width: drawerWidth,
   },
   drawer: {
     width: drawerWidth,
     flexShrink: 0,
   },
-  drawerPaper: {
-    width: drawerWidth,
+  item: {
+    display: "flex",
   },
   drawerHeader: {
     display: "flex",
@@ -104,7 +98,7 @@ const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(0, 1),
     // necessary for content to be below app bar
     ...theme.mixins.toolbar,
-    justifyContent: "flex-end",
+    justifyContent: "center",
   },
   content: {
     flexGrow: 1,
@@ -125,6 +119,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function Header(props) {
+  const { darkModeCallback, darkMode } = props;
   const classes = useStyles();
 
   const [userAnchorEl, setUserAnchorEl] = useState(false);
@@ -145,56 +140,89 @@ export default function Header(props) {
   };
 
   const listMenu = () => (
-    <div>
+    <div className={classes.drawerRoot}>
       <div className={classes.drawerHeader}>
         <Link className={classes.brand} to="/">
-          <i class="fa fa-bitcoin" style={{ color: orange[800] }}></i>
-          ulls<span style={{ color: green[600] }}>O</span>
-          <span style={{ color: green[600] }}>n</span>
-          <TrendingUpIcon />{" "}
+          <Typography color="textPrimary" variant="h4">
+            <strong>
+              <i class="fa fa-bitcoin" style={{ color: orange[800] }}></i>ulls
+              <span style={{ color: green[600] }}>O</span>
+              <span style={{ color: green[600] }}>n</span>
+            </strong>
+          </Typography>
         </Link>
+        <Switch checked={darkMode} onChange={darkModeCallback} />{" "}
+        <Brightness3Icon />
       </div>
       <Divider />
       <List>
         <Link to="/">
-          <ListItem button>
-            <ListItemIcon>
-              <HomeOutlinedIcon style={{ color: orange[700] }} />
-            </ListItemIcon>
-            <ListItemText style={{ color: orange[800] }} primary="Inicio" />
+          <ListItem button divider className={classes.item}>
+            <Grid
+              item
+              xs={5}
+              style={{ display: "flex", justifyContent: "flex-end" }}
+            >
+              <ListItemIcon>
+                <HomeOutlinedIcon style={{ color: orange[700] }} />
+              </ListItemIcon>{" "}
+            </Grid>
+            <Typography color="textPrimary"> Inicio</Typography>
+            {
+              //         <ListItemText style={{ color: orange[800] }} primary="Inicio" />
+            }{" "}
           </ListItem>
         </Link>
 
         {userInfo ? (
           <>
             <Link to={`/${userInfo.username}`}>
-              <ListItem button>
-                <ListItemIcon>
-                  <AccountCircleRoundedIcon style={{ color: orange[700] }} />
-                </ListItemIcon>
-                <ListItemText
-                  style={{ color: orange[800] }}
-                  primary={userInfo.username}
-                />
+              <ListItem button divider className={classes.item}>
+                <Grid
+                  item
+                  xs={5}
+                  style={{ display: "flex", justifyContent: "flex-end" }}
+                >
+                  <ListItemIcon>
+                    <AccountCircleRoundedIcon style={{ color: orange[700] }} />
+                  </ListItemIcon>
+                </Grid>
+
+                <Typography color="textPrimary">{userInfo.username}</Typography>
               </ListItem>
             </Link>
-            <ListItem button onClick={signoutHandler}>
-              <ExitToAppOutlinedIcon style={{ color: red[500] }} />
-              <ListItemText className="menu-margin" style={{ color: red[500] }}>
-                Cerrar sesión
-              </ListItemText>
+            <ListItem
+              button
+              onClick={signoutHandler}
+              divider
+              className={classes.item}
+            >
+              <Grid
+                item
+                xs={5}
+                style={{ display: "flex", justifyContent: "flex-end" }}
+              >
+                <ListItemIcon>
+                  <ExitToAppOutlinedIcon style={{ color: red[500] }} />
+                </ListItemIcon>{" "}
+              </Grid>{" "}
+              <Typography color="textPrimary">Cerrar sesión</Typography>
             </ListItem>
           </>
         ) : (
           <Link to="/signin">
-            <ListItem button>
-              <ExitToAppOutlinedIcon style={{ color: green[700] }} />
-              <ListItemText
-                className="menu-margin"
-                style={{ color: green[700] }}
+            <ListItem button divider className={classes.item}>
+              <Grid
+                item
+                xs={5}
+                style={{ display: "flex", justifyContent: "flex-end" }}
               >
-                Iniciar Sesión
-              </ListItemText>
+                {" "}
+                <ListItemIcon>
+                  <ExitToAppOutlinedIcon style={{ color: green[700] }} />
+                </ListItemIcon>{" "}
+              </Grid>{" "}
+              <Typography color="textPrimary">Iniciar sesión</Typography>
             </ListItem>
           </Link>
         )}
@@ -204,7 +232,7 @@ export default function Header(props) {
 
   return (
     <Grid container className={classes.root}>
-      <AppBar color="transparent" elevation={1} className={classes.appbar}>
+      <AppBar color="transparent" elevation={0} className={classes.appbar}>
         <Toolbar>
           <Grid container alignItems="center" justify="flex-start">
             <Grid item xs={12} lg={3} md={3}>
@@ -218,6 +246,7 @@ export default function Header(props) {
                   <MenuIcon />
                   <SwipeableDrawer
                     className={classes.drawer}
+                    style={{ backgroundColor: "#fff" }}
                     open={menuOpen}
                     onClose={() => setMenuOpen(false)}
                     onOpen={() => setMenuOpen(true)}
@@ -236,23 +265,53 @@ export default function Header(props) {
 
             <Grid item lg={6} xs={12}>
               <Hidden mdDown>
-                <SearchBox />
+                <SearchBox />{" "}
               </Hidden>
             </Grid>
             <Hidden mdDown>
               <Grid item xs={3}>
-                <Grid container alignItems="center" justify="flex-end">
-                  <a href="https://m-ivan.github.io">
-                    <Button classes={{ root: classes.navlink }}>
-                      <Typography variant="button" display="block">
-                        <Grid container alignItems="center">
-                          <BusinessCenterIcon />
-                          Ir a mi portafolio{" "}
-                        </Grid>
-                      </Typography>
+                {userInfo ? (
+                  <Grid container justify="flex-end">
+                    <Button
+                      classes={{ root: classes.navlink }}
+                      aria-controls="simple-menu"
+                      aria-haspopup="true"
+                      onClick={handleUserMenu}
+                    >
+                      <i className="fa fa-user-circle"></i>
+                      {userInfo.username}
                     </Button>
-                  </a>
-                </Grid>
+
+                    <Menu
+                      id="simple-menu"
+                      anchorEl={userAnchorEl}
+                      keepMounted
+                      open={userAnchorEl}
+                      onClose={handleUserMenuClose}
+                    >
+                      <MenuItem onClick={handleUserMenuClose}>
+                        <Link to={`/${userInfo.username}`}>
+                          {" "}
+                          <Typography color="textPrimary">Mi perfil</Typography>
+                        </Link>
+                      </MenuItem>
+                      <MenuItem onClick={darkModeCallback}>
+                        {" "}
+                        <Switch checked={darkMode} /> <Brightness3Icon />
+                      </MenuItem>
+
+                      <MenuItem onClick={signoutHandler}>
+                        Cerrar sesión
+                      </MenuItem>
+                    </Menu>
+                  </Grid>
+                ) : (
+                  <Grid container justify="flex-end">
+                    <div className="navlink">
+                      <Link to="/signin">Iniciar Sesión</Link>
+                    </div>
+                  </Grid>
+                )}
               </Grid>
             </Hidden>
           </Grid>
@@ -261,46 +320,6 @@ export default function Header(props) {
         <Hidden lgUp>
           <Toolbar>
             <SearchBox />
-          </Toolbar>
-        </Hidden>
-
-        <Hidden mdDown>
-          <Toolbar>
-            {userInfo ? (
-              <Grid container justify="flex-end">
-                <Button
-                  classes={{ root: classes.navlink }}
-                  aria-controls="simple-menu"
-                  aria-haspopup="true"
-                  onClick={handleUserMenu}
-                >
-                  <i className="fa fa-user-circle"></i>
-                  {userInfo.username}
-                </Button>
-
-                <Menu
-                  id="simple-menu"
-                  anchorEl={userAnchorEl}
-                  keepMounted
-                  open={userAnchorEl}
-                  onClose={handleUserMenuClose}
-                >
-                  <MenuItem onClick={handleUserMenuClose}>
-                    <Link to={`/${userInfo.username}`}>Mi perfil</Link>
-                  </MenuItem>
-                  <MenuItem onClick={handleUserMenuClose}>
-                    <Link to={`/${userInfo.username}/settings`}>
-                      Configuración
-                    </Link>
-                  </MenuItem>
-                  <MenuItem onClick={signoutHandler}>Cerrar sesión</MenuItem>
-                </Menu>
-              </Grid>
-            ) : (
-              <div className="navlink">
-                <Link to="/signin">Iniciar Sesión</Link>
-              </div>
-            )}
           </Toolbar>
         </Hidden>
       </AppBar>

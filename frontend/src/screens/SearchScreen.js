@@ -36,11 +36,10 @@ const useStyles = makeStyles((theme) => ({
     padding: "1rem",
   },
   tabs: {
-    backgroundColor: "#ffffff",
     borderbottom: "1px solid #e0e0e0",
   },
   divider: {
-    backgroundColor: "#e0e0e0",
+    backgroundColor: "#cccccc",
     padding: "0.5rem",
   },
 }));
@@ -104,19 +103,8 @@ export default withRouter(function SearchScreen(props) {
     dispatch(listUsers({ user: query }));
   }, [query, successFollow, successUnfollow]);
 
-  const getFilterUrl = (filter) => {
-    const filterQuery = filter.query || query;
-    const filterProfile = filter.profile || profile;
-    return `/search/?query=${filterQuery}&profile=${filterProfile}`;
-  };
-  // console.log("props", props);
-  console.log("posts", posts);
-  console.log("users", users);
-
   const handleChange = (event, newValue) => {
     setShowing(newValue);
-    // newValue:
-    // 0 = Destacados, 1 = Mas recientes, 2 = Usuarios
   };
   const profileFilterHandler = (e) => {
     if (profile) {
@@ -151,7 +139,13 @@ export default withRouter(function SearchScreen(props) {
         </Grid>
         <NavLarge />
         <Grid item xs={12} md={6}>
-          <AppBar position="static" className={classes.tabs}>
+          <AppBar
+            position="static"
+            color="default"
+            style={{ borderbottom: "1px solid #e0e0e0" }}
+            className={classes.tabs}
+            elevation={1}
+          >
             <Tabs
               //TODO: Render condicional de users y posts
               value={showing}
@@ -164,9 +158,9 @@ export default withRouter(function SearchScreen(props) {
               <Tab label="Usuarios" {...a11yProps(1)} />
             </Tabs>
           </AppBar>
-
-          <Grid className={classes.divider}></Grid>
-          <Divider />
+          <div className="feed-separation">
+            <br />
+          </div>
 
           {loading ? (
             <ReactLoading color="#2d91f0" type="bars" />

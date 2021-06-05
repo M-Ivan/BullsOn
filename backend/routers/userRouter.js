@@ -35,7 +35,6 @@ userRouter.get(
             },
           }
         : {};
-      console.log("userDentro", user);
       const users = await User.find({
         ...lastnameFilter,
       });
@@ -49,7 +48,6 @@ userRouter.get(
             },
           }
         : {};
-      console.log("userDentro", user);
       const users = await User.find({
         ...nameFilter,
       });
@@ -112,7 +110,6 @@ userRouter.get(
     const user = await User.findById(req.params.username);
     if (user) {
       res.send(user);
-      console.log(user);
     } else {
       res.status(404).send({ message: "Usuario no encontrado" });
     }
@@ -175,9 +172,7 @@ userRouter.put(
       user.followers.push(req.user._id);
       followerUser.following.push(userId);
       const updatedUser = await user.save();
-      const updatedFollower = await followerUser.save();
-      console.log("followbase", updatedUser);
-      console.log("follower", updatedFollower);
+      await followerUser.save();
       res.status(201).send({
         message: `Siguiendo a ${updatedUser.username}`,
       });
@@ -200,12 +195,10 @@ userRouter.put(
       user.followers.pull(req.user._id);
       unfollowerUser.following.pull(userId);
       const updatedUser = await user.save();
-      const updatedUnfollower = await unfollowerUser.save();
+      await unfollowerUser.save();
       res.status(201).send({
         message: `Ya no estas siguiendo a ${updatedUser.username}`,
       });
-      console.log("unfollowBase", updatedUser);
-      console.log("unfollower", updatedUnfollower);
     } else {
       res.status(404).send({
         message: "User no encontrado",

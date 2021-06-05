@@ -97,7 +97,6 @@ export const updateProfile = (user) => async (dispatch, getState) => {
     });
     dispatch({ type: USER_PROFILE_UPDATE_SUCCESS, payload: data });
     dispatch({ type: USER_SIGNIN_SUCCESS, payload: data });
-    console.log("dataActionUpdateProf", data);
     localStorage.setItem("userInfo", JSON.stringify(data));
   } catch (error) {
     dispatch({
@@ -152,7 +151,6 @@ export const followUser = (userId) => async (dispatch, getState) => {
       type: USER_FOLLOW_SUCCESS,
       payload: data,
     });
-    console.log("data", data);
   } catch (error) {
     const message =
       error.response && error.response.data.message
@@ -179,7 +177,6 @@ export const unfollowUser = (userId) => async (dispatch, getState) => {
       type: USER_UNFOLLOW_SUCCESS,
       payload: data,
     });
-    console.log("data", data);
   } catch (error) {
     const message =
       error.response && error.response.data.message

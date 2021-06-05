@@ -76,10 +76,9 @@ postRouter.delete(
   isAuth,
   expressAsyncHandler(async (req, res) => {
     const post = await Post.findById(req.params.id);
-
     if (req.user._id === post.profile) {
       const deletePost = await post.remove();
-      res.send({ message: "Post borrado", product: deletePost });
+      res.send({ message: "Post borrado", post: deletePost });
     } else {
       res.status(404).send({ message: "Post no encontrado" });
     }
@@ -114,7 +113,7 @@ postRouter.post(
       };
       post.comments.push(comment);
 
-      const updatedPost = await post.save();
+      await post.save();
       res.status(201).send({
         message: "Comentario publicado",
         comment: updatedPost.comments[updatedPost.comments.length - 1],
@@ -141,11 +140,10 @@ postRouter.put(
 
     if (comment) {
       comment.likes.push(req.body.username);
-      const updatedPost = await post.save();
+      await post.save();
       res.status(201).send({
         message: "Like publicado",
       });
-      console.log("updatedPost", updatedPost);
     } else {
       res.status(404).send({
         message: "Comentario no encontrado",
@@ -167,11 +165,10 @@ postRouter.put(
 
     if (comment) {
       comment.likes.pull(req.body.username);
-      const updatedPost = await post.save();
+      await post.save();
       res.status(201).send({
         message: "Like removido",
       });
-      console.log("updatedPost", updatedPost);
     } else {
       res.status(404).send({
         message: "Comentario no encontrado",
@@ -188,7 +185,7 @@ postRouter.put(
     const post = await Post.findByIdAndUpdate(postId);
     if (post) {
       post.likes.push(req.body.username);
-      const updatedPost = await post.save();
+      await post.save();
       res.status(201).send({
         message: "Like publicado",
       });
@@ -208,7 +205,7 @@ postRouter.put(
     const post = await Post.findByIdAndUpdate(postId);
     if (post) {
       post.likes.pull(req.body.username);
-      const updatedPost = await post.save();
+      await post.save();
       res.status(201).send({
         message: "Like removido",
       });
@@ -228,7 +225,7 @@ postRouter.put(
     const post = await Post.findByIdAndUpdate(postId);
     if (post) {
       post.repost.push(req.body.username);
-      const updatedPost = await post.save();
+      await post.save();
       res.status(201).send({
         message: "Reposteado",
       });
@@ -248,7 +245,7 @@ postRouter.put(
     const post = await Post.findByIdAndUpdate(postId);
     if (post) {
       post.repost.pull(req.body.username);
-      const updatedPost = await post.save();
+      await post.save();
       res.status(201).send({
         message: "Repost deshecho",
       });

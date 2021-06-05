@@ -45,11 +45,7 @@ import RenderComments from "../components/RenderComments";
 import StarOutlineIcon from "@material-ui/icons/StarOutline";
 import ChatIcon from "@material-ui/icons/Chat";
 import NavLarge from "../components/NavLarge";
-import {
-  DeleteOutline,
-  MenuOpen,
-} from "../../node_modules/@material-ui/icons/index";
-import { booleanLiteral } from "../../../../../../.cache/typescript/4.2/node_modules/@babel/types/lib/index";
+import { DeleteOutline } from "@material-ui/icons/index";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -80,26 +76,30 @@ const useStyles = makeStyles((theme) => ({
       color: "#006eff",
     },
   },
-  activeComment: {
-    color: "#006eff",
-  },
-  activeRepost: {
-    color: "#00bb1b",
-  },
-  likeIcon: {
-    "&:hover": {
-      color: "#ffc900",
-    },
-  },
-  repostIcon: {
+  repostBtn: {
     "&:hover": {
       color: "#00bb1b",
     },
   },
-  likedIcon: {
+  likeBtn: {
+    "&:hover": {
+      color: "#ffc900",
+    },
+  },
+  activeComment: {
+    border: 0,
+    color: "#006eff",
+    "&:hover": {
+      color: "#fff",
+      backgroundColor: "#006eff",
+    },
+  },
+  activeRepost: {
+    color: "#00bb1b",
+  },
+  activeLike: {
     color: "#ffc900",
   },
-
   commentForm: {
     padding: "1rem",
   },
@@ -204,7 +204,6 @@ export default function PostScreen(props) {
       props.history.push("/signin");
     }
   };
-  console.log("userList", userList);
   return (
     <Container maxWidth="lg" fixed>
       <Grid container className={classes.root}>
@@ -238,7 +237,7 @@ export default function PostScreen(props) {
                         </Link>
                       }
                       action={
-                        <Grid container justify="flex-end">
+                        <Box>
                           <IconButton
                             className={classes.navlink}
                             aria-label="settings"
@@ -251,6 +250,14 @@ export default function PostScreen(props) {
                           <Menu
                             id="simple-menu"
                             anchorEl={anchorEl}
+                            anchorOrigin={{
+                              vertical: "bottom",
+                              horizontal: "center",
+                            }}
+                            transformOrigin={{
+                              vertical: "top",
+                              horizontal: "center",
+                            }}
                             keepMounted
                             open={Boolean(anchorEl)}
                             onClose={handleCloseMenu}
@@ -260,7 +267,7 @@ export default function PostScreen(props) {
                               Borrar post
                             </MenuItem>
                           </Menu>
-                        </Grid>
+                        </Box>
                       }
                       title={
                         <div>
@@ -320,14 +327,20 @@ export default function PostScreen(props) {
                       {post &&
                       userInfo &&
                       !post.repost.includes(userInfo.username) ? (
-                        <IconButton onClick={repostHandler}>
+                        <IconButton
+                          onClick={repostHandler}
+                          className={classes.repostBtn}
+                        >
                           <RepeatIcon />
                           {post.repost.length}
                         </IconButton>
                       ) : post &&
                         userInfo &&
                         post.repost.includes(userInfo.username) ? (
-                        <IconButton onClick={unrepostHandler}>
+                        <IconButton
+                          onClick={unrepostHandler}
+                          className={classes.repostBtn}
+                        >
                           <RepeatIcon className={classes.activeRepost} />
                           {post.repost.length}
                         </IconButton>
@@ -344,7 +357,7 @@ export default function PostScreen(props) {
                         <IconButton
                           onClick={likeHandler}
                           aria-label="indicar me gusta"
-                          className={classes.likeIcon}
+                          className={classes.likeBtn}
                         >
                           <Grid container alignItems="center">
                             <StarOutlineIcon />
@@ -357,13 +370,10 @@ export default function PostScreen(props) {
                         <IconButton
                           onClick={unlikeHandler}
                           aria-label="ya no me gusta"
+                          className={classes.likeBtn}
                         >
-                          <Grid
-                            container
-                            alignItems="center"
-                            className={classes.likeIcon}
-                          >
-                            <StarIcon className={classes.likedIcon} />
+                          <Grid container alignItems="center">
+                            <StarIcon className={classes.activeLike} />
                             {post.likes.length}{" "}
                           </Grid>
                         </IconButton>
@@ -430,11 +440,6 @@ export default function PostScreen(props) {
           </Grid>
         )}
       </Grid>
-      {
-        // console.log("props", props)}
-        // {console.log("postId", postId)}
-        // {console.log("commentAdd", commentAdd)} {console.log("comment", comment)}
-      }
     </Container>
   );
 }

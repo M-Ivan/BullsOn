@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import {
   Button,
@@ -20,7 +20,7 @@ import {
   USER_FOLLOW_RESET,
   USER_UNFOLLOW_RESET,
 } from "../constants/userConstants";
-import { Link, withRouter } from "react-router-dom";
+import { Link } from "react-router-dom";
 import MessageBox from "../components/MessageBox";
 import ReactLoading from "react-loading";
 
@@ -93,8 +93,6 @@ export default function RenderUsers(props) {
     }
     dispatch(detailsUser(user._id));
   }, [dispatch, successFollow, user._id, successUnfollow]);
-
-  console.log("user", user);
 
   return (
     <Grid>

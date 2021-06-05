@@ -68,7 +68,6 @@ export const detailsPost = (postId) => async (dispatch) => {
   try {
     const { data } = await Axios.get(`/api/posts/${postId}`);
     dispatch({ type: POST_DETAILS_SUCCESS, payload: data });
-    console.log(data);
   } catch (error) {
     dispatch({
       type: POST_DETAILS_FAIL,
@@ -93,7 +92,6 @@ export const createPost = (post, image) => async (dispatch, getState) => {
         headers: { Authorization: `Bearer ${userInfo.token}` },
       }
     );
-    console.log(data);
     dispatch({
       type: POST_CREATE_SUCCESS,
       payload: data.post,
@@ -152,7 +150,6 @@ export const likePost = (postId) => async (dispatch, getState) => {
       type: POST_LIKE_ADD_SUCCESS,
       payload: data,
     });
-    console.log("data", data);
   } catch (error) {
     const message =
       error.response && error.response.data.message
@@ -179,7 +176,6 @@ export const unlikePost = (postId) => async (dispatch, getState) => {
       type: POST_UNLIKE_ADD_SUCCESS,
       payload: data,
     });
-    console.log("data", data);
   } catch (error) {
     const message =
       error.response && error.response.data.message
@@ -206,7 +202,6 @@ export const repostPost = (postId) => async (dispatch, getState) => {
       type: POST_REPOST_ADD_SUCCESS,
       payload: data,
     });
-    console.log("data", data);
   } catch (error) {
     const message =
       error.response && error.response.data.message
@@ -233,7 +228,6 @@ export const unrepostPost = (postId) => async (dispatch, getState) => {
       type: POST_UNREPOST_ADD_SUCCESS,
       payload: data,
     });
-    console.log("data", data);
   } catch (error) {
     const message =
       error.response && error.response.data.message

@@ -13,7 +13,8 @@ import {
   Avatar,
   IconButton,
   Typography,
-  Divider,
+  MenuItem,
+  Menu,
 } from "@material-ui/core";
 import { red } from "@material-ui/core/colors";
 import ScreenShareOutlinedIcon from "@material-ui/icons/ScreenShareOutlined";
@@ -24,6 +25,7 @@ import RepeatIcon from "@material-ui/icons/Repeat";
 import StarIcon from "@material-ui/icons/Star";
 import {
   addComment,
+  deletePost,
   likePost,
   repostPost,
   unlikePost,
@@ -32,6 +34,7 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import StarOutlineIcon from "@material-ui/icons/StarOutline";
 import ChatIcon from "@material-ui/icons/Chat";
+import { DeleteOutline } from "@material-ui/icons";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -63,26 +66,30 @@ const useStyles = makeStyles((theme) => ({
       color: "#006eff",
     },
   },
-  activeComment: {
-    color: "#006eff",
-  },
-  activeRepost: {
-    color: "#00bb1b",
-  },
-  likeIcon: {
-    "&:hover": {
-      color: "#ffc900",
-    },
-  },
-  repostIcon: {
+  repostBtn: {
     "&:hover": {
       color: "#00bb1b",
     },
   },
-  likedIcon: {
+  likeBtn: {
+    "&:hover": {
+      color: "#ffc900",
+    },
+  },
+  activeComment: {
+    border: 0,
+    color: "#006eff",
+    "&:hover": {
+      color: "#fff",
+      backgroundColor: "#006eff",
+    },
+  },
+  activeRepost: {
+    color: "#00bb1b",
+  },
+  activeLike: {
     color: "#ffc900",
   },
-
   commentForm: {
     padding: "1rem",
   },
@@ -93,6 +100,7 @@ export default withRouter(function RenderPost(props) {
   const { post } = props;
   const { profile } = post.profile;
   const [commentForm, setCommentForm] = useState(false);
+  const [anchorEl, setAnchorEl] = useState(null);
   const [comment, setComment] = useState("");
   const userSignin = useSelector((state) => state.userSignin);
   const { userInfo } = userSignin;
@@ -110,7 +118,22 @@ export default withRouter(function RenderPost(props) {
     }
   };
 
-  //TODO: Handler para redirect a signIn si no hay userInfo
+  const handleClick = (e) => {
+    setAnchorEl(e.currentTarget);
+  };
+
+  const handleCloseMenu = () => {
+    setAnchorEl(null);
+  };
+
+  const deleteHandler = () => {
+    if (userInfo.username === post.profile._id) {
+      dispatch(deletePost(postId));
+      props.history.push("/");
+    }
+    setAnchorEl(null);
+  };
+
   const likeHandler = () => {
     if (userInfo) {
       dispatch(likePost(postId));
@@ -154,9 +177,37 @@ export default withRouter(function RenderPost(props) {
           </Link>
         }
         action={
-          <IconButton aria-label="settings">
-            <MoreVertIcon />
-          </IconButton>
+          <Box>
+            <IconButton
+              className={classes.navlink}
+              aria-label="settings"
+              onClick={handleClick}
+              aria-controls="simple-menu"
+              aria-haspopup="true"
+            >
+              <MoreVertIcon />{" "}
+            </IconButton>
+            <Menu
+              id="simple-menu"
+              anchorEl={anchorEl}
+              anchorOrigin={{
+                vertical: "bottom",
+                horizontal: "center",
+              }}
+              transformOrigin={{
+                vertical: "top",
+                horizontal: "center",
+              }}
+              keepMounted
+              open={Boolean(anchorEl)}
+              onClose={handleCloseMenu}
+            >
+              <MenuItem onClick={deleteHandler}>
+                <DeleteOutline />
+                Borrar post
+              </MenuItem>
+            </Menu>
+          </Box>
         }
         title={
           <Link to={`/${profile.username}`}>
@@ -177,13 +228,6 @@ export default withRouter(function RenderPost(props) {
           post.createdAt.substring(11, 16)
         }
       />
-      {
-        // TODO: Revisar por que solo devuelve el ID Del autor
-        // Pero no otras caracteristicas.
-      }
-      {
-        //console.log("props", props)
-      }
       <Link to={`/${profile.username}/post/${post._id}`}>
         {post.image ? (
           <CardMedia className={classes.media} image={post.image} />
@@ -215,24 +259,23 @@ export default withRouter(function RenderPost(props) {
         )}
 
         {post && userInfo && !post.repost.includes(userInfo.username) ? (
-          <IconButton onClick={repostHandler}>
+          <IconButton onClick={repostHandler} className={classes.repostBtn}>
             <RepeatIcon />
-            {post.repost.length}
-          </IconButton>
-        ) : post && userInfo && post.repost.includes(userInfo.username) ? (
-          <IconButton onClick={unrepostHandler}>
-            <RepeatIcon className={classes.activeRepost} />
             {post.repost.length}
           </IconButton>
         ) : (
-          <IconButton onClick={repostHandler}>
-            <RepeatIcon />
-            {post.repost.length}
-          </IconButton>
+          post &&
+          userInfo &&
+          post.repost.includes(userInfo.username) && (
+            <IconButton onClick={unrepostHandler} className={classes.repostBtn}>
+              <RepeatIcon className={classes.activeRepost} />
+              {post.repost.length}
+            </IconButton>
+          )
         )}
         {post && userInfo && !post.likes.includes(userInfo.username) ? (
           <IconButton
-            className={classes.likeIcon}
+            className={classes.likeBtn}
             onClick={likeHandler}
             aria-label="indicar me gusta"
           >
@@ -241,20 +284,17 @@ export default withRouter(function RenderPost(props) {
               {post.likes.length}{" "}
             </Grid>
           </IconButton>
-        ) : post && userInfo && post.likes.includes(userInfo.username) ? (
-          <IconButton onClick={unlikeHandler} aria-label="ya no me gusta">
-            <Grid container alignItems="center" className={classes.likeIcon}>
-              <StarIcon className={classes.likedIcon} />
-              {post.likes.length}{" "}
-            </Grid>
-          </IconButton>
         ) : (
-          <IconButton onClick={likeHandler}>
-            <Grid container alignItems="center" className={classes.likeIcon}>
-              <StarIcon />
-              {post.likes.length}{" "}
-            </Grid>
-          </IconButton>
+          post &&
+          userInfo &&
+          post.likes.includes(userInfo.username) && (
+            <IconButton onClick={unlikeHandler} aria-label="ya no me gusta">
+              <Grid container alignItems="center" className={classes.likeBtn}>
+                <StarIcon className={classes.activeLike} />
+                {post.likes.length}{" "}
+              </Grid>
+            </IconButton>
+          )
         )}
         <IconButton aria-label="share">
           <ScreenShareOutlinedIcon />
@@ -285,9 +325,6 @@ export default withRouter(function RenderPost(props) {
           </Grid>{" "}
         </Box>
       ) : null}
-      {
-        // console.log("post", post)
-      }
     </Card>
   );
 });

@@ -68,7 +68,6 @@ export default withRouter(function RegisterScreen(props) {
       props.history.push(redirect);
     }
   }, [props.history, redirect, userInfo]);
-  console.log("redir", redirect);
 
   return (
     <div>
@@ -87,7 +86,6 @@ export default withRouter(function RegisterScreen(props) {
               onChange={(e) => setUserame(e.target.value)}
             ></TextField>
           </div>
-          {console.log("username", username)}
           <div className="form-control">
             <TextField
               id="name"
@@ -98,7 +96,6 @@ export default withRouter(function RegisterScreen(props) {
               onChange={(e) => setName(e.target.value)}
             ></TextField>
           </div>
-          {console.log("name", name)}
           <div className="form-control">
             <TextField
               id="lastname"
@@ -109,7 +106,6 @@ export default withRouter(function RegisterScreen(props) {
               onChange={(e) => setLastname(e.target.value)}
             ></TextField>
           </div>
-          {console.log("lastname", lastname)}{" "}
           <div className="form-control">
             <TextField
               id="description"
@@ -120,7 +116,6 @@ export default withRouter(function RegisterScreen(props) {
               onChange={(e) => setDescription(e.target.value)}
             ></TextField>
           </div>
-          {console.log("description", description)}
           <div className="form-control">
             <TextField
               id="email"
@@ -131,7 +126,6 @@ export default withRouter(function RegisterScreen(props) {
               onChange={(e) => setEmail(e.target.value)}
             ></TextField>
           </div>
-          {console.log("email", email)}
           <div className="form-control">
             <TextField
               type="password"
@@ -143,7 +137,6 @@ export default withRouter(function RegisterScreen(props) {
               onChange={(e) => setPassword(e.target.value)}
             ></TextField>
           </div>
-          {console.log("password", password)}
           <div className="form-control">
             <TextField
               type="password"
@@ -155,7 +148,6 @@ export default withRouter(function RegisterScreen(props) {
               onChange={(e) => setConfirmPassword(e.target.value)}
             ></TextField>
           </div>
-          {console.log("confirm", confirmPassword)}
           <div className="form-group">
             {password !== confirmPassword ? (
               confirmPassword.length > 0 ? (

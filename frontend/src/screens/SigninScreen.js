@@ -13,6 +13,10 @@ import {
 } from "@material-ui/core/index";
 
 const useStyles = makeStyles({
+  root: {
+    alignSelf: "center",
+    width: "100%",
+  },
   btnRoundedOr: {
     background: "#ea6d0b",
     borderRadius: "3rem",
@@ -45,7 +49,6 @@ export default withRouter(function SigninScreen(props) {
     ? props.location.search.split("=")[1]
     : "/";
 
-  console.log("redir", redirect);
   const userSignin = useSelector((state) => state.userSignin);
   const { userInfo, loading, error } = userSignin;
 
@@ -60,7 +63,7 @@ export default withRouter(function SigninScreen(props) {
     }
   }, [props.history, redirect, userInfo]);
   return (
-    <div>
+    <div className={classes.root}>
       <Container maxWidth="sm" fixed>
         <form className="form" onSubmit={submitHandler}>
           <div>
@@ -92,7 +95,6 @@ export default withRouter(function SigninScreen(props) {
               fullWidth
               onChange={(e) => setPassword(e.target.value)}
             ></TextField>
-            {console.log("Password", password)}
           </div>
           <div className="form-control">
             <Grid item xs={12}>

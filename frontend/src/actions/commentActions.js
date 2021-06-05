@@ -26,7 +26,6 @@ export const likeComment =
         type: COMMENT_LIKE_SUCCESS,
         payload: data,
       });
-      console.log("data", data);
     } catch (error) {
       const message =
         error.response && error.response.data.message
@@ -54,7 +53,6 @@ export const unlikeComment =
         type: COMMENT_UNLIKE_SUCCESS,
         payload: data,
       });
-      console.log("data", data);
     } catch (error) {
       const message =
         error.response && error.response.data.message

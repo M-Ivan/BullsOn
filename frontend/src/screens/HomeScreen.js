@@ -52,6 +52,8 @@ export default function HomeScreen(props) {
   const { success: successRepost } = postRepost;
   const postUnrepost = useSelector((state) => state.postUnrepost);
   const { success: successUnrepost } = postUnrepost;
+  const postDelete = useSelector((state) => state.postDelete);
+  const { success: successDelete } = postDelete;
 
   useEffect(() => {
     if (!userInfo) {
@@ -66,7 +68,8 @@ export default function HomeScreen(props) {
       successRepost ||
       successLikeAdd ||
       successLikeRemove ||
-      successCommentAdd
+      successCommentAdd ||
+      successDelete
     ) {
       dispatch(listPosts({}));
     }
@@ -80,6 +83,7 @@ export default function HomeScreen(props) {
     successRepost,
     successLikeRemove,
     successCreate,
+    successDelete,
   ]);
 
   return (
@@ -97,11 +101,13 @@ export default function HomeScreen(props) {
             <Grid item xs={12} lg={6}>
               {userInfo && <PostCreateBox />}
               <Grid item xs={12}>
-                <div className="feed-separation">
+                <div
+                  className="feed-separation"
+                  style={{ marginTop: "0.5rem" }}
+                >
                   <br />
                 </div>
               </Grid>
-              <Divider />
               <Grid
                 container
                 direction="row"

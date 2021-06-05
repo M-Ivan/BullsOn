@@ -8,19 +8,31 @@ import {
   makeStyles,
   TextField,
   withStyles,
+  CardMedia,
+  IconButton,
 } from "@material-ui/core/index";
 import PostAddIcon from "@material-ui/icons/PostAdd";
 import ImageIcon from "@material-ui/icons/Image";
 import MessageBox from "../components/MessageBox";
 import ReactLoading from "react-loading";
 import { POST_CREATE_RESET } from "../constants/postConstants";
+import { DeleteOutline } from "../../node_modules/@material-ui/icons/index";
 
 const useStyles = makeStyles((theme) => ({
   root: {},
   imgBtn: {
-    border: "1px solid #00a6ff",
-    color: "#00a6ff",
-    margin: "0.5rem",
+    border: "1px solid #2978e1",
+    color: "#2978e1",
+    height: "100%",
+    marginLeft: "2vw",
+    "&:hover": {
+      background: "#2978e1",
+      color: "#fff",
+    },
+  },
+  delete: {
+    background: "#ffffff50",
+    color: "#bd0d0d",
   },
   button: {
     background: "#ea6d0b",
@@ -34,7 +46,17 @@ const useStyles = makeStyles((theme) => ({
       background: "#e16828",
     },
   },
+  preview: {
+    width: "100px",
+    height: "100%",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    boxShadow: "0 0 3px #1e1e1e",
+    borderRadius: "0.3em",
+  },
   buttonsBox: {
+    marginTop: "0.3rem",
     display: "flex",
     justifyContent: "flex-end",
     [theme.breakpoints.down("md")]: {
@@ -87,6 +109,8 @@ export default function PostCreateBox(props) {
 
   const [loadingUpload, setLoadingUpload] = useState(false);
   const [errorUpload, setErrorUpload] = useState("");
+  const [hover, setHover] = useState(false);
+
   const uploadFileHandler = async (e) => {
     const file = e.target.files[0];
     const bodyFormData = new FormData();
@@ -105,6 +129,10 @@ export default function PostCreateBox(props) {
       setErrorUpload(error.message);
       setLoadingUpload(false);
     }
+  };
+
+  const deleteUpload = () => {
+    setImage(null);
   };
 
   const submitHandler = (e) => {
@@ -131,11 +159,23 @@ export default function PostCreateBox(props) {
         </Grid>
         <Grid container justify="flex-end">
           <Grid item xs={12} lg={7} className={classes.buttonsBox}>
-            <Button
-              classes={{ root: classes.imgBtn }}
-              variant="outlined"
-              component="label"
-            >
+            {image && (
+              <CardMedia
+                component="div"
+                image={image}
+                className={classes.preview}
+                alt="preview"
+                onMouseEnter={() => setHover(!hover)}
+                onMouseLeave={() => setHover(!hover)}
+              >
+                {hover && (
+                  <IconButton className={classes.delete} onClick={deleteUpload}>
+                    <DeleteOutline />
+                  </IconButton>
+                )}
+              </CardMedia>
+            )}{" "}
+            <Button classes={{ root: classes.imgBtn }} component="label">
               {" "}
               <ImageIcon />
               <input type="file" hidden onChange={uploadFileHandler} />

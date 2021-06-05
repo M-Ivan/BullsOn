@@ -21,12 +21,12 @@ import RenderProfile from "../components/RenderProfile";
 import ProfileEdit from "../components/ProfileEdit";
 
 const useStyles = makeStyles((theme) => ({
-  root: {
+  root: { minHeight: "70vh", padding: "0 0 15vh 0" },
+  main: {
     maxWidth: "auto",
     "&:hover": {
       cursor: "normal",
     },
-
     borderLeft: "1px solid #e0e0e0",
     borderRight: "1px solid #e0e0e0",
     borderBottom: "1px solid #e0e0e0",
@@ -73,7 +73,6 @@ export default function ProfileScreen(props) {
   // utils
   const profileId = props.match.params.username;
   const postTotal = posts && reposts ? posts.concat(reposts) : null;
-  // console.log("postTotal", postTotal);
   useEffect(() => {
     if (
       successCommentAdd ||
@@ -130,19 +129,10 @@ export default function ProfileScreen(props) {
   };
 
   return (
-    <div>
-      {console.log("editMode", editMode)}
-      {
-        //   {console.log("reposts", reposts)}
-        //   {console.log("posts", posts)
-      }{" "}
-      {console.log("props", props)}
-      {
-        //console.log("userInfo", userInfo)
-      }
+    <div className={classes.root}>
       {user ? (
         <Container fixed maxWidth="lg">
-          <Grid container className={classes.root}>
+          <Grid container className={classes.main}>
             <Grid item xs={12} className={classes.title}>
               <Typography variant="h4" color="textPrimary">
                 {user.profile.name} {user.profile.lastname}

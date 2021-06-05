@@ -39,7 +39,6 @@ const useStyles = makeStyles((theme) => ({
     borderRadius: "3rem",
     color: "#fff",
     backgroundColor: "#ea6d0b",
-
     [theme.breakpoints.down("sm")]: { fontSize: "8pt" },
     "&:hover": {
       backgroundColor: "#e16828",
@@ -52,7 +51,12 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: red[500],
     width: "100px",
     height: "100px",
-    border: "5px solid #000000",
+    border: `2px solid 
+    ${
+      [theme.palette.background.paper][0] === "#fffef4" ? "#171717" : "#cccccc"
+      //=== ["#fffef4"] ? "#171717" : "#fffef4"
+    }`,
+    boxShadow: "0 0 5px #000",
     zIndex: "10",
   },
   nameSection: {},
@@ -67,8 +71,6 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function RenderProfile(props) {
-  console.log(props);
-
   const { user, userInfo, profileId } = props;
   const classes = useStyles();
 

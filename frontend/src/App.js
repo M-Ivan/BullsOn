@@ -7,47 +7,141 @@ import ProfileScreen from "./screens/ProfileScreen";
 import RegisterScreen from "./screens/RegisterScreen";
 import SearchScreen from "./screens/SearchScreen";
 import SigninScreen from "./screens/SigninScreen";
-import { withWidth } from "@material-ui/core";
+import {
+  Grid,
+  Typography,
+  Paper,
+  createMuiTheme,
+  ThemeProvider,
+} from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
+import { LaunchOutlined } from "../node_modules/@material-ui/icons/index";
+import { useState } from "react";
 
 const useStyles = makeStyles((theme) => ({
-  root: {
-    padding: "7rem 0",
+  root: {},
+  main: {
+    display: "flex",
+    justifyContent: "center",
+    minHeight: "69vh",
+    padding: "3.5rem 0 5vh 0",
+
+    [theme.breakpoints.down("md")]: {
+      padding: "7.5rem 0",
+    },
     [theme.breakpoints.down("xs")]: {
       padding: "6.5rem 0",
     },
     margin: 0,
     overflow: "hidden",
   },
+  footer: {
+    borderTop: "3px solid #e16828",
+    color: "#c1c1c1",
+    display: "grid",
+    background: "#1f1f1f",
+    width: "100%",
+    position: "relative",
+    height: "18vh",
+  },
+  text: {
+    fontSize: "20pt",
+    [theme.breakpoints.down("xs")]: {
+      fontSize: "10pt",
+    },
+  },
 }));
 
-function App(props) {
+function App() {
   const classes = useStyles();
+  const [darkMode, setDarkMode] = useState(false);
+
+  const theme = createMuiTheme({
+    palette: {
+      type: darkMode ? "dark" : "light",
+      background: darkMode
+        ? {
+            paper: "#171717",
+          }
+        : { paper: "#fffef4" },
+    },
+  });
+
+  const darkModeCallback = () => {
+    setDarkMode(!darkMode);
+  };
 
   return (
     <BrowserRouter>
-      <Route render={({ history }) => <Header history={history} />}></Route>
+      <ThemeProvider theme={theme}>
+        <Paper>
+          <Route
+            render={({ history }) => (
+              <Header
+                history={history}
+                darkModeCallback={darkModeCallback}
+                darkMode={darkMode}
+              />
+            )}
+          ></Route>
+          <main className={classes.main}>
+            <Route path="/" exact component={HomeScreen}></Route>
+            <Route path="/signin" component={SigninScreen}></Route>
+            <Route path="/register" component={RegisterScreen}></Route>
+            <Route path="/:username" exact component={ProfileScreen}></Route>
+            <Route path="/:username/post/:id" component={PostScreen}></Route>
 
-      <main className={classes.root}>
-        <Route path="/" exact component={HomeScreen}></Route>
-        <Route path="/signin" component={SigninScreen}></Route>
-        <Route path="/register" component={RegisterScreen}></Route>
-        <Route path="/:username" exact component={ProfileScreen}></Route>
-        <Route path="/:username/post/:id" component={PostScreen}></Route>
+            <Route exact path="/search" component={SearchScreen}></Route>
+            <Route path="/search/query/:query" component={SearchScreen}></Route>
+            {
+              //    <Route
+              //     path="/search/query/:query/profile/:profile"
+              //     component={SearchScreen}
+              //   ></Route>
+              // <Route
+              //    path="/search/query/:query/profile/:profile/order/:order"
+              //    component={SearchScreen}
+              //  ></Route>
+            }
+          </main>
+          <footer className={classes.footer}>
+            <Grid
+              item
+              xs={12}
+              style={{
+                display: "flex",
+                alignItems: "flex-end",
+                justifyContent: "center",
+              }}
+            >
+              <Typography variant="body1" className={classes.text}>
+                Iván Miragaya
+                <span style={{ color: "#e16828" }}>©2021</span>
+              </Typography>
+            </Grid>
+            <Grid
+              item
+              xs={12}
+              style={{
+                display: "flex",
 
-        <Route exact path="/search" component={SearchScreen}></Route>
-        <Route path="/search/query/:query" component={SearchScreen}></Route>
-        {
-          //    <Route
-          //     path="/search/query/:query/profile/:profile"
-          //     component={SearchScreen}
-          //   ></Route>
-          // <Route
-          //    path="/search/query/:query/profile/:profile/order/:order"
-          //    component={SearchScreen}
-          //  ></Route>
-        }
-      </main>
+                justifyContent: "center",
+                marginTop: "2vh",
+
+                marginLeft: "3%",
+              }}
+            >
+              <a
+                href="https://m-ivan.github.io"
+                className="sub-header"
+                style={{ transform: "skewY(2deg)" }}
+              >
+                Portafolio <LaunchOutlined />
+              </a>
+            </Grid>
+          </footer>
+        </Paper>
+      </ThemeProvider>
     </BrowserRouter>
   );
 }

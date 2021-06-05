@@ -377,11 +377,6 @@ export default function ProfileEdit(props) {
           </Typography>
         </Grid>
       </CardContent>{" "}
-      {console.log("name", name)}
-      {console.log("lastname", lastname)}
-      {console.log("description", description)}
-      {console.log("user", user)}
-      {console.log("user", user._id)}
     </Card>
   );
 }
