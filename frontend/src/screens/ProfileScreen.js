@@ -33,8 +33,9 @@ const useStyles = makeStyles((theme) => ({
     borderRadius: "0px",
   },
   title: {
-    marginLeft: "1rem",
-    padding: "1rem",
+    borderBottom: "1px solid #e0e0e0",
+
+    padding: "1rem 1rem 1rem 2rem",
   },
 }));
 
@@ -138,9 +139,7 @@ export default function ProfileScreen(props) {
                 {user.profile.name} {user.profile.lastname}
               </Typography>
             </Grid>
-            <Grid item xs={12}>
-              <Divider />
-            </Grid>
+
             <NavLarge />
 
             <Grid item xs={12} lg={6}>

@@ -8,20 +8,21 @@ import {
 } from "@material-ui/core/index";
 import { useDispatch, useSelector } from "react-redux";
 import HomeOutlinedIcon from "@material-ui/icons/HomeOutlined";
-import { orange, red, green } from "@material-ui/core/colors";
+import { red, green } from "@material-ui/core/colors";
 import { Link } from "react-router-dom";
 import AccountCircleRoundedIcon from "@material-ui/icons/AccountCircleRounded";
 import ExitToAppOutlinedIcon from "@material-ui/icons/ExitToAppOutlined";
 import { signout } from "../actions/userActions";
 
 const useStyles = makeStyles((theme) => ({
-  navLg: { margin: "1rem", marginTop: "3rem" },
+  navLg: { padding: "3rem 1rem 1rem 1rem" },
   navBtn: {
     textTransform: "none",
-    marginBottom: "1rem",
-    color: orange[800],
+    padding: "1rem",
+    width: "100%",
+    justifyContent: "flex-start",
   },
-  colorIcon: { color: [theme.palette.secondary.main] },
+  colorIcon: { color: [theme.palette.secondary.main], marginRight: "5px" },
   border: {
     borderRight: "1px solid #e0e0e0",
   },
@@ -75,7 +76,9 @@ export default function NavLarge() {
               onClick={signoutHandler}
             >
               <Grid container alignItems="center">
-                <ExitToAppOutlinedIcon style={{ color: red[700] }} />
+                <ExitToAppOutlinedIcon
+                  style={{ color: red[700], marginRight: "5px" }}
+                />
                 <Typography variant="h5" color="textPrimary">
                   Cerrar Sesión
                 </Typography>
@@ -85,7 +88,9 @@ export default function NavLarge() {
             <Button classes={{ root: classes.navBtn }} size="large">
               <Link to="/signin">
                 <Grid container alignItems="center">
-                  <ExitToAppOutlinedIcon style={{ color: green[500] }} />
+                  <ExitToAppOutlinedIcon
+                    style={{ color: green[500], marginRight: "5px" }}
+                  />
                   <Typography variant="h5" color="textPrimary">
                     Iniciar Sesión
                   </Typography>

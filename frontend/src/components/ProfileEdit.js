@@ -106,26 +106,26 @@ const useStyles = makeStyles((theme) => ({
     width: "70%",
   },
 }));
-const MyTextField = withStyles({
+const MyTextField = withStyles((theme) => ({
   root: {
     marginRight: "20px",
     "& .MuiInput-underline:after": {
-      borderBottomColor: "#ea6d0b",
+      borderBottomColor: [theme.palette.secondary.main],
     },
     "& label": {},
     "& label.Mui-focused": {
-      color: "#ea6d0b",
+      color: [theme.palette.secondary.main],
     },
     "& .MuiOutlinedInput-root": {
       "& label": {
         fontSize: "1.05rem",
       },
       "&.Mui-focused fieldset": {
-        borderColor: "#ea6d0b",
+        borderColor: [theme.palette.secondary.main],
       },
     },
   },
-})(TextField);
+}))(TextField);
 
 export default function ProfileEdit(props) {
   const { userInfo, user } = props;

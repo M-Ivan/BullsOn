@@ -37,7 +37,7 @@ const useStyles = makeStyles((theme) => ({
     alignItems: "center",
   },
   appbar: {
-    color: "#1b1b1b",
+    color: "#fff",
     backgroundColor: [theme.palette.primary.dark],
     borderBottom: `3px solid ${[theme.palette.secondary.light]}`,
   },
@@ -72,6 +72,7 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   navlink: {
+    transition: "0.3s",
     color: "#fff",
     padding: "0.5rem",
     borderRadius: "0.2rem",
@@ -79,7 +80,7 @@ const useStyles = makeStyles((theme) => ({
     textTransform: "capitalize",
     fontWeight: "normal",
     "&:hover": {
-      backgroundColor: "#68686823",
+      backgroundColor: "#ffffff10",
     },
   },
   drawerRoot: {
@@ -119,6 +120,7 @@ const useStyles = makeStyles((theme) => ({
     }),
     marginLeft: 0,
   },
+  iconColor: { color: [theme.palette.secondary.main] },
 }));
 
 export default function Header(props) {
@@ -312,8 +314,19 @@ export default function Header(props) {
                   </Grid>
                 ) : (
                   <Grid container justify="flex-end">
-                    <div className="navlink">
-                      <Link to="/signin">Iniciar Sesión</Link>
+                    <div>
+                      <Link to="/signin">
+                        <Grid
+                          container
+                          alignItems="center"
+                          className={classes.navlink}
+                        >
+                          <ExitToAppOutlinedIcon
+                            className={classes.iconColor}
+                          />
+                          Iniciar Sesión
+                        </Grid>
+                      </Link>
                     </div>
                   </Grid>
                 )}

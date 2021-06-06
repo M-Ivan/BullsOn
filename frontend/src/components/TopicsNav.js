@@ -6,18 +6,19 @@ import {
   Typography,
   Hidden,
 } from "@material-ui/core/index";
-import { orange, red, green } from "@material-ui/core/colors";
+import { red, green } from "@material-ui/core/colors";
 import { Link } from "react-router-dom";
 
 import TrendingUpIcon from "@material-ui/icons/TrendingUp";
 import TrendingDownIcon from "@material-ui/icons/TrendingDown";
 
 const useStyles = makeStyles({
-  navLg: { margin: "1rem", marginTop: "3rem" },
+  navLg: { padding: "3rem 1rem 1rem 1rem" },
   navBtn: {
     textTransform: "none",
-    marginBottom: "1rem",
-    color: orange[800],
+    padding: "1rem",
+    width: "100%",
+    justifyContent: "flex-start",
   },
   btcIcon: {
     color: "#ff9900",
@@ -44,7 +45,7 @@ export default function TopicsNav() {
             <Link to="/search/query/bitcoin">
               <Grid container alignItems="center">
                 <Typography variant="h5" color="textPrimary">
-                  <i className={`fa fa-btc ${classes.btcIcon}`}></i> # Bitcoin
+                  # Bitcoin <i className={`fa fa-btc ${classes.btcIcon}`} />
                 </Typography>
               </Grid>{" "}
             </Link>
@@ -86,11 +87,16 @@ export default function TopicsNav() {
               <Typography variant="h5" color="textPrimary">
                 {" "}
                 <Grid container alignItems="center">
+                  # Long{" "}
                   <TrendingUpIcon
                     className={classes.iconBtn}
-                    style={{ color: green[700], width: "25px", height: "25px" }}
+                    style={{
+                      color: green[700],
+                      width: "25px",
+                      height: "25px",
+                      marginLeft: "5px",
+                    }}
                   />
-                  # Long
                 </Grid>
               </Typography>
             </Link>
@@ -100,11 +106,16 @@ export default function TopicsNav() {
             <Link to="/search/query/short">
               <Typography variant="h5" color="textPrimary">
                 <Grid container alignItems="center">
+                  # Short{" "}
                   <TrendingDownIcon
                     className={classes.iconBtn}
-                    style={{ color: red[500], width: "25px", height: "25px" }}
+                    style={{
+                      color: red[500],
+                      width: "25px",
+                      height: "25px",
+                      marginLeft: "5px",
+                    }}
                   />
-                  # Short
                 </Grid>
               </Typography>
             </Link>
