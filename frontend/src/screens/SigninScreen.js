@@ -12,13 +12,13 @@ import {
   makeStyles,
 } from "@material-ui/core/index";
 
-const useStyles = makeStyles({
+const useStyles = makeStyles((theme) => ({
   root: {
     alignSelf: "center",
     width: "100%",
   },
   btnRoundedOr: {
-    background: "#ea6d0b",
+    background: [theme.palette.secondary.main],
     borderRadius: "3rem",
     border: 0,
     color: "white",
@@ -26,18 +26,20 @@ const useStyles = makeStyles({
     padding: "0 30px",
     boxShadow: "0 3px 5px 2px rgba(255, 105, 135, .3)",
     "&:hover": {
-      background: "#e16828",
+      background: [theme.palette.secondary.light],
     },
   },
   title: {
     marginLeft: "1rem",
     padding: "1rem",
   },
-
   label: {
     textTransform: "capitalize",
   },
-});
+  colorText: {
+    color: [theme.palette.secondary.main],
+  },
+}));
 
 export default withRouter(function SigninScreen(props) {
   const classes = useStyles();
@@ -80,6 +82,7 @@ export default withRouter(function SigninScreen(props) {
               id="email"
               label="E-mail"
               variant="outlined"
+              color="secondary"
               required
               fullWidth
               onChange={(e) => setEmail(e.target.value)}
@@ -90,6 +93,7 @@ export default withRouter(function SigninScreen(props) {
               type="password"
               id="password"
               label="Password"
+              color="secondary"
               variant="outlined"
               required
               fullWidth
@@ -114,7 +118,10 @@ export default withRouter(function SigninScreen(props) {
           <Grid container justify="center" alignItems="center">
             <div>
               Primera vez en el sitio?{" "}
-              <Link to={`/register?redirect=${redirect}`}>
+              <Link
+                to={`/register?redirect=${redirect}`}
+                className={classes.colorText}
+              >
                 {" "}
                 *Únete a BullsOn
               </Link>

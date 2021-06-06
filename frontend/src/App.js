@@ -17,7 +17,7 @@ const useStyles = makeStyles((theme) => ({
   main: {
     display: "flex",
     justifyContent: "center",
-    minHeight: "69vh",
+    minHeight: "88vh",
     padding: "4.1rem 0 5vh 0",
 
     [theme.breakpoints.down("md")]: {

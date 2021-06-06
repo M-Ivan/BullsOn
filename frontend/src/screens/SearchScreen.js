@@ -14,6 +14,7 @@ import {
   Divider,
   Container,
   InputBase,
+  Slide,
 } from "@material-ui/core";
 import RenderPost from "../components/RenderPost";
 import { useState } from "react";
@@ -83,6 +84,8 @@ export default withRouter(function SearchScreen(props) {
 
   const dispatch = useDispatch();
   const postList = useSelector((state) => state.postList);
+  const userSignin = useSelector((state) => state.userSignin);
+  const { userInfo } = userSignin;
   const { loading, error, posts } = postList;
   const userList = useSelector((state) => state.userList);
   const userFollow = useSelector((state) => state.userFollow);
@@ -94,9 +97,12 @@ export default withRouter(function SearchScreen(props) {
   const [showing, setShowing] = useState(0);
 
   useEffect(() => {
+    if (!userInfo) {
+      props.history.push("/signin");
+    }
     dispatch(listPosts({ post: query }));
     dispatch(listUsers({ user: query }));
-  }, [query, successFollow, successUnfollow]);
+  }, [query, successFollow, successUnfollow, props.history, userInfo]);
 
   const handleChange = (event, newValue) => {
     setShowing(newValue);
@@ -112,23 +118,27 @@ export default withRouter(function SearchScreen(props) {
     <Container fixed maxWidth="lg">
       <Grid container justify="center" className={classes.root}>
         <Grid item xs={12} className={classes.title}>
-          <Typography variant="h4" color="textPrimary">
-            Busqueda
-          </Typography>
-          <form onSubmit={profileFilterHandler}>
-            <label>Filtrar por perfil: </label>
-            <InputBase
-              label=""
-              placeholder="@ o nombre/apellido"
-              onChange={(e) => setProfile(e.target.value)}
-              classes={{
-                root: classes.inputRoot,
-                input: classes.inputInput,
-              }}
-              inputProps={{ type: "text", name: "q", id: "q" }}
-            />
-          </form>
-        </Grid>
+          <Slide direction="left" in {...{ timeout: 1000 }}>
+            <Box>
+              <Typography variant="h4" color="textPrimary">
+                Busqueda
+              </Typography>
+              <form onSubmit={profileFilterHandler}>
+                <label>Filtrar por perfil: </label>
+                <InputBase
+                  label=""
+                  placeholder="@ o nombre/apellido"
+                  onChange={(e) => setProfile(e.target.value)}
+                  classes={{
+                    root: classes.inputRoot,
+                    input: classes.inputInput,
+                  }}
+                  inputProps={{ type: "text", name: "q", id: "q" }}
+                />
+              </form>{" "}
+            </Box>
+          </Slide>
+        </Grid>{" "}
         <Grid item xs={12}>
           <Divider />
         </Grid>

@@ -24,6 +24,17 @@ const useStyles = makeStyles((theme) => ({
     lineHeight: "0.8em",
     outline: "none",
     animation: `$animate2 5s infinite`,
+    [theme.breakpoints.down("sm")]: {
+      fontSize: "1em",
+      letterSpacing: "3px",
+      animation: "none",
+      color: [theme.palette.terceary.main],
+      textShadow: `0 0 10px ${[theme.palette.terceary.main]}, 0 0 20px ${[
+        theme.palette.secondary.light,
+      ]}, 0 0 40px ${[theme.palette.terceary.main]},  0 0 80px ${[
+        theme.palette.secondary.light,
+      ]}, 0 0 160px ${[theme.palette.terceary.main]}`,
+    },
   },
   "@keyframes animate2": {
     "0%, 18%, 20%, 50.1%,  60%, 65.1%, 80%, 90.1%, 92%": {

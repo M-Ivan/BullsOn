@@ -7,6 +7,7 @@ import {
   CardMedia,
   Typography,
   Divider,
+  Grow,
 } from "@material-ui/core/";
 import { followUser, unfollowUser } from "../actions/userActions";
 import { red } from "@material-ui/core/colors";
@@ -92,104 +93,108 @@ export default function RenderProfile(props) {
     dispatch(unfollowUser(profileId));
   };
   return (
-    <Card elevation={0} className={classes.profileRoot}>
-      {
-        //  loading ? (
-        //   <div className="row center">
-        //      <ReactLoading className="loading" color="#2d91f0" type="cylon" />{" "}
-        //    </div>
-        //  ) : error ? (
-        //    <MessageBox variant="danger">{error}</MessageBox>
-        //  ) : null
-      }
-      <Box m={1}>
-        <CardMedia
-          className={classes.media}
-          image={
-            user.profile.background ? user.profile.background : "/images/p1.jpg"
-          }
-        ></CardMedia>
-      </Box>
-      <Grid container>
-        <Grid item xs={3}>
-          <Grid container alignItems="center" direction="column">
-            <Box>
-              <Avatar
-                src={user ? user.profile.profile : null}
-                className={classes.avatar}
-              ></Avatar>
-            </Box>
+    <Grow in {...{ timeout: 600 }}>
+      <Card elevation={0} className={classes.profileRoot}>
+        {
+          //  loading ? (
+          //   <div className="row center">
+          //      <ReactLoading className="loading" color="#2d91f0" type="cylon" />{" "}
+          //    </div>
+          //  ) : error ? (
+          //    <MessageBox variant="danger">{error}</MessageBox>
+          //  ) : null
+        }
+        <Box m={1}>
+          <CardMedia
+            className={classes.media}
+            image={
+              user.profile.background
+                ? user.profile.background
+                : "/images/p1.jpg"
+            }
+          ></CardMedia>
+        </Box>
+        <Grid container>
+          <Grid item xs={3}>
+            <Grid container alignItems="center" direction="column">
+              <Box>
+                <Avatar
+                  src={user ? user.profile.profile : null}
+                  className={classes.avatar}
+                ></Avatar>
+              </Box>
+            </Grid>
+          </Grid>
+          <Grid item xs={9}>
+            <Grid container direction="column" alignItems="flex-end">
+              {userInfo && user && userInfo._id === user._id ? (
+                <Box m={3}>
+                  <Button
+                    size="large"
+                    onClick={editProfileHandler}
+                    className={classes.button}
+                  >
+                    Editar perfil
+                  </Button>
+                </Box>
+              ) : userInfo && user.followers.includes(userInfo.username) ? (
+                <Box m={3}>
+                  <Button
+                    onClick={unfollowHandler}
+                    size="large"
+                    className={classes.active}
+                  >
+                    Dejar de seguir
+                  </Button>
+                </Box>
+              ) : (
+                <Box m={3}>
+                  <Button
+                    onClick={followHandler}
+                    size="large"
+                    className={classes.button}
+                  >
+                    Seguir{" "}
+                  </Button>
+                </Box>
+              )}
+            </Grid>
           </Grid>
         </Grid>
-        <Grid item xs={9}>
-          <Grid container direction="column" alignItems="flex-end">
-            {userInfo && user && userInfo._id === user._id ? (
-              <Box m={3}>
-                <Button
-                  size="large"
-                  onClick={editProfileHandler}
-                  className={classes.button}
-                >
-                  Editar perfil
-                </Button>
-              </Box>
-            ) : userInfo && user.followers.includes(userInfo.username) ? (
-              <Box m={3}>
-                <Button
-                  onClick={unfollowHandler}
-                  size="large"
-                  className={classes.active}
-                >
-                  Dejar de seguir
-                </Button>
-              </Box>
-            ) : (
-              <Box m={3}>
-                <Button
-                  onClick={followHandler}
-                  size="large"
-                  className={classes.button}
-                >
-                  Seguir{" "}
-                </Button>
-              </Box>
-            )}
+        <CardContent>
+          <Grid container className={classes.nameSection}>
+            <Grid item xs={12}>
+              <Typography gutterBottom variant="h4" component="h2">
+                {user.profile.name + " " + user.profile.lastname}
+              </Typography>
+            </Grid>
+            <Grid item xs={12}>
+              <Typography variant="body1" color="textSecondary" gutterBottom>
+                {"@" + user.profile.username}
+              </Typography>
+            </Grid>
           </Grid>
-        </Grid>
-      </Grid>
-      <CardContent>
-        <Grid container className={classes.nameSection}>
-          <Grid item xs={12}>
-            <Typography gutterBottom variant="h4" component="h2">
-              {user.profile.name + " " + user.profile.lastname}
-            </Typography>
-          </Grid>
-          <Grid item xs={12}>
-            <Typography variant="body1" color="textSecondary" gutterBottom>
-              {"@" + user.profile.username}
-            </Typography>
-          </Grid>
-        </Grid>
-        <Typography
-          variant="body"
-          color="textPrimary"
-          component="p"
-          gutterBottom
-        >
-          {" "}
-          <Grid container className={classes.descriptionSection}>
-            {user.profile.description}
-          </Grid>
-        </Typography>
-        <Divider />
-        <Grid container className={classes.followSection}>
-          {" "}
-          <Typography variant="body" component="p" gutterBottom>
-            {`${user.following.length} siguiendo
-                ${user.followers.length} seguidores`}
+          <Typography
+            variant="body"
+            color="textPrimary"
+            component="p"
+            gutterBottom
+          >
+            {" "}
+            <Grid container className={classes.descriptionSection}>
+              {user.profile.description}
+            </Grid>
           </Typography>
-        </Grid>
-      </CardContent>
-    </Card>
+          <Divider />
+          <Grid container className={classes.followSection}>
+            {" "}
+            <Typography variant="body" component="p" gutterBottom>
+              {`${user.following.length} siguiendo
+                ${user.followers.length} seguidores`}
+            </Typography>
+          </Grid>
+        </CardContent>
+      </Card>
+    </Grow>
   );
 }

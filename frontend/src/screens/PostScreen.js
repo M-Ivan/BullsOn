@@ -33,6 +33,7 @@ import {
   Zoom,
   Menu,
   MenuItem,
+  Slide,
 } from "@material-ui/core/index";
 import { red } from "@material-ui/core/colors";
 import ScreenShareOutlinedIcon from "@material-ui/icons/ScreenShareOutlined";
@@ -213,9 +214,13 @@ export default function PostScreen(props) {
     <Container maxWidth="lg" fixed>
       <Grid container className={classes.root}>
         <Grid item xs={12} className={classes.title}>
-          <Typography variant="h4" color="textPrimary">
-            Compartido por {post ? post.profile._id : "un inversor anonimo"}
-          </Typography>
+          <Slide direction="left" in {...{ timeout: 1000 }}>
+            <Box>
+              <Typography variant="h4" color="textPrimary">
+                Compartido por {post ? post.profile._id : "un inversor anonimo"}
+              </Typography>
+            </Box>
+          </Slide>
         </Grid>
         <Grid item xs={12}>
           <Divider />

@@ -156,7 +156,7 @@ export default function Header(props) {
           </Typography>
         </Link>
         <Switch checked={darkMode} onChange={darkModeCallback} />{" "}
-        <Brightness3Icon className={classes.colorText} />
+        <Brightness3Icon className={darkMode ? classes.colorText : ""} />
       </div>
       <Divider />
       <List>

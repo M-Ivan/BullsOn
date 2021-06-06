@@ -15,6 +15,7 @@ import {
   Typography,
   MenuItem,
   Menu,
+  Slide,
 } from "@material-ui/core";
 import { red } from "@material-ui/core/colors";
 import ScreenShareOutlinedIcon from "@material-ui/icons/ScreenShareOutlined";
@@ -164,171 +165,175 @@ export default withRouter(function RenderPost(props) {
   };
 
   return (
-    <Card className={classes.root} elevation={0} key={post._id}>
-      {" "}
-      <CardHeader
-        avatar={
-          <Link to={`/${profile.username}`}>
-            <Avatar
-              aria-label="recipe"
-              src={post ? profile.profile : null}
-              className={classes.avatar}
-            ></Avatar>
-          </Link>
-        }
-        action={
-          <Box>
+    <Slide direction="up" in {...{ timeout: 1000 }}>
+      <Card className={classes.root} elevation={0} key={post._id}>
+        <CardHeader
+          avatar={
+            <Link to={`/${profile.username}`}>
+              <Avatar
+                aria-label="recipe"
+                src={post ? profile.profile : null}
+                className={classes.avatar}
+              ></Avatar>
+            </Link>
+          }
+          action={
+            <Box>
+              <IconButton
+                className={classes.navlink}
+                aria-label="settings"
+                onClick={handleClick}
+                aria-controls="simple-menu"
+                aria-haspopup="true"
+              >
+                <MoreVertIcon />{" "}
+              </IconButton>
+              <Menu
+                id="simple-menu"
+                anchorEl={anchorEl}
+                anchorOrigin={{
+                  vertical: "bottom",
+                  horizontal: "center",
+                }}
+                transformOrigin={{
+                  vertical: "top",
+                  horizontal: "center",
+                }}
+                keepMounted
+                open={Boolean(anchorEl)}
+                onClose={handleCloseMenu}
+              >
+                <MenuItem onClick={deleteHandler}>
+                  <DeleteOutline />
+                  Borrar post
+                </MenuItem>
+              </Menu>
+            </Box>
+          }
+          title={
+            <Link to={`/${profile.username}`}>
+              <div>
+                <Typography color="textPrimary" variant="h6">
+                  {profile.name + " " + profile.lastname}
+                </Typography>
+                <Typography color="textSecondary">
+                  <strong>@{profile.username}</strong>
+                </Typography>
+              </div>
+            </Link>
+          }
+          subheader={
+            "Publicado el: " +
+            post.createdAt.substring(0, 10) +
+            "   A las:  " +
+            post.createdAt.substring(11, 16)
+          }
+        />
+        <Link to={`/${profile.username}/post/${post._id}`}>
+          {post.image ? (
+            <CardMedia className={classes.media} image={post.image} />
+          ) : null}
+          <CardContent>
+            <Typography variant="body" color="textPrimary" component="p">
+              {post.post}
+            </Typography>
+          </CardContent>
+        </Link>
+        <CardActions disableSpacing>
+          {post ? (
             <IconButton
-              className={classes.navlink}
-              aria-label="settings"
-              onClick={handleClick}
-              aria-controls="simple-menu"
-              aria-haspopup="true"
+              className={classes.commentBtn}
+              onClick={() => setCommentForm(true)}
             >
-              <MoreVertIcon />{" "}
+              {!commentForm ? (
+                <ChatBubbleOutlineIcon />
+              ) : (
+                <ChatIcon className={classes.activeComment} />
+              )}
+              {post.comments.length}
             </IconButton>
-            <Menu
-              id="simple-menu"
-              anchorEl={anchorEl}
-              anchorOrigin={{
-                vertical: "bottom",
-                horizontal: "center",
-              }}
-              transformOrigin={{
-                vertical: "top",
-                horizontal: "center",
-              }}
-              keepMounted
-              open={Boolean(anchorEl)}
-              onClose={handleCloseMenu}
-            >
-              <MenuItem onClick={deleteHandler}>
-                <DeleteOutline />
-                Borrar post
-              </MenuItem>
-            </Menu>
-          </Box>
-        }
-        title={
-          <Link to={`/${profile.username}`}>
-            <div>
-              <Typography color="textPrimary" variant="h6">
-                {profile.name + " " + profile.lastname}
-              </Typography>
-              <Typography color="textSecondary">
-                <strong>@{profile.username}</strong>
-              </Typography>
-            </div>
-          </Link>
-        }
-        subheader={
-          "Publicado el: " +
-          post.createdAt.substring(0, 10) +
-          "   A las:  " +
-          post.createdAt.substring(11, 16)
-        }
-      />
-      <Link to={`/${profile.username}/post/${post._id}`}>
-        {post.image ? (
-          <CardMedia className={classes.media} image={post.image} />
-        ) : null}
-        <CardContent>
-          <Typography variant="body" color="textPrimary" component="p">
-            {post.post}
-          </Typography>
-        </CardContent>
-      </Link>
-      <CardActions disableSpacing>
-        {post ? (
-          <IconButton
-            className={classes.commentBtn}
-            onClick={() => setCommentForm(true)}
-          >
-            {!commentForm ? (
+          ) : (
+            <IconButton className={classes.commentBtn}>
               <ChatBubbleOutlineIcon />
-            ) : (
-              <ChatIcon className={classes.activeComment} />
-            )}
-            {post.comments.length}
-          </IconButton>
-        ) : (
-          <IconButton className={classes.commentBtn}>
-            <ChatBubbleOutlineIcon />
-            {post.comments.length}
-          </IconButton>
-        )}
+              {post.comments.length}
+            </IconButton>
+          )}
 
-        {post && userInfo && !post.repost.includes(userInfo.username) ? (
-          <IconButton onClick={repostHandler} className={classes.repostBtn}>
-            <RepeatIcon />
-            {post.repost.length}
-          </IconButton>
-        ) : (
-          post &&
-          userInfo &&
-          post.repost.includes(userInfo.username) && (
-            <IconButton onClick={unrepostHandler} className={classes.repostBtn}>
-              <RepeatIcon className={classes.activeRepost} />
+          {post && userInfo && !post.repost.includes(userInfo.username) ? (
+            <IconButton onClick={repostHandler} className={classes.repostBtn}>
+              <RepeatIcon />
               {post.repost.length}
             </IconButton>
-          )
-        )}
-        {post && userInfo && !post.likes.includes(userInfo.username) ? (
-          <IconButton
-            className={classes.likeBtn}
-            onClick={likeHandler}
-            aria-label="indicar me gusta"
-          >
-            <Grid container alignItems="center">
-              <StarOutlineIcon />
-              {post.likes.length}{" "}
-            </Grid>
-          </IconButton>
-        ) : (
-          post &&
-          userInfo &&
-          post.likes.includes(userInfo.username) && (
+          ) : (
+            post &&
+            userInfo &&
+            post.repost.includes(userInfo.username) && (
+              <IconButton
+                onClick={unrepostHandler}
+                className={classes.repostBtn}
+              >
+                <RepeatIcon className={classes.activeRepost} />
+                {post.repost.length}
+              </IconButton>
+            )
+          )}
+          {post && userInfo && !post.likes.includes(userInfo.username) ? (
             <IconButton
-              onClick={unlikeHandler}
-              aria-label="ya no me gusta"
               className={classes.likeBtn}
+              onClick={likeHandler}
+              aria-label="indicar me gusta"
             >
               <Grid container alignItems="center">
-                <StarIcon className={classes.activeLike} />
+                <StarOutlineIcon />
                 {post.likes.length}{" "}
               </Grid>
             </IconButton>
-          )
-        )}
-        <IconButton aria-label="share">
-          <ScreenShareOutlinedIcon />
-        </IconButton>
-      </CardActions>
-      {commentForm ? (
-        <Box className={classes.commentForm}>
-          <Grid container alignItems="center">
-            <Grid item xs={10}>
-              <TextField
-                id="comment-form"
-                value={comment}
-                onChange={(e) => setComment(e.target.value)}
-                fullWidth
-                label="Agregar un comentario..."
-              ></TextField>
-            </Grid>
-            <Grid item xs={2}>
-              <Button
-                className={classes.activeComment}
-                variant="outlined"
-                size="small"
-                onClick={submitCommentHandler}
+          ) : (
+            post &&
+            userInfo &&
+            post.likes.includes(userInfo.username) && (
+              <IconButton
+                onClick={unlikeHandler}
+                aria-label="ya no me gusta"
+                className={classes.likeBtn}
               >
-                +1 <ChatIcon className={classes.iconSmall} />
-              </Button>
+                <Grid container alignItems="center">
+                  <StarIcon className={classes.activeLike} />
+                  {post.likes.length}{" "}
+                </Grid>
+              </IconButton>
+            )
+          )}
+          <IconButton aria-label="share">
+            <ScreenShareOutlinedIcon />
+          </IconButton>
+        </CardActions>
+        {commentForm ? (
+          <Box className={classes.commentForm}>
+            <Grid container alignItems="center">
+              <Grid item xs={10}>
+                <TextField
+                  id="comment-form"
+                  value={comment}
+                  onChange={(e) => setComment(e.target.value)}
+                  fullWidth
+                  label="Agregar un comentario..."
+                ></TextField>
+              </Grid>
+              <Grid item xs={2}>
+                <Button
+                  className={classes.activeComment}
+                  variant="outlined"
+                  size="small"
+                  onClick={submitCommentHandler}
+                >
+                  +1 <ChatIcon className={classes.iconSmall} />
+                </Button>
+              </Grid>
             </Grid>
-          </Grid>{" "}
-        </Box>
-      ) : null}
-    </Card>
+          </Box>
+        ) : null}
+      </Card>
+    </Slide>
   );
 });

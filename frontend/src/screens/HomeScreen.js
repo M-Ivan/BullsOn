@@ -4,6 +4,8 @@ import {
   Grid,
   makeStyles,
   Typography,
+  Box,
+  Slide,
 } from "@material-ui/core/index";
 import RenderPost from "../components/RenderPost";
 import { useDispatch, useSelector } from "react-redux";
@@ -92,9 +94,13 @@ export default function HomeScreen(props) {
       <Container maxWidth="lg" fixed>
         <Grid container className={classes.root}>
           <Grid item xs={12} className={classes.title}>
-            <Typography variant="h4" color="textPrimary">
-              Inicio
-            </Typography>
+            <Slide direction="left" in {...{ timeout: 1000 }}>
+              <Box>
+                <Typography variant="h4" color="textPrimary">
+                  Inicio
+                </Typography>
+              </Box>
+            </Slide>
           </Grid>
 
           <Grid container justify="center">

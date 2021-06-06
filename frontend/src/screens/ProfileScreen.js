@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import MessageBox from "../components/MessageBox";
 import ReactLoading from "react-loading";
 import { Container, Grid, makeStyles } from "@material-ui/core/index";
-import { Typography, Divider } from "@material-ui/core/";
+import { Typography, Divider, Slide, Box } from "@material-ui/core/";
 import { detailsUser } from "../actions/userActions";
 
 import RenderPost from "../components/RenderPost";
@@ -135,9 +135,14 @@ export default function ProfileScreen(props) {
         <Container fixed maxWidth="lg">
           <Grid container className={classes.main}>
             <Grid item xs={12} className={classes.title}>
-              <Typography variant="h4" color="textPrimary">
-                {user.profile.name} {user.profile.lastname}
-              </Typography>
+              {" "}
+              <Slide direction="left" in {...{ timeout: 1000 }}>
+                <Box>
+                  <Typography variant="h4" color="textPrimary">
+                    {user.profile.name} {user.profile.lastname}
+                  </Typography>{" "}
+                </Box>
+              </Slide>
             </Grid>
 
             <NavLarge />

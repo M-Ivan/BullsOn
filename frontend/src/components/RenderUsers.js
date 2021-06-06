@@ -12,6 +12,7 @@ import {
   Typography,
   Divider,
   Grid,
+  Grow,
 } from "@material-ui/core";
 import { followUser, unfollowUser, detailsUser } from "../actions/userActions";
 import { useDispatch, useSelector } from "react-redux";
@@ -95,78 +96,80 @@ export default function RenderUsers(props) {
   }, [dispatch, successFollow, user._id, successUnfollow]);
 
   return (
-    <Grid>
-      {loading ? (
-        <ReactLoading className="loading" color="#2d91f0" type="cylon" />
-      ) : error ? (
-        <MessageBox variant="danger">{error}</MessageBox>
-      ) : (
-        <List disablePadding className={classes.root}>
-          <Link to={`/${user.profile.username}`}>
-            <ListItem key={user._id} button>
-              <ListItemAvatar>
-                <Avatar alt={user.username} src={user.profile.profile} />
-              </ListItemAvatar>
-              <ListItemText
-                id={user}
-                primary={
-                  <Typography variant="h6" color="textPrimary">
-                    {`${user.profile.name} ${user.profile.lastname}`}
-                  </Typography>
-                }
-                secondary={
-                  <Box>
-                    {`@${user.profile.username}`}
-                    <Typography variant="body2" color="textPrimary">
-                      {user.profile.description}
+    <Grow in {...{ timeout: 1000 }}>
+      <Grid>
+        {loading ? (
+          <ReactLoading className="loading" color="#2d91f0" type="cylon" />
+        ) : error ? (
+          <MessageBox variant="danger">{error}</MessageBox>
+        ) : (
+          <List disablePadding className={classes.root}>
+            <Link to={`/${user.profile.username}`}>
+              <ListItem key={user._id} button>
+                <ListItemAvatar>
+                  <Avatar alt={user.username} src={user.profile.profile} />
+                </ListItemAvatar>
+                <ListItemText
+                  id={user}
+                  primary={
+                    <Typography variant="h6" color="textPrimary">
+                      {`${user.profile.name} ${user.profile.lastname}`}
                     </Typography>
-                  </Box>
-                }
-              />
-              <ListItemSecondaryAction>
-                {user.followers || user.following ? (
-                  user &&
-                  userInfo &&
-                  !user.followers.includes(userInfo.username) ? (
-                    <Button
-                      disableElevation
-                      variant="contained"
-                      classes={{ root: classes.followButton }}
-                      onClick={followHandler}
-                    >
-                      Seguir
-                    </Button>
-                  ) : user &&
+                  }
+                  secondary={
+                    <Box>
+                      {`@${user.profile.username}`}
+                      <Typography variant="body2" color="textPrimary">
+                        {user.profile.description}
+                      </Typography>
+                    </Box>
+                  }
+                />
+                <ListItemSecondaryAction>
+                  {user.followers || user.following ? (
+                    user &&
                     userInfo &&
-                    user.followers.includes(userInfo.username) ? (
-                    <Button
-                      disableElevation
-                      classes={{ root: classes.unfollowButton }}
-                      onClick={unfollowHandler}
-                    >
-                      Dejar de seguir
-                    </Button>
-                  ) : (
-                    !userInfo && (
-                      <Link to="/signin">
-                        <Button
-                          disableElevation
-                          variant="contained"
-                          classes={{ root: classes.followButton }}
-                          onClick={followHandler}
-                        >
-                          Seguir
-                        </Button>
-                      </Link>
+                    !user.followers.includes(userInfo.username) ? (
+                      <Button
+                        disableElevation
+                        variant="contained"
+                        classes={{ root: classes.followButton }}
+                        onClick={followHandler}
+                      >
+                        Seguir
+                      </Button>
+                    ) : user &&
+                      userInfo &&
+                      user.followers.includes(userInfo.username) ? (
+                      <Button
+                        disableElevation
+                        classes={{ root: classes.unfollowButton }}
+                        onClick={unfollowHandler}
+                      >
+                        Dejar de seguir
+                      </Button>
+                    ) : (
+                      !userInfo && (
+                        <Link to="/signin">
+                          <Button
+                            disableElevation
+                            variant="contained"
+                            classes={{ root: classes.followButton }}
+                            onClick={followHandler}
+                          >
+                            Seguir
+                          </Button>
+                        </Link>
+                      )
                     )
-                  )
-                ) : null}
-              </ListItemSecondaryAction>
-            </ListItem>
-          </Link>
-          <Divider component="li" />
-        </List>
-      )}
-    </Grid>
+                  ) : null}
+                </ListItemSecondaryAction>
+              </ListItem>
+            </Link>
+            <Divider component="li" />
+          </List>
+        )}
+      </Grid>
+    </Grow>
   );
 }

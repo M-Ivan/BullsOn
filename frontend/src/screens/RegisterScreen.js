@@ -12,9 +12,14 @@ import {
   makeStyles,
 } from "@material-ui/core/index";
 
-const useStyles = makeStyles({
+const useStyles = makeStyles((theme) => ({
+  root: {
+    display: "flex",
+    width: "100%",
+    alignItems: "center",
+  },
   btnRoundedOr: {
-    background: "#ea6d0b",
+    background: [theme.palette.secondary.main],
     borderRadius: "3rem",
     border: 0,
     color: "white",
@@ -22,7 +27,7 @@ const useStyles = makeStyles({
     padding: "0 30px",
     boxShadow: "0 3px 5px 2px rgba(255, 105, 135, .3)",
     "&:hover": {
-      background: "#e16828",
+      background: [theme.palette.secondary.light],
     },
   },
   title: {
@@ -32,7 +37,10 @@ const useStyles = makeStyles({
   label: {
     textTransform: "capitalize",
   },
-});
+  colorText: {
+    color: [theme.palette.secondary.main],
+  },
+}));
 
 export default withRouter(function RegisterScreen(props) {
   const classes = useStyles();
@@ -70,18 +78,19 @@ export default withRouter(function RegisterScreen(props) {
   }, [props.history, redirect, userInfo]);
 
   return (
-    <div>
+    <div className={classes.root}>
       <Container maxWidth="sm" fixed>
-        <form className="form" onSubmit={submitHandler}>
+        <form onSubmit={submitHandler}>
           <div>
             <h1>Crear una cuenta</h1>
           </div>
-          <div className="form-control">
+          <div className={`form-control ${classes.root}`}>
             <TextField
               id="username"
               label="Nombre de usuario (con el que te veran otros usuarios)"
               variant="outlined"
               required
+              color="secondary"
               fullWidth
               onChange={(e) => setUserame(e.target.value)}
             ></TextField>
@@ -92,6 +101,7 @@ export default withRouter(function RegisterScreen(props) {
               label="Tu nombre"
               variant="outlined"
               required
+              color="secondary"
               fullWidth
               onChange={(e) => setName(e.target.value)}
             ></TextField>
@@ -102,6 +112,7 @@ export default withRouter(function RegisterScreen(props) {
               label="Tu apellido"
               variant="outlined"
               required
+              color="secondary"
               fullWidth
               onChange={(e) => setLastname(e.target.value)}
             ></TextField>
@@ -112,6 +123,7 @@ export default withRouter(function RegisterScreen(props) {
               label="Escribe algo sobre vos"
               variant="outlined"
               required
+              color="secondary"
               fullWidth
               onChange={(e) => setDescription(e.target.value)}
             ></TextField>
@@ -122,6 +134,7 @@ export default withRouter(function RegisterScreen(props) {
               label="E-mail"
               variant="outlined"
               required
+              color="secondary"
               fullWidth
               onChange={(e) => setEmail(e.target.value)}
             ></TextField>
@@ -133,6 +146,7 @@ export default withRouter(function RegisterScreen(props) {
               label="Crea una contraseña"
               variant="outlined"
               required
+              color="secondary"
               fullWidth
               onChange={(e) => setPassword(e.target.value)}
             ></TextField>
@@ -144,6 +158,7 @@ export default withRouter(function RegisterScreen(props) {
               label="Vuelve a ingresar tu contraseña"
               variant="outlined"
               required
+              color="secondary"
               fullWidth
               onChange={(e) => setConfirmPassword(e.target.value)}
             ></TextField>
@@ -185,7 +200,10 @@ export default withRouter(function RegisterScreen(props) {
             <Grid container justify="center" alignItems="center">
               <div>
                 Ya tienes una cuenta?{" "}
-                <Link to={`/signin?redirect=${redirect}`}>
+                <Link
+                  to={`/signin?redirect=${redirect}`}
+                  className={classes.colorText}
+                >
                   {" "}
                   *Iniciar sesión
                 </Link>
