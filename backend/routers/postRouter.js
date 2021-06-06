@@ -1,7 +1,7 @@
 import express from "express";
 import expressAsyncHandler from "express-async-handler";
 import data from "../data.js";
-import { Post, Comment } from "../models/postModel.js";
+import Post from "../models/postModel.js";
 
 import { isAdmin, isAuth } from "../utils.js";
 
@@ -113,7 +113,7 @@ postRouter.post(
       };
       post.comments.push(comment);
 
-      await post.save();
+      const updatedPost = await post.save();
       res.status(201).send({
         message: "Comentario publicado",
         comment: updatedPost.comments[updatedPost.comments.length - 1],
@@ -126,7 +126,6 @@ postRouter.post(
   })
 );
 
-// Hacer debug
 postRouter.put(
   "/:id/comments/:commentId/likes",
   isAuth,
@@ -173,6 +172,46 @@ postRouter.put(
       res.status(404).send({
         message: "Comentario no encontrado",
       });
+    }
+  })
+);
+
+postRouter.delete(
+  "/:id/comments/:commentId",
+  isAuth,
+  expressAsyncHandler(async (req, res) => {
+    const postId = req.params.id;
+    const commentId = req.params.commentId;
+    const post = await Post.findByIdAndUpdate(postId);
+    // Cuando buscamos subdocumentos en mongoose
+    // usamos id en lugar de la promise findById
+    const comment = post.comments.id(commentId);
+
+    if (comment) {
+      const deleteComment = await comment.remove();
+      await post.save();
+      res.status(201).send({
+        message: "Comentario borrado",
+        post: deleteComment,
+      });
+    } else {
+      res.status(404).send({
+        message: "Comentario no encontrado",
+      });
+    }
+  })
+);
+
+postRouter.delete(
+  "/:id",
+  isAuth,
+  expressAsyncHandler(async (req, res) => {
+    const post = await Post.findById(req.params.id);
+    if (req.user._id === post.profile) {
+      const deletePost = await post.remove();
+      res.send({ message: "Post borrado", post: deletePost });
+    } else {
+      res.status(404).send({ message: "Post no encontrado" });
     }
   })
 );

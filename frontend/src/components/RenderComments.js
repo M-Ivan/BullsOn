@@ -12,37 +12,40 @@ import {
   Typography,
   Button,
   Grow,
+  IconButton,
 } from "@material-ui/core";
+import { red } from "@material-ui/core/colors";
 import ThumbUpIcon from "@material-ui/icons/ThumbUp";
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
-import { likeComment, unlikeComment } from "../actions/commentActions";
+import {
+  deleteComment,
+  likeComment,
+  unlikeComment,
+} from "../actions/commentActions";
 import { detailsPost } from "../actions/postActions";
 import {
   COMMENT_LIKE_RESET,
   COMMENT_UNLIKE_RESET,
 } from "../constants/commentConstants";
+import { DeleteOutline } from "../../node_modules/@material-ui/icons/index";
 
 const useStyles = makeStyles((theme) => ({
   root: {
     width: "100%",
-
-    backgroundColor: theme.palette.background.paper,
   },
   inline: {
     display: "inline",
   },
   button: {
-    color: "#000",
-    padding: 0,
     "&:hover": {
       backgroundColor: "#00000000",
       textDecoration: "underline",
     },
   },
   ActiveButton: {
-    color: "#2878e1",
+    color: [theme.palette.secondary.main],
     "&:hover": {
       backgroundColor: "#00000000",
       textDecoration: "underline",
@@ -51,7 +54,7 @@ const useStyles = makeStyles((theme) => ({
   icon: {
     width: "20px",
     height: "20px",
-    color: "#2878e1",
+    color: [theme.palette.secondary.main],
   },
 }));
 
@@ -93,6 +96,12 @@ export default function RenderComments(props) {
     }
   };
 
+  const deleteHandler = () => {
+    if (userInfo.username === profile.username) {
+      dispatch(deleteComment(postId, commentId));
+    }
+  };
+
   return (
     <Grow in {...{ timeout: 700 }}>
       <List className={classes.root}>
@@ -104,11 +113,31 @@ export default function RenderComments(props) {
           </Link>
           <ListItemText
             primary={
-              <Link to={`/${profile.username}`}>
-                <Typography color="textPrimary" variant="h7">
-                  <strong>{`${profile.name} ${profile.lastname}`}</strong>
-                </Typography>{" "}
-              </Link>
+              <Box
+                style={{
+                  display: "flex",
+                }}
+                // Terminar de hacer el boton de borrado
+              >
+                <Link to={`/${profile.username}`} style={{ flexGrow: 1 }}>
+                  <Typography color="textPrimary" variant="h7">
+                    <strong
+                      style={{ width: "100%" }}
+                    >{`${profile.name} ${profile.lastname}`}</strong>{" "}
+                  </Typography>{" "}
+                </Link>
+                {userInfo.username === profile.username && (
+                  <IconButton
+                    onClick={deleteHandler}
+                    style={{
+                      padding: 0,
+                      justifySelf: "flex-end",
+                    }}
+                  >
+                    <DeleteOutline style={{ color: red[800] }} />
+                  </IconButton>
+                )}
+              </Box>
             }
             secondary={
               <Box>

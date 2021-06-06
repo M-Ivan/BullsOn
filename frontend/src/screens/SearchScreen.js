@@ -89,12 +89,7 @@ export default withRouter(function SearchScreen(props) {
   const { success: successFollow } = userFollow;
   const userUnfollow = useSelector((state) => state.userUnfollow);
   const { success: successUnfollow } = userUnfollow;
-  const {
-    loading: loadingUsers,
-    success: successUsers,
-    error: errorUsers,
-    users,
-  } = userList;
+  const { users } = userList;
 
   const [showing, setShowing] = useState(0);
 
@@ -147,7 +142,6 @@ export default withRouter(function SearchScreen(props) {
             elevation={1}
           >
             <Tabs
-              //TODO: Render condicional de users y posts
               value={showing}
               onChange={handleChange}
               indicatorColor="secondary"

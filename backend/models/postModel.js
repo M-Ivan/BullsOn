@@ -9,7 +9,7 @@ const commentSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-export const postSchema = new mongoose.Schema(
+const postSchema = new mongoose.Schema(
   {
     post: { type: String, required: true },
     likes: [{ type: String, ref: "User" }],
@@ -27,5 +27,6 @@ export const postSchema = new mongoose.Schema(
   }
 );
 
-export const Post = mongoose.model("Post", postSchema);
-export const Comment = mongoose.model("Comment", commentSchema);
+const Post = mongoose.model("Post", postSchema);
+
+export default Post;

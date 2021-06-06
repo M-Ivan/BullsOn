@@ -1,12 +1,11 @@
 import React, { useState } from "react";
-import { fade, Grid, InputBase, makeStyles } from "@material-ui/core";
+import { fade, InputBase, makeStyles } from "@material-ui/core";
 import SearchIcon from "@material-ui/icons/Search";
 import { withRouter } from "react-router";
 
 const useStyles = makeStyles((theme) => ({
   search: {
     boxShadow: "0px 0px 5px #3636363f",
-
     position: "relative",
     borderRadius: theme.shape.borderRadius,
     backgroundColor: fade(theme.palette.common.white, 0.15),
@@ -20,6 +19,8 @@ const useStyles = makeStyles((theme) => ({
   searchIcon: {
     padding: theme.spacing(0, 2),
     height: "100%",
+    color: "#fff",
+
     position: "absolute",
     pointerEvents: "none",
     display: "flex",
@@ -27,7 +28,7 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: "center",
   },
   inputRoot: {
-    color: "inherit",
+    color: "#fff",
     width: "100%",
   },
   inputInput: {

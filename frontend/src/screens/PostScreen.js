@@ -124,9 +124,12 @@ export default function PostScreen(props) {
   const { success: successRepost } = postRepost;
   const postUnrepost = useSelector((state) => state.postUnrepost);
   const { success: successUnrepost } = postUnrepost;
+  const commentDelete = useSelector((state) => state.commentDelete);
+  const { success: successCommentDelete } = commentDelete;
   const userSignin = useSelector((state) => state.userSignin);
   const { userInfo } = userSignin;
-  const userList = useSelector((state) => state.userList);
+
+  console.log("commentADD", commentAdd);
 
   useEffect(() => {
     if (
@@ -134,7 +137,8 @@ export default function PostScreen(props) {
       successRepost ||
       successLikeAdd ||
       successLikeRemove ||
-      successCommentAdd
+      successCommentAdd ||
+      successCommentDelete
     ) {
       dispatch(detailsPost(postId));
     }
@@ -147,6 +151,7 @@ export default function PostScreen(props) {
     successUnrepost,
     successRepost,
     successLikeRemove,
+    successCommentDelete,
   ]);
 
   const submitCommentHandler = () => {

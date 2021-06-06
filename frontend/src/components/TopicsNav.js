@@ -6,13 +6,9 @@ import {
   Typography,
   Hidden,
 } from "@material-ui/core/index";
-import { useDispatch, useSelector } from "react-redux";
-import HomeOutlinedIcon from "@material-ui/icons/HomeOutlined";
 import { orange, red, green } from "@material-ui/core/colors";
 import { Link } from "react-router-dom";
-import AccountCircleRoundedIcon from "@material-ui/icons/AccountCircleRounded";
-import ExitToAppOutlinedIcon from "@material-ui/icons/ExitToAppOutlined";
-import { signout } from "../actions/userActions";
+
 import TrendingUpIcon from "@material-ui/icons/TrendingUp";
 import TrendingDownIcon from "@material-ui/icons/TrendingDown";
 

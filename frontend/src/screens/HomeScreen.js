@@ -3,7 +3,6 @@ import {
   Container,
   Grid,
   makeStyles,
-  Divider,
   Typography,
 } from "@material-ui/core/index";
 import RenderPost from "../components/RenderPost";
@@ -84,6 +83,8 @@ export default function HomeScreen(props) {
     successLikeRemove,
     successCreate,
     successDelete,
+    props.history,
+    userInfo,
   ]);
 
   return (

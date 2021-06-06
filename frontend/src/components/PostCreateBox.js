@@ -19,15 +19,17 @@ import { POST_CREATE_RESET } from "../constants/postConstants";
 import { DeleteOutline } from "../../node_modules/@material-ui/icons/index";
 
 const useStyles = makeStyles((theme) => ({
-  root: {},
+  root: {
+    padding: "1rem",
+  },
   imgBtn: {
-    border: "1px solid #2978e1",
-    color: "#2978e1",
+    border: `1px solid ${[theme.palette.secondary.main]}`,
+    color: [theme.palette.secondary.main],
     height: "100%",
     marginLeft: "2vw",
     "&:hover": {
-      background: "#2978e1",
-      color: "#fff",
+      background: [theme.palette.secondary.main],
+      color: [theme.palette.background.paper],
     },
   },
   delete: {
@@ -35,15 +37,15 @@ const useStyles = makeStyles((theme) => ({
     color: "#bd0d0d",
   },
   button: {
-    background: "#ea6d0b",
+    background: [theme.palette.secondary.main],
     borderRadius: "3rem",
     border: 0,
-    color: "white",
+    color: [theme.palette.background.paper],
     height: 48,
     padding: "0 30px",
-    boxShadow: "0 3px 5px 2px rgba(255, 105, 135, .3)",
+    boxShadow: "0 3px 5px #00000050",
     "&:hover": {
-      background: "#e16828",
+      background: [theme.palette.secondary.light],
     },
   },
   preview: {
@@ -65,29 +67,18 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const MyTextField = withStyles({
+const MyTextField = withStyles((theme) => ({
   root: {
-    marginLeft: "1rem",
-    marginRight: "1rem",
-    marginTop: "0.3rem",
-
     "& .MuiInput-underline:after": {
-      borderBottomColor: "#ea6d0b",
+      borderBottomColor: [theme.palette.secondary.main],
     },
     "& label": {},
     "& label.Mui-focused": {
-      color: "#ea6d0b",
-    },
-    "& .MuiOutlinedInput-root": {
-      "& label": {
-        fontSize: "1.05rem",
-      },
-      "&.Mui-focused fieldset": {
-        borderColor: "#ea6d0b",
-      },
+      color: [theme.palette.secondary.main],
+      border: 0,
     },
   },
-})(TextField);
+}))(TextField);
 
 export default function PostCreateBox(props) {
   const classes = useStyles();

@@ -25,12 +25,13 @@ const useStyles = makeStyles((theme) => ({
   button: {
     marginRight: "10px",
     borderRadius: "3rem",
-    color: "#ea6d0b",
-    border: "2px solid #ea6d0b",
+    backgroundColor: [theme.palette.background.paper],
+    color: [theme.palette.secondary.main],
+    border: `2px solid ${[theme.palette.secondary.main]}`,
     [theme.breakpoints.down("sm")]: { fontSize: "8pt" },
     "&:hover": {
-      backgroundColor: "#e16828",
-      color: "#fff",
+      backgroundColor: [theme.palette.secondary.main],
+      color: [theme.palette.background.paper],
       boxShadow: "0 2px 2px #00000050",
     },
   },
@@ -57,7 +58,6 @@ const useStyles = makeStyles((theme) => ({
       //=== ["#fffef4"] ? "#171717" : "#fffef4"
     }`,
     boxShadow: "0 0 5px #000",
-    zIndex: "10",
   },
   nameSection: {},
   descriptionSection: {},

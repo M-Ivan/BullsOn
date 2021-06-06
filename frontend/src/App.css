@@ -2,8 +2,18 @@
   color: #e16828;
   color: #2878e1;
   color: #ef6c00;
-  color: #ffc900;
+  color: #3d2a14;
+  color: #fce4a2;
+  color: #2e230e;
+  color: #ffc400;
   color: #bd0d0d;
+  color: #101628;
+  color: #211028;
+  color: #00d6dd;
+  color: #d8006c;
+  color: #e72fff;
+  color: #0b0e0f;
+  color: #fcf8e4;
 }
 
 * {
@@ -126,55 +136,6 @@ a:hover {
 
 /* Footer */
 
-.sub-header {
-  position: relative;
-  font-size: 2em;
-  letter-spacing: 10px;
-  text-transform: uppercase;
-  align-self: flex-start;
-  color: #342f3d;
-  text-align: center;
+.reflect {
   -webkit-box-reflect: below 1px linear-gradient(transparent, #0004);
-  line-height: 0.8em;
-  outline: none;
-  animation: animate2 5s infinite;
-}
-
-@keyframes animate2 {
-  0%,
-  18%,
-  20%,
-  50.1%,
-  60%,
-  65.1%,
-  80%,
-  90.1%,
-  92% {
-    color: #342f3d;
-    text-shadow: none;
-  }
-  18.1%,
-  20.1%,
-  30%,
-  50%,
-  60.1%,
-  65%,
-  80.1%,
-  90%,
-  92.1%,
-  100% {
-    color: #ffc900;
-    text-shadow: 0 0 10px #ffc900, 0 0 20px #ffc900, 0 0 40px #ffc900,
-      0 0 80px #ffc900, 0 0 160px #ffc900;
-  }
-}
-
-@media only screen and (max-width: 600px) {
-  .sub-header {
-    font-size: 1.4em;
-    letter-spacing: 3px;
-    animation: none;
-    color: #ffc900;
-    text-shadow: 0 0 10px #ffc900, 0 0 20px #ffc900, 0 0 40px #ffc900;
-  }
 }

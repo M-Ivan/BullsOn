@@ -1,4 +1,8 @@
 import {
+  COMMENT_DELETE_FAIL,
+  COMMENT_DELETE_REQUEST,
+  COMMENT_DELETE_RESET,
+  COMMENT_DELETE_SUCCESS,
   COMMENT_LIKE_FAIL,
   COMMENT_LIKE_REQUEST,
   COMMENT_LIKE_RESET,
@@ -33,6 +37,21 @@ export const commentUnlikeReducer = (state = {}, action) => {
     case COMMENT_UNLIKE_FAIL:
       return { loading: false, error: action.payload };
     case COMMENT_UNLIKE_RESET:
+      return {};
+    default:
+      return state;
+  }
+};
+
+export const commentDeleteReducer = (state = {}, action) => {
+  switch (action.type) {
+    case COMMENT_DELETE_REQUEST:
+      return { loading: true };
+    case COMMENT_DELETE_SUCCESS:
+      return { loading: false, success: true, post: action.payload };
+    case COMMENT_DELETE_FAIL:
+      return { loading: false, error: action.payload };
+    case COMMENT_DELETE_RESET:
       return {};
     default:
       return state;

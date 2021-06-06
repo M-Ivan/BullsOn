@@ -1,6 +1,7 @@
 import { createStore, compose, applyMiddleware, combineReducers } from "redux";
 import thunk from "redux-thunk";
 import {
+  commentDeleteReducer,
   commentLikeReducer,
   commentUnlikeReducer,
 } from "./reducers/commentReducer";
@@ -53,6 +54,7 @@ const reducer = combineReducers({
   commentLike: commentLikeReducer,
   commentUnlike: commentUnlikeReducer,
   postDelete: postDeleteReducer,
+  commentDelete: commentDeleteReducer,
 });
 const composeEnhancer = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 

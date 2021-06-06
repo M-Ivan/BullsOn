@@ -28,14 +28,16 @@ const useStyles = makeStyles((theme) => ({
     borderRadius: "0px",
     [theme.breakpoints.up("sm")]: {},
   },
-  save: {
+  button: {
     marginRight: "10px",
     borderRadius: "3rem",
-    color: "#fff",
-    backgroundColor: "#ea6d0b",
-    [theme.breakpoints.down("x")]: { fontSize: "8pt" },
+    color: [theme.palette.background.paper],
+    backgroundColor: [theme.palette.secondary.main],
+    border: `2px solid ${[theme.palette.secondary.main]}`,
+    [theme.breakpoints.down("sm")]: { fontSize: "8pt" },
     "&:hover": {
-      backgroundColor: "#e16828",
+      color: [theme.palette.secondary.main],
+      backgroundColor: [theme.palette.background.paper],
       boxShadow: "0 2px 2px #00000050",
     },
   },
@@ -62,7 +64,12 @@ const useStyles = makeStyles((theme) => ({
       width: "70px",
       height: "70px",
     },
-    border: "5px solid #000000",
+    border: `2px solid 
+    ${
+      [theme.palette.background.paper][0] === "#fffef4" ? "#171717" : "#cccccc"
+      //=== ["#fffef4"] ? "#171717" : "#fffef4"
+    }`,
+    boxShadow: "0 0 5px #000",
     display: "flex",
     justifyContent: "center",
   },
@@ -269,13 +276,15 @@ export default function ProfileEdit(props) {
             alignItems: "center",
           }}
         >
-          <Button
-            onClick={saveProfileHandler}
-            size="large"
-            className={classes.save}
-          >
-            Guardar
-          </Button>
+          <Box m={3}>
+            <Button
+              onClick={saveProfileHandler}
+              size="large"
+              className={classes.button}
+            >
+              Guardar
+            </Button>
+          </Box>
         </Grid>
       </Grid>
       <CardContent>

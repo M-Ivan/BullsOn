@@ -14,17 +14,18 @@ import AccountCircleRoundedIcon from "@material-ui/icons/AccountCircleRounded";
 import ExitToAppOutlinedIcon from "@material-ui/icons/ExitToAppOutlined";
 import { signout } from "../actions/userActions";
 
-const useStyles = makeStyles({
+const useStyles = makeStyles((theme) => ({
   navLg: { margin: "1rem", marginTop: "3rem" },
   navBtn: {
     textTransform: "none",
     marginBottom: "1rem",
     color: orange[800],
   },
+  colorIcon: { color: [theme.palette.secondary.main] },
   border: {
     borderRight: "1px solid #e0e0e0",
   },
-});
+}));
 
 export default function NavLarge() {
   const classes = useStyles();
@@ -48,7 +49,7 @@ export default function NavLarge() {
           <Button classes={{ root: classes.navBtn }} size="large">
             <Link to="/">
               <Grid container alignItems="center">
-                <HomeOutlinedIcon style={{ color: orange[700] }} />
+                <HomeOutlinedIcon className={classes.colorIcon} />
                 <Typography variant="h5" color="textPrimary">
                   Inicio
                 </Typography>
@@ -59,7 +60,7 @@ export default function NavLarge() {
             <Button classes={{ root: classes.navBtn }} size="large">
               <Link to={`/${userInfo.username}`}>
                 <Grid container alignItems="center">
-                  <AccountCircleRoundedIcon style={{ color: orange[700] }} />
+                  <AccountCircleRoundedIcon className={classes.colorIcon} />
                   <Typography variant="h5" color="textPrimary">
                     Perfil
                   </Typography>

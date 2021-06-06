@@ -288,8 +288,12 @@ export default withRouter(function RenderPost(props) {
           post &&
           userInfo &&
           post.likes.includes(userInfo.username) && (
-            <IconButton onClick={unlikeHandler} aria-label="ya no me gusta">
-              <Grid container alignItems="center" className={classes.likeBtn}>
+            <IconButton
+              onClick={unlikeHandler}
+              aria-label="ya no me gusta"
+              className={classes.likeBtn}
+            >
+              <Grid container alignItems="center">
                 <StarIcon className={classes.activeLike} />
                 {post.likes.length}{" "}
               </Grid>

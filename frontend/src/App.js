@@ -7,16 +7,10 @@ import ProfileScreen from "./screens/ProfileScreen";
 import RegisterScreen from "./screens/RegisterScreen";
 import SearchScreen from "./screens/SearchScreen";
 import SigninScreen from "./screens/SigninScreen";
-import {
-  Grid,
-  Typography,
-  Paper,
-  createMuiTheme,
-  ThemeProvider,
-} from "@material-ui/core";
+import { Paper, createMuiTheme, ThemeProvider } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
-import { LaunchOutlined } from "../node_modules/@material-ui/icons/index";
 import { useState } from "react";
+import Footer from "./components/Footer";
 
 const useStyles = makeStyles((theme) => ({
   root: {},
@@ -24,13 +18,13 @@ const useStyles = makeStyles((theme) => ({
     display: "flex",
     justifyContent: "center",
     minHeight: "69vh",
-    padding: "3.5rem 0 5vh 0",
+    padding: "4.1rem 0 5vh 0",
 
     [theme.breakpoints.down("md")]: {
-      padding: "7.5rem 0",
+      padding: "8.1rem 0",
     },
     [theme.breakpoints.down("xs")]: {
-      padding: "6.5rem 0",
+      padding: "7.1rem 0",
     },
     margin: 0,
     overflow: "hidden",
@@ -39,7 +33,7 @@ const useStyles = makeStyles((theme) => ({
     borderTop: "3px solid #e16828",
     color: "#c1c1c1",
     display: "grid",
-    background: "#1f1f1f",
+    background: [theme.palette.primary.dark],
     width: "100%",
     position: "relative",
     height: "18vh",
@@ -59,11 +53,16 @@ function App() {
   const theme = createMuiTheme({
     palette: {
       type: darkMode ? "dark" : "light",
+      primary: {
+        main: darkMode ? "#0b0f1c" : "#170b1c",
+      },
+      secondary: { main: darkMode ? "#00d6dd" : "#d30058" },
+      terceary: { main: "#e72fff" },
       background: darkMode
         ? {
-            paper: "#171717",
+            paper: "#0b0e0f", // "#171717",
           }
-        : { paper: "#fffef4" },
+        : { paper: "#fffdf1" },
     },
   });
 
@@ -90,7 +89,6 @@ function App() {
             <Route path="/register" component={RegisterScreen}></Route>
             <Route path="/:username" exact component={ProfileScreen}></Route>
             <Route path="/:username/post/:id" component={PostScreen}></Route>
-
             <Route exact path="/search" component={SearchScreen}></Route>
             <Route path="/search/query/:query" component={SearchScreen}></Route>
             {
@@ -102,44 +100,9 @@ function App() {
               //    path="/search/query/:query/profile/:profile/order/:order"
               //    component={SearchScreen}
               //  ></Route>
-            }
+            }{" "}
           </main>
-          <footer className={classes.footer}>
-            <Grid
-              item
-              xs={12}
-              style={{
-                display: "flex",
-                alignItems: "flex-end",
-                justifyContent: "center",
-              }}
-            >
-              <Typography variant="body1" className={classes.text}>
-                Iván Miragaya
-                <span style={{ color: "#e16828" }}>©2021</span>
-              </Typography>
-            </Grid>
-            <Grid
-              item
-              xs={12}
-              style={{
-                display: "flex",
-
-                justifyContent: "center",
-                marginTop: "2vh",
-
-                marginLeft: "3%",
-              }}
-            >
-              <a
-                href="https://m-ivan.github.io"
-                className="sub-header"
-                style={{ transform: "skewY(2deg)" }}
-              >
-                Portafolio <LaunchOutlined />
-              </a>
-            </Grid>
-          </footer>
+          <Footer />
         </Paper>
       </ThemeProvider>
     </BrowserRouter>

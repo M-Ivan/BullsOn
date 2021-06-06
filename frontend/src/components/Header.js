@@ -6,7 +6,6 @@ import {
   IconButton,
   makeStyles,
   Toolbar,
-  createMuiTheme,
   Switch,
   Typography,
 } from "@material-ui/core";
@@ -26,7 +25,7 @@ import ListItemIcon from "@material-ui/core/ListItemIcon";
 import HomeOutlinedIcon from "@material-ui/icons/HomeOutlined";
 import ExitToAppOutlinedIcon from "@material-ui/icons/ExitToAppOutlined";
 import AccountCircleRoundedIcon from "@material-ui/icons/AccountCircleRounded";
-import { orange, green, red } from "@material-ui/core/colors";
+import { green } from "@material-ui/core/colors";
 import SearchBox from "./SearchBox";
 import TrendingUpIcon from "@material-ui/icons/TrendingUp";
 import Brightness3Icon from "@material-ui/icons/Brightness3";
@@ -39,16 +38,17 @@ const useStyles = makeStyles((theme) => ({
   },
   appbar: {
     color: "#1b1b1b",
-    backgroundColor: "#ffd700",
-    borderBottom: "3px solid #ef6c00",
+    backgroundColor: [theme.palette.primary.dark],
+    borderBottom: `3px solid ${[theme.palette.secondary.light]}`,
   },
   brand: {
     fontSize: "1.8rem",
     fontWeight: 600,
     padding: "0.5rem",
-    color: "#424242",
+    color: "#fff", //  [theme.palette.background.paper],
     borderRadius: "0.3rem",
   },
+  colorText: { color: [theme.palette.secondary.main] },
   menuButton: {
     marginRight: theme.spacing(2),
   },
@@ -72,7 +72,7 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   navlink: {
-    color: "#2c2c2c",
+    color: "#fff",
     padding: "0.5rem",
     borderRadius: "0.2rem",
     fontSize: "1.1rem",
@@ -88,6 +88,9 @@ const useStyles = makeStyles((theme) => ({
   drawer: {
     width: drawerWidth,
     flexShrink: 0,
+  },
+  colorIcon: {
+    color: [theme.palette.secondary.main],
   },
   item: {
     display: "flex",
@@ -145,14 +148,13 @@ export default function Header(props) {
         <Link className={classes.brand} to="/">
           <Typography color="textPrimary" variant="h4">
             <strong>
-              <i class="fa fa-bitcoin" style={{ color: orange[800] }}></i>ulls
-              <span style={{ color: green[600] }}>O</span>
-              <span style={{ color: green[600] }}>n</span>
+              <i className={`fa fa-bitcoin ${classes.colorText}`}></i>ulls
+              <span className={classes.colorText}>On</span>
             </strong>
           </Typography>
         </Link>
         <Switch checked={darkMode} onChange={darkModeCallback} />{" "}
-        <Brightness3Icon />
+        <Brightness3Icon className={classes.colorText} />
       </div>
       <Divider />
       <List>
@@ -164,7 +166,7 @@ export default function Header(props) {
               style={{ display: "flex", justifyContent: "flex-end" }}
             >
               <ListItemIcon>
-                <HomeOutlinedIcon style={{ color: orange[700] }} />
+                <HomeOutlinedIcon className={classes.colorText} />
               </ListItemIcon>{" "}
             </Grid>
             <Typography color="textPrimary"> Inicio</Typography>
@@ -184,7 +186,7 @@ export default function Header(props) {
                   style={{ display: "flex", justifyContent: "flex-end" }}
                 >
                   <ListItemIcon>
-                    <AccountCircleRoundedIcon style={{ color: orange[700] }} />
+                    <AccountCircleRoundedIcon className={classes.colorText} />
                   </ListItemIcon>
                 </Grid>
 
@@ -203,7 +205,7 @@ export default function Header(props) {
                 style={{ display: "flex", justifyContent: "flex-end" }}
               >
                 <ListItemIcon>
-                  <ExitToAppOutlinedIcon style={{ color: red[500] }} />
+                  <ExitToAppOutlinedIcon className={classes.colorText} />
                 </ListItemIcon>{" "}
               </Grid>{" "}
               <Typography color="textPrimary">Cerrar sesión</Typography>
@@ -232,7 +234,7 @@ export default function Header(props) {
 
   return (
     <Grid container className={classes.root}>
-      <AppBar color="transparent" elevation={0} className={classes.appbar}>
+      <AppBar elevation={0} className={classes.appbar}>
         <Toolbar>
           <Grid container alignItems="center" justify="flex-start">
             <Grid item xs={12} lg={3} md={3}>
@@ -240,13 +242,11 @@ export default function Header(props) {
                 <IconButton
                   onClick={() => setMenuOpen(!menuOpen)}
                   edge="start"
-                  color="inherit"
                   aria-label="menu"
                 >
-                  <MenuIcon />
+                  <MenuIcon style={{ color: "#fff" }} />
                   <SwipeableDrawer
                     className={classes.drawer}
-                    style={{ backgroundColor: "#fff" }}
                     open={menuOpen}
                     onClose={() => setMenuOpen(false)}
                     onOpen={() => setMenuOpen(true)}
@@ -255,10 +255,10 @@ export default function Header(props) {
                   </SwipeableDrawer>
                 </IconButton>
               </Hidden>
+
               <Link className={classes.brand} to="/">
-                <i class="fa fa-bitcoin" style={{ color: orange[800] }}></i>
-                ulls<span style={{ color: green[600] }}>O</span>
-                <span style={{ color: green[600] }}>n</span>
+                <i className={`fa fa-bitcoin ${classes.colorText}`}></i>
+                ulls<span className={classes.colorText}>On</span>
                 <TrendingUpIcon />{" "}
               </Link>
             </Grid>
@@ -278,7 +278,9 @@ export default function Header(props) {
                       aria-haspopup="true"
                       onClick={handleUserMenu}
                     >
-                      <i className="fa fa-user-circle"></i>
+                      <i
+                        className={`fa fa-user-circle ${classes.colorIcon}`}
+                      ></i>
                       {userInfo.username}
                     </Button>
 
@@ -297,7 +299,10 @@ export default function Header(props) {
                       </MenuItem>
                       <MenuItem onClick={darkModeCallback}>
                         {" "}
-                        <Switch checked={darkMode} /> <Brightness3Icon />
+                        <Switch checked={darkMode} />{" "}
+                        <Brightness3Icon
+                          className={darkMode ? classes.colorIcon : ""}
+                        />
                       </MenuItem>
 
                       <MenuItem onClick={signoutHandler}>
