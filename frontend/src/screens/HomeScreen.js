@@ -1,11 +1,14 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Container,
   Grid,
   makeStyles,
   Typography,
-  Box,
+  MenuItem,
+  InputLabel,
+  Select,
   Slide,
+  FormControl,
 } from "@material-ui/core/index";
 import RenderPost from "../components/RenderPost";
 import { useDispatch, useSelector } from "react-redux";
@@ -24,6 +27,11 @@ const useStyles = makeStyles((theme) => ({
     borderRight: "1px solid #e0e0e0",
     borderBottom: "1px solid #e0e0e0",
   },
+  formControl: {
+    marginTop: [theme.spacing(1)],
+    minWidth: 120,
+  },
+
   title: {
     marginLeft: "0rem",
     padding: "1rem 2rem",
@@ -55,12 +63,13 @@ export default function HomeScreen(props) {
   const { success: successUnrepost } = postUnrepost;
   const postDelete = useSelector((state) => state.postDelete);
   const { success: successDelete } = postDelete;
+  const [order, setOrder] = useState("Destacados");
 
   useEffect(() => {
     if (!userInfo) {
       props.history.push("/signin");
     }
-    dispatch(listPosts({}));
+    dispatch(listPosts({ order: order }));
     if (successCreate) {
       dispatch({ type: POST_CREATE_RESET });
     }
@@ -72,9 +81,9 @@ export default function HomeScreen(props) {
       successCommentAdd ||
       successDelete
     ) {
-      dispatch(listPosts({}));
+      dispatch(listPosts({ order: order }));
     }
-    dispatch(listPosts({}));
+    dispatch(listPosts({ order: order }));
   }, [
     createdPost,
     dispatch,
@@ -87,19 +96,36 @@ export default function HomeScreen(props) {
     successDelete,
     props.history,
     userInfo,
+    order,
   ]);
 
+  console.log("order", order);
   return (
     <div>
       <Container maxWidth="lg" fixed>
         <Grid container className={classes.root}>
           <Grid item xs={12} className={classes.title}>
             <Slide direction="left" in {...{ timeout: 1000 }}>
-              <Box>
+              <Grid container justify="space-between" alignItems="center">
                 <Typography variant="h4" color="textPrimary">
                   Inicio
                 </Typography>
-              </Box>
+
+                <FormControl className={classes.formControl}>
+                  <InputLabel id="order-label">
+                    <Typography color="textSecondary">Ordenar por:</Typography>
+                  </InputLabel>
+                  <Select
+                    labelId="order-label"
+                    id="demo-simple-select"
+                    value={order}
+                    onChange={(e) => setOrder(e.target.value)}
+                  >
+                    <MenuItem value="Destacados">Destacados</MenuItem>
+                    <MenuItem value="Recientes">Recientes</MenuItem>
+                  </Select>
+                </FormControl>
+              </Grid>
             </Slide>
           </Grid>
 

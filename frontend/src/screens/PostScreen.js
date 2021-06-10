@@ -130,8 +130,6 @@ export default function PostScreen(props) {
   const userSignin = useSelector((state) => state.userSignin);
   const { userInfo } = userSignin;
 
-  console.log("commentADD", commentAdd);
-
   useEffect(() => {
     if (
       successUnrepost ||

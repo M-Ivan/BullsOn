@@ -34,14 +34,14 @@ import {
 } from "../constants/postConstants";
 
 export const listPosts =
-  ({ profile = "", post = "", repost = "" }) =>
+  ({ profile = "", post = "", repost = "", order = "" }) =>
   async (dispatch) => {
     dispatch({
       type: POST_LIST_REQUEST,
     });
     try {
       const { data } = await Axios.get(
-        `/api/posts?profile=${profile}&repost=${repost}&post=${post}`
+        `/api/posts?profile=${profile}&repost=${repost}&post=${post}&order=${order}`
       );
       dispatch({ type: POST_LIST_SUCCESS, payload: data });
     } catch (error) {

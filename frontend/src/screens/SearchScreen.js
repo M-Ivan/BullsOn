@@ -15,6 +15,7 @@ import {
   Container,
   InputBase,
   Slide,
+  InputLabel,
 } from "@material-ui/core";
 import RenderPost from "../components/RenderPost";
 import { useState } from "react";
@@ -81,6 +82,7 @@ export default withRouter(function SearchScreen(props) {
   const classes = useStyles();
   const query = props.match.params.query;
   const [profile, setProfile] = useState("");
+  const [order, setOrder] = useState("Destacados");
 
   const dispatch = useDispatch();
   const postList = useSelector((state) => state.postList);
@@ -100,9 +102,9 @@ export default withRouter(function SearchScreen(props) {
     if (!userInfo) {
       props.history.push("/signin");
     }
-    dispatch(listPosts({ post: query }));
+    dispatch(listPosts({ post: query, order: order, profile: profile }));
     dispatch(listUsers({ user: query }));
-  }, [query, successFollow, successUnfollow, props.history, userInfo]);
+  }, [query, successFollow, successUnfollow, profile, props.history, userInfo, order]);
 
   const handleChange = (event, newValue) => {
     setShowing(newValue);
@@ -110,7 +112,8 @@ export default withRouter(function SearchScreen(props) {
   const profileFilterHandler = (e) => {
     if (profile) {
       e.preventDefault();
-      dispatch(listPosts({ post: query, profile: profile }));
+      dispatch(listPosts({ post: query, profile: profile, order: order }));
+      setProfile("");
     }
   };
 
@@ -121,20 +124,23 @@ export default withRouter(function SearchScreen(props) {
           <Slide direction="left" in {...{ timeout: 1000 }}>
             <Box>
               <Typography variant="h4" color="textPrimary">
-                Busqueda
+                Búsqueda
               </Typography>
               <form onSubmit={profileFilterHandler}>
-                <label>Filtrar por perfil: </label>
-                <InputBase
-                  label=""
-                  placeholder="@ o nombre/apellido"
-                  onChange={(e) => setProfile(e.target.value)}
-                  classes={{
-                    root: classes.inputRoot,
-                    input: classes.inputInput,
-                  }}
-                  inputProps={{ type: "text", name: "q", id: "q" }}
-                />
+                <InputLabel id="profile-filter">
+                  Filtrar por perfil:{" "}
+                  <InputBase
+                    labelId="profile-filter"
+                    placeholder="@usuario"
+                    onChange={(e) => setProfile(e.target.value)}
+                    value={profile}
+                    classes={{
+                      root: classes.inputRoot,
+                      input: classes.inputInput,
+                    }}
+                    inputProps={{ type: "text", name: "q", id: "q" }}
+                  />
+                </InputLabel>
               </form>{" "}
             </Box>
           </Slide>
@@ -158,8 +164,17 @@ export default withRouter(function SearchScreen(props) {
               textColor="secondary"
               variant="fullWidth"
             >
-              <Tab label="Posts" {...a11yProps(0)} />
-              <Tab label="Usuarios" {...a11yProps(1)} />
+              <Tab
+                label="Destacados"
+                onClick={() => setOrder("Destacados")}
+                {...a11yProps(0)}
+              />
+              <Tab
+                label="Recientes"
+                onClick={() => setOrder("Recientes")}
+                {...a11yProps(1)}
+              />
+              <Tab label="Usuarios" {...a11yProps(2)} />
             </Tabs>
           </AppBar>
           <div className="feed-separation">
@@ -178,14 +193,23 @@ export default withRouter(function SearchScreen(props) {
                   palabras solicitadas.
                 </MessageBox>
               )}
+              {posts && posts.length === 0 && showing === 1 && (
+                <MessageBox>
+                  Lo sentimos, no encontramos publicaciones que incluyan las
+                  palabras solicitadas.
+                </MessageBox>
+              )}
 
-              {users && users.length === 0 && showing === 1 && (
+              {users && users.length === 0 && showing === 2 && (
                 <MessageBox>No se encontraron usuarios.</MessageBox>
               )}
               {posts && showing === 0
                 ? posts.map((post) => <RenderPost key={post._id} post={post} />)
                 : null}
-              {users && showing === 1
+              {posts && showing === 1
+                ? posts.map((post) => <RenderPost key={post._id} post={post} />)
+                : null}
+              {users && showing === 2
                 ? users.map((user) => (
                     <RenderUsers key={user._id} user={user} />
                   ))

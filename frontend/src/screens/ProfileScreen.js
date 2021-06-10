@@ -21,9 +21,9 @@ import RenderProfile from "../components/RenderProfile";
 import ProfileEdit from "../components/ProfileEdit";
 
 const useStyles = makeStyles((theme) => ({
-  root: { minHeight: "70vh", padding: "0 0 15vh 0" },
+  root: { minHeight: "70vh", padding: "0 0 15vh 0", width: "100%" },
   main: {
-    maxWidth: "auto",
+    width: "100%",
     "&:hover": {
       cursor: "normal",
     },

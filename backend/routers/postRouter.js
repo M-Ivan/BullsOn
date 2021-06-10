@@ -12,6 +12,7 @@ postRouter.get(
   expressAsyncHandler(async (req, res) => {
     const post = req.query.post || "";
     const profile = req.query.profile || "";
+    const order = req.query.order || "";
 
     const postFilter = post ? { post: { $regex: post, $options: "i" } } : {};
     const profileFilter = profile
@@ -22,7 +23,14 @@ postRouter.get(
           },
         }
       : {};
-    const sortOrder = { likes: -1 } && { reposts: -1 } && { comments: -1 };
+    const sortOrder =
+      order === "Recientes"
+        ? { createdAt: -1 }
+        : order === "Destacados"
+        ? { likes: -1 } && { reposts: -1 } && {
+            comments: -1,
+          }
+        : { _id: -1 };
     const posts = await Post.find({
       ...postFilter,
       ...profileFilter,
