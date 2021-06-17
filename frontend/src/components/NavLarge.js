@@ -5,7 +5,6 @@ import {
   makeStyles,
   Typography,
   Hidden,
-  Slide,
 } from "@material-ui/core/index";
 import { useDispatch, useSelector } from "react-redux";
 import HomeOutlinedIcon from "@material-ui/icons/HomeOutlined";

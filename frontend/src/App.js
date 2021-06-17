@@ -16,10 +16,9 @@ const useStyles = makeStyles((theme) => ({
   root: {},
   main: {
     display: "flex",
+    minHeight: "95vh",
     justifyContent: "center",
-    minHeight: "88vh",
     padding: "4.1rem 0 5vh 0",
-
     [theme.breakpoints.down("md")]: {
       padding: "8.1rem 0",
     },
@@ -28,15 +27,6 @@ const useStyles = makeStyles((theme) => ({
     },
     margin: 0,
     overflow: "hidden",
-  },
-  footer: {
-    borderTop: "3px solid #e16828",
-    color: "#c1c1c1",
-    display: "grid",
-    background: [theme.palette.primary.dark],
-    width: "100%",
-    position: "relative",
-    height: "18vh",
   },
   text: {
     fontSize: "20pt",
@@ -73,7 +63,7 @@ function App() {
   return (
     <BrowserRouter>
       <ThemeProvider theme={theme}>
-        <Paper>
+        <Paper className={classes.root}>
           <Route
             render={({ history }) => (
               <Header

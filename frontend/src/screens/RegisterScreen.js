@@ -14,9 +14,15 @@ import {
 
 const useStyles = makeStyles((theme) => ({
   root: {
+    minHeight: "90vh",
     display: "flex",
-    width: "100%",
     alignItems: "center",
+    // Unica forma que encontre de lograr centrar el contenido
+    // cuando le ordeno display: "flex" en la tag <main> de App.js
+    // La screen se divide a la mitad, incluso especificandole width: "100%",
+    // La width en 100000% hace que ocupe toda la pantalla, y asi se centre
+    // el contenido
+    width: "1000000%",
   },
   btnRoundedOr: {
     background: [theme.palette.secondary.main],
@@ -84,7 +90,7 @@ export default withRouter(function RegisterScreen(props) {
           <div>
             <h1>Crear una cuenta</h1>
           </div>
-          <div className={`form-control ${classes.root}`}>
+          <div className={`form-control `}>
             <TextField
               id="username"
               label="Nombre de usuario (con el que te veran otros usuarios)"

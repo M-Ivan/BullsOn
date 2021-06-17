@@ -10,9 +10,8 @@ const useStyles = makeStyles((theme) => ({
     background: [theme.palette.primary.dark],
     width: "100%",
     position: "relative",
-    height: "18vh",
+    height: "20vh",
   },
-
   neon: {
     position: "relative",
     fontSize: "2em",

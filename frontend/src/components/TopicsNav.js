@@ -5,7 +5,6 @@ import {
   makeStyles,
   Typography,
   Hidden,
-  Slide,
 } from "@material-ui/core/index";
 import { red, green } from "@material-ui/core/colors";
 import { Link } from "react-router-dom";

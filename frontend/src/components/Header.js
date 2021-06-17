@@ -313,7 +313,7 @@ export default function Header(props) {
                     </Menu>
                   </Grid>
                 ) : (
-                  <Grid container justify="flex-end">
+                  <Grid container justify="flex-end" alignItems="center">
                     <div>
                       <Link to="/signin">
                         <Grid
@@ -328,6 +328,13 @@ export default function Header(props) {
                         </Grid>
                       </Link>
                     </div>
+                    <MenuItem onClick={darkModeCallback}>
+                      {" "}
+                      <Switch checked={darkMode} />{" "}
+                      <Brightness3Icon
+                        className={darkMode ? classes.colorIcon : ""}
+                      />
+                    </MenuItem>
                   </Grid>
                 )}
               </Grid>
